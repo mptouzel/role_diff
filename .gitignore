@@ -1,0 +1,14 @@
+# Claude working files (not part of the submission)
+CLAUDE.md
+session_state.md
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc

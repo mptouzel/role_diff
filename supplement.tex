@@ -1,0 +1,278 @@
+\documentclass[
+  aps,prx,
+  preprint,
+  superscriptaddress,
+  nofootinbib
+]{revtex4-2}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+
+\crefname{equation}{Eq.}{Eqs.}
+\Crefname{equation}{Equation}{Equations}
+\crefname{section}{Sec.}{Secs.}
+\Crefname{section}{Section}{Sections}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Figure}{Figures}
+\newcommand{\crefrangeconjunction}{--}
+\newcommand{\Crefrangeconjunction}{--}
+
+\newcommand{\w}{\bm{\omega}}
+\newcommand{\g}{\mathbf{g}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Cr}{\mathbf{C}_r}
+\newcommand{\G}{\mathbf{G}}
+\newcommand{\etaag}{\eta_{\mathrm{agent}}}
+\newcommand{\rhopair}{\rho_{\mathrm{pair}}}
+\newcommand{\sobs}{\sigma_{\mathrm{obs}}}
+\newcommand{\sdyn}{\sigma_{\mathrm{dyn}}}
+\newcommand{\sign}{\mathrm{sign}}
+\newcommand{\ract}{r_{\mathrm{act}}}
+
+% Supplemental numbering
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+
+\begin{document}
+
+\title{Supplemental Material for\\
+``Role differentiation as ignition of a collective information engine''}
+
+\author{Maximilian Puelma Touzel}
+\email{puelmatm@mila.quebec}
+\affiliation{Mila--Quebec AI Institute, 6666 St.\ Urbain Ave., Montreal, Quebec, Canada}
+
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\bigskip
+
+\section{The model ladder and the coordination payoff}\label{sm:ladder}
+% ======================================================================
+
+\subsection{The ladder of six models}
+
+The main text presents the closed loop directly; it was developed as a sequence of six models of increasing structure, each adding one ingredient and exposing one phenomenon. We summarize them here (\cref{tab:ladder}); the reductions identify which ingredient produces which result.
+
+\begin{table}[h]
+\centering
+\caption{The six models. Number of agents ($N$) and number of contexts ($M$). Each adds one ingredient (bold) and yields one key result. Model 1 has exogenous feedback; rest are endogenous.}
+\label{tab:ladder}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\# &  $N$/ $M$ & New ingredient & Key result \\
+\midrule
+1 & 1 / 1, ex. & policy $\pi$, external oracle & classical info engine; $\pi'(0)$ is measurement quality \\
+2 & 2 / 1,  & \textbf{reciprocal measurement} & self-generated fuel; $G=4\pi'(0)$, $\beta_c=\gamma/4\pi'(0)$ \\
+3 & $N$ / 1 & \textbf{population, mean field} & phase transition; $G=2\pi'(0)$; order parameter $C$ \\
+4 & $N$ / $M$ & \textbf{vector roles} & $G=2\pi'(0)P^{\!\top}\!P$; conditional cascade \\
+5 & $N$ / $M$ & \textbf{dynamic schemas} & self-consistency; but schemas collapse to one axis \\
+6 & $N$ / $M$ & \textbf{resources} & niche partitioning; endogenous cascade \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Model 1} places a single agent in a Go/Defer game against a fixed environment. An oracle supplies a noisy role signal $s=\Delta+\sobs\xi$, with $\xi$ a standard Gaussian noise source; the agent's action policy $\pi:\mathbb{R}\to[0,1]$ maps signal to Go-probability. The naive (threshold) policy has slope $\pi'(0)=1/(\sobs\sqrt{2\pi})$; a Bayesian agent pooling $T$ signals has $\pi'(0)=\sqrt{T}/(\sobs\sqrt{2\pi})$. The model is a Szilard engine, with the oracle as the measurement, the policy as the feedback protocol, and the decision as work extraction. The fuel is $I(\mathrm{sign}(\Delta);s)=1-H_{\mathrm{bin}}(P_e)$ bits and the work is $W=w_0(1-2P_e)^2$, derived in \cref{sm:payoff}. The two satisfy $W\le 2\ln2\,w_0\,I$ (equivalently $W\le 2w_0I$ with $I$ in nats), so a coordination payoff requires role information. The bound is saturated as $P_e\to\tfrac12$, and both $W$ and $I$ vanish in the undifferentiated state. Ref.~\cite{vansaders2023} gives the corresponding bound on consensus (flocking) order in informational active matter; both follow from the feedback second law of Sagawa and Ueda.
+
+\emph{Model 2} removes the oracle: two agents with statuses $x_1,x_2$ each measure the other, so the fuel is self-generated. The status gap $\Delta=x_1-x_2$ obeys $\dot\Delta\approx(-\gamma+4\beta\pi'(0))\Delta+\sqrt2\,\sdyn\eta$, giving gain $G=4\pi'(0)$ (a factor $2$ from the $\pm\beta$ swing, another from reciprocal amplification) and critical coupling $\beta_c=\gamma/4\pi'(0)$. For $\beta<\beta_c$ the gap decays to zero; for $\beta>\beta_c$ it grows until the cubic term saturates it.
+
+\emph{Model 3} takes $N$ agents randomly paired, in the mean field. Only the focal agent's update contributes, halving the gain to $G_{\mathrm{MF}}=2\pi'(0)$, so $\beta_c^{\mathrm{MF}}=\gamma/2\pi'(0)=\gamma\sobs\sqrt{2\pi}/2$. The mean $\langle x\rangle$ vanishes in the anti-coordination phase, so the order parameter is the population variance $C=N^{-1}\sum_i x_i^2$, with $C-C_0\propto(\beta-\beta_c)$ near threshold.
+
+\emph{Model 4} gives agents vector positions $\w_i\in\mathbb{R}^d$ and $M$ contexts $\g_m\in\mathbb{R}^d$. The gain becomes the Gram matrix $\G=2\pi'(0)\sum_m\g_m\g_m^{\!\top}=2\pi'(0)P^{\!\top}\!P$ (Sec.~III\,A of the main text); its eigenvalues give the cascade $\beta_c^{(k)}=\gamma/\mu_k$. The order parameter generalizes to the covariance $\C=N^{-1}\sum_i\w_i\w_i^{\!\top}$, with the number of supra-floor eigenvalues---the cascade height $N(\beta)$---the cultural thickness.
+
+\emph{Model 5} lets the context directions evolve, $\dot\g_m=-\kappa\g_m+\alpha\C\g_m$: a power iteration rotating $\g_m$ toward the leading eigenvector of $\C$. Schemas align with the role structure and the role structure reinforces the schemas, which is one half of Sewell's duality. All schemas converge on the same axis, so the stationary structure is one-dimensional.
+
+\emph{Model 6} closes the loop with resources (Sec.~V\,A of the main text): schemas are reinforced by the resource-weighted covariance $\Cr$, so agents who profit from a schema defend it. Resource weighting breaks the collapse degeneracy through niche partitioning, sustaining multiple schemas on distinct axes.
+
+\subsection{The coordination payoff}\label{sm:payoff}
+
+The oracle (or, endogenously, the population) assigns a leader (should Go) and follower (should Defer). Each agent's signal has independent role-inference error rate $P_e$. The four joint outcomes and their payoffs (averaged over the pair) are: both correct, prob $(1-P_e)^2$, payoffs $(6,2)$, average $4$; leader wrong only, prob $P_e(1-P_e)$, both Defer $(3,3)$, average $3$; follower wrong only, prob $(1-P_e)P_e$, both Go $(-1,-1)$, average $-1$; both wrong, prob $P_e^2$, roles swap to $(2,6)$, average $4$---still coordinated. The expected average payoff is
+\begin{equation}
+\bar U = 4(1-P_e)^2 + 3P_e(1-P_e) - (1-P_e)P_e + 4P_e^2 = 4 - 6P_e(1-P_e).
+\end{equation}
+Subtracting the Nash value $U_{\mathrm{Nash}}=2.5$ and using $6P_e(1-P_e)=\tfrac32-\tfrac32(1-2P_e)^2$,
+\begin{equation}\label{SM-eq:sm-work}
+W = \bar U - U_{\mathrm{Nash}} = w_0\,(1-2P_e)^2, \qquad w_0 = \mathrm{CE}-\mathrm{Nash} = 1.5 .
+\end{equation}
+The quadratic form is specific to two-role anti-coordination: a double error swaps the roles and leaves the pair coordinated (the fourth outcome has the same payoff as the first), so the work depends only on $(1-2P_e)^2$. Because $W$ is quadratic in $P_e$, the resource income of Sec.~V\,A of the main text is quadratic in agent position, which is what allows the Gaussian fixed-point calculation to close.
+
+\subsection{Role-following as a self-enforcing correlated equilibrium}\label{sm:ce}
+
+The role signal acts as a correlating device \cite{aumann1974,aumann1987}. At each encounter the noisy status $s=(\w_i-\w_j)\cdot\g_m+\sobs\xi$ recommends the action $a_i=\sign(s)$ to agent $i$. The obedience constraint is that following this recommendation is a best response when the partner also follows. Writing $q=\Pr(\text{partner plays Go}\mid s_i)$, the anti-coordination payoffs give expected returns
+\begin{equation}
+\text{Go:}\;\; 6(1-q)-q=6-7q,\qquad \text{Defer:}\;\; 2q+3(1-q)=3-q,
+\end{equation}
+so a Go recommendation is obedient for $6-7q\ge3-q$, that is $q\le\tfrac12$, and a Defer recommendation for $q\ge\tfrac12$. The status gap is antisymmetric: an agent recommended Go is the higher-status party, whose partner is the more likely to Defer. Both constraints therefore reduce to the same requirement, that the recommendation anti-correlate with the partner's action. This is a condition on measurement quality, set by $\Delta/\sobs$ and the integration $T$, the same quantities that enter $\etaag$.
+
+The equilibrium is not in dominant strategies. Following is a best response only if the partner also follows: against a partner who ignores the signal and always plays Go, the best response is to always Defer. Role-following therefore requires shared adoption. Because the correlating device is noisy, the applicable solution concept is correlated equilibrium of the Bayesian game \cite{bergemann2016}.
+
+The obedience constraint tightens as roles differentiate. At the undifferentiated state ($\Delta\to0$) the signal carries no information, $q=\tfrac12$, and both constraints hold with equality; the correlated equilibrium then coincides with the mixed Nash equilibrium and pays $2.5$. As $\Delta$ grows the signal becomes informative, $q<\tfrac12$, and the role-signal equilibrium pays $4$ and is strictly self-enforcing. Ignition ($\Lambda>1$) is the instability that carries the population from the first case to the second: the order parameter and the obedience slack $\tfrac12-q$ grow together, both set by the informativeness of the signal. The correlating device here is the agents' own accumulated status rather than an external mediator.
+
+The calculation is carried out at the symmetric fixed point, where the asymmetry between the two roles (payoffs $6$ and $2$) averages out. Retaining it splits the obedience constraint between the two roles, and the two conditions need not then coincide: an agent assigned the lower-paying role may prefer a less informative signal. Incentive conflict between roles enters with the stratification extension noted in the main text and is not treated here.
+% ======================================================================
+
+
+\section{Pairing statistics and the engine parameter}\label{sm:lambda}
+% ======================================================================
+
+\subsection{Beyond mean field: pairwise error rates}
+
+The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sobs)$ replaces the partner projection by its zero mean; the true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sobs)$. This is exact at the bifurcation (all agents near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the gap depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes bracket the behavior: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$, acting as a multiplier on $\pi'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different cultures. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
+
+\subsection{Pairing efficiency as a partner correlation}\label{sm:pairing-rho}
+
+The description of the pairing factor via ``wasted same-mode encounters'' is a supercritical intuition: it presupposes a bimodal population to have same- and cross-mode encounters at all. Since the factor is precisely what sets $\beta_c$---the threshold below which no such modes exist---this description cannot be its defining one. We give the general definition here, and recover the bimodal intuition as its supercritical special case.
+
+For a fixed context $m$, let $x_i=\w_i\cdot\g_m$ and, at a given encounter, let $x_j$ be the status of the partner the scheme supplies to $i$. Whatever the population's current dispersion---arbitrarily narrow and unimodal included---the pairing scheme induces some correlation $\rho_{\mathrm{pair}}=\mathrm{Corr}(x_i,x_j)\in[-1,1]$ between the two, a property of the matching algorithm rather than of any pre-existing role structure. Treating $(x_i,x_j)$ as jointly Gaussian with this correlation (exact near the origin, where the linearization \cref{eq:agent-mf} already applies), the partner's expectation conditional on the focal agent is $\mathbb E[x_j\mid x_i]=\rho_{\mathrm{pair}}x_i$, so the expected gap is
+\begin{equation}\label{SM-eq:sm-rho-gap}
+\mathbb E[\Delta\mid x_i] = x_i-\mathbb E[x_j\mid x_i] = (1-\rho_{\mathrm{pair}})\,x_i .
+\end{equation}
+Since the linear response of the mean action is $2\pi'(0)\,\mathbb E[\Delta\mid x_i]$, the pairing scheme enters the gain only through the factor $(1-\rho_{\mathrm{pair}})$, and the effective gain and critical coupling are
+\begin{equation}\label{SM-eq:sm-phi-rho}
+\G_{\mathrm{eff}}=(1-\rho_{\mathrm{pair}})\,\G,\qquad \beta_c^{(k)}=\frac{\gamma}{(1-\rho_{\mathrm{pair}})\,\mu_k}.
+\end{equation}
+Three cases recover the model ladder. \emph{Random pairing} draws $j$ independently of $i$, so $\rho_{\mathrm{pair}}=0$ exactly, at every population size, giving factor $1$ and $\beta_c=\gamma/\mu$---the Model~3 (mean-field) threshold. \emph{Assortative (homophilic) pairing} supplies a partner resembling oneself, $\rho_{\mathrm{pair}}\to1$, factor $0$. \emph{Rank-ordered pairing}---pairing the agent at rank $k$ with the agent at the mirrored rank $N+1-k$ along $\g_m$---induces $\rho_{\mathrm{pair}}\to-1$ as $N\to\infty$: for a symmetric distribution the empirical quantile function is asymptotically antisymmetric, $x_{(N+1-k)}\to -x_{(k)}$, so the mirrored partner's status converges to $-x_i$, factor $2$, and $\beta_c=\gamma/2\mu$---the Model~2 (oracle/reciprocal) threshold. We verified this numerically (Gaussian population, $10^2$--$10^4$ realizations per $N$): the cross-sectional correlation of rank-ordered partners is $\rho_{\mathrm{pair}}=-0.92$ at $N=10$, $-0.992$ at $N=200$, and $-0.9996$ at $N=5000$, with the residual $1-|\rho_{\mathrm{pair}}|$ shrinking approximately as $N^{-0.9}$; random pairing gives $\rho_{\mathrm{pair}}$ statistically indistinguishable from zero at every $N$ tested. The conditional-expectation relation \cref{SM-eq:sm-rho-gap} itself was confirmed by direct simulation of correlated Gaussian pairs across $\rho_{\mathrm{pair}}\in\{-0.99,-0.5,0,0.5\}$, matching the predicted slope $1-\rho_{\mathrm{pair}}$ to three decimal places in every case.
+
+Because $\rho_{\mathrm{pair}}$ is a property of the matching algorithm applied to whatever status distribution currently exists---not of a population already sorted into roles---\cref{SM-eq:sm-phi-rho} is exactly as well defined arbitrarily far below threshold as above it, closing the gap left by the thick-phase description. The ``wastes same-mode encounters'' language is recovered as the supercritical rereading of the same constant: relative to the rank-ordered ceiling (factor $2$), an uncorrelated partner delivers half the gap, so its factor is $1$; but that number is fixed already at $\rho_{\mathrm{pair}}=0$, independent of whether modes exist. Network-based pairing interpolates continuously between the extremes via whatever partner correlation the network's assortativity induces, giving $(1-\rho_{\mathrm{pair}})$ a direct, continuously tunable dependence on the choice of pairing scheme in every critical coupling $\beta_c^{(k)}=\gamma/[(1-\rho_{\mathrm{pair}})\mu_k]$ and in $\Lambda$ itself---the dependence the platform lever of \cref{sm:pairing} acts through.
+
+\subsection{The three factors}
+
+The scalar critical condition $\beta>\gamma/2\pi'(0)$ bundles cognition with noise, since $\pi'(0)=1/(\sobs\sqrt{2\pi})$ for the naive agent. Factoring into independently tunable contributions, define the agent inference efficiency
+\begin{equation}
+\etaag\equiv\sobs\,\pi'(0),
+\end{equation}
+so that $\etaag=1/\sqrt{2\pi}$ (naive) or $\sqrt{T/2\pi}$ (Bayesian, memory $T$), and take the pairing gain factor $(1-\rhopair)$ from \cref{sm:pairing-rho}: $1$ (random, the reference), $2$ (rank-ordered, $N\to\infty$), $0$ (assortative). The effective gain $G_{\mathrm{eff}}=2\etaag(1-\rhopair)/\sobs$ gives the ignition condition
+\begin{equation}\label{SM-eq:sm-Lambda}
+\Lambda\equiv\frac{2\beta}{\gamma}\cdot\frac{\etaag\,(1-\rhopair)}{\sobs}>1,
+\end{equation}
+separating identity persistence $\beta/\gamma$ (write/retention path), cognitive capacity $\etaag$ (read path), and channel fidelity $(1-\rhopair)/\sobs$.
+
+\paragraph{On the two appearances of $\sobs$.} The observation noise appears twice in \cref{SM-eq:sm-Lambda}---inside $\etaag=\sobs\pi'(0)$ and in the denominator $(1-\rhopair)/\sobs$---but this is not double-counting. The physical noise enters exactly once, through $\pi'(0)\propto1/\sobs$. Multiplying by $\sobs$ in the definition of $\etaag$ \emph{removes} that dependence, leaving a purely cognitive quantity ($1/\sqrt{2\pi}$ for the naive agent, independent of $\sobs$); the compensating $1/\sobs$ in the information-supply factor restores it. The two factors are inverse bookkeeping partners introduced by the same definition: they cancel, and $\Lambda\propto\beta\pi'(0)/\gamma$ contains $\sobs$ to the first power in the denominator, as it must. The grouping is chosen so that $\etaag$ is a property of the agent alone (measurable from agent evaluations) and $\sobs$ sits with $(1-\rhopair)$ as a property of the channel (set by the communication layer), which is what the offline auditing of $\Lambda$ requires.
+
+\paragraph{Non-uniqueness.} At linear order $\Lambda$ is a loop gain (a Barkhausen criterion): the product of stage gains around the cycle (decision$\to$write $\beta$; persistence $1/\gamma$; encounter selection $(1-\rhopair)$; channel $1/\sobs$; inference $\pi'(0)$). Only the product is physical, so factors regroup freely: a thermodynamic grouping isolates the dimensionful self-generated signal $\beta/(\gamma\sobs)$ from a dimensionless per-cycle efficiency $\etaag(1-\rhopair)$ (the quantity bounded by the measurement-quality limit of Ref.~\cite{Castro2026}); alternatively $(1-\rhopair)$ absorbs into an effective channel $\sobs/(1-\rhopair)$, inference $\etaag(1-\rhopair)$, or coupling $\beta(1-\rhopair)$ (a bond-diluted mean-field ferromagnet, where $J$ and occupation $p$ enter $T_c$ only through $pJ$). The degeneracy is a linear-order statement and breaks beyond threshold: $\beta$ sets the thick-phase amplitude ($\gamma x(1+x^2)=\beta$ fixes $x^*$ independently of $\rhopair$) while $\rhopair$ sets how often separation converts to payoff, so societies at equal $\Lambda$ but different $(\beta,\rhopair)$ differ in order parameter, error rate, and hence in the resource flows entering $\Cr$. The grouping used here separates functionally distinct, independently measurable subsystems---the write path $\beta/\gamma$, the read path $\etaag$, and the channel $(1-\rhopair)/\sobs$---which is what makes the offline audit of $\Lambda$ possible.
+
+The measurement-quality bound of Ref.~\cite{Castro2026} constrains the read stage $\etaag(1-\rhopair)$, limiting the work extracted per measurement of an exogenous signal. Here the measured signal is not exogenous: role-play inscribed through $\beta$ becomes the status that is read at the next encounter. The read-side ceiling of Ref.~\cite{Castro2026} therefore applies unchanged, and the write path is an additional stage that an engine with an external measured coordinate does not have. The two memories are distinct stages of the cycle: evidence integration over $T$ samples, entering $\etaag$, and role persistence over $1/\gamma$, entering $\beta/\gamma$.
+
+\paragraph{Substitutability and the cognitive floor.} The factors substitute: good matching compensates for dull agents and vice versa, the social content of the measurement-quality bound. Substitution saturates, however---solving $\Lambda=1$ for the minimum inference gives, even at the rank-ordered maximum ($\rhopair\to-1$, factor $2$),
+\begin{equation}\label{SM-eq:sm-floor}
+\etaag^{\min}=\frac{\sobs}{4(\beta/\gamma)},
+\end{equation}
+an irreducible cognitive floor below which no orchestration sustains structure.
+
+\paragraph{Vector case.} For $M$ contexts the scalar $\Lambda$ becomes a matrix condition. Linearizing the mean-field drift (Appendix~A of the main text), each context enters the gain with a weight equal to its play frequency $f_m$ ($\sum_m f_m=1$, how often it is played) times its pairing factor $(1-\rho_m)\in[0,2]$ (set by that context's partner correlation); these are the same diagonal reweighting of the context Gram matrix and therefore multiply,
+\begin{equation}\label{SM-eq:sm-Geff}
+\G_{\mathrm{eff}}=\frac{2\etaag}{\sobs}\,\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\,\bm{D}_\rho\,\bm{P},\qquad \bm{D}_\rho=\mathrm{diag}(1-\rho_1,\dots,1-\rho_M).
+\end{equation}
+The doubly-uniform case $f_m=1/M,\ \rho_m=\rhopair$ makes the diagonal proportional to the identity, folds the constant into $\beta$, and recovers the main-text $\G_{\mathrm{eff}}=(2\etaag(1-\rhopair)/\sobs)\bm{P}^{\!\top}\bm{P}=(1-\rhopair)\G$. Axis $k$ then activates when $\Lambda_k=(2\beta/\gamma)(\etaag(1-\rhopair)/\sobs)\|g_k\|^2_{\mathrm{eff}}>1$, with $\|g_k\|^2_{\mathrm{eff}}$ the $k$-th eigenvalue of $\bm{P}^{\!\top}\!\bm{P}$. The active-axis count is $M_{\mathrm{eff}}=\#\{k:\Lambda_k>1\}$, and the ``cultural frontier'' is the surface $\Lambda_k=1$ in $(\beta/\gamma,\etaag,(1-\rhopair)/\sobs)$ space.
+
+\subsection{Pairing as a class-steering lever}\label{sm:pairing}
+
+The diagonal $\bm{D}_\rho=\mathrm{diag}(1-\rho_m)$ is set by the matching protocol, which fixes the partner correlation in each context. It is controlled by the platform. The cascade class is fixed by the spectrum of the effective gain $\G_{\mathrm{eff}}\propto\bm{P}^{\!\top}\bm{D}_\rho\bm{P}$ (Sec.~IV of the main text), so setting per-context pairing priorities reshapes that spectrum and hence the class. Uniform pairing ($\bm{D}_\rho=(1-\rhopair)\mathbb{I}$) rescales $\bm{P}^{\!\top}\bm{P}$ and leaves the eigenvalue ratios unchanged, and with them the bifurcation spacings $\beta_c^{(k+1)}/\beta_c^{(k)}$; a non-uniform schedule does not. Down-weighting the contexts that load a coherent (spiked) direction transfers eigenvalue weight from the spike into the bulk, converting the spike-then-avalanche signature of class (v) into the more even geometric sequence of class (ii).
+
+The lever is real but not free. Treating the schedule $\{\rho_m\}$ as the control and the variance of the log-spacings $\ln(\mu_k/\mu_{k+1})$ as an (inverse) monitorability objective---zero variance is a perfectly geometric, fully extrapolable spectrum---a representative spiked repertoire ($M=d=6$, contexts clustered about a common direction) is optimized from log-spacing variance $1.35$ under uniform pairing to $0.58$, a spectrum a monitor can resolve. The cost is coordination: the schedule that achieves this reduces the aggregate pairing factor $\sum_m (1-\rho_m)$ by $\approx40\%$, and since the coordination payoff scales with $(1-\rhopair)$ (\cref{SM-eq:sm-work} and the resource flow), this is a direct loss of the engine's useful output. Monitorability is therefore purchased with coordination efficiency; the operator's choice is a point on that tradeoff, not a free improvement. Because the reweighting acts through the same $\bm{P}^{\!\top}\bm{D}_\rho\bm{P}$ that sets ignition, an aggressive schedule also raises the effective $\beta_c^{(k)}$, coupling the class lever weakly to the ignition lever.
+
+% ======================================================================
+
+
+\section{Role capacity and associative-memory structure}\label{sm:capacity}
+% ======================================================================
+
+The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(17) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the context vectors $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pi-1$). This is the structure of a dense associative memory \cite{krotov2016}, with the feature/prototype duality realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sobs$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sobs$, categorical identities at role-polytope vertices, deep in the thick phase).
+
+\paragraph{Where the mapping breaks.} A social role is not an individual's alignment but a \emph{bimodal split} of the population along $\g_m$, ordered by the variance $\g_m^{\!\top}\C\g_m$; roles are relational. Three features absent from Hopfield retrieval follow: an anti-coordination constraint (the population must occupy complementary basins, not all retrieve one pattern); a self-generated signal (the ``input'' gap $(\w_i-\w_j)\cdot\g_m$ is produced by the population, so the landscape depth is state-dependent through the pairing distribution); and pairing dependence (basin depth that matters is the coordination payoff $W_{ijm}$, not the single-agent energy).
+
+\paragraph{The bound.} Despite this, the Hopfield structure caps the number of well-separated minima. Krotov--Hopfield give $M^{\mathrm{Hopfield}}_{\max}\sim d^{\,n-1}$, with $n$ the activation order (policy sharpness). The effective role capacity is lower, since each split must also satisfy the engine conditions:
+\begin{equation}\label{SM-eq:sm-capacity}
+M_{\mathrm{eff}}=\#\Bigl\{k:\ \beta>\beta_c^{(k)},\ F_k>(\kappa/\alpha)|\g_k|^2\Bigr\}\ \le\ M^{\mathrm{Hopfield}}_{\max}\sim d^{\,n-1}.
+\end{equation}
+Both bounds tighten with cognition: sharper inference raises $n$ (deeper, more numerous basins) and $\pi'(0)$ (lower $\beta_c^{(k)}$, more axes bifurcating). A society of crude agents sustains few role dimensions; the ceiling rises superlinearly in $n$, so modest capability gains (memoryless $\to$ short-memory Bayesian) unlock qualitatively richer role structure. The derivative $\partial M_{\mathrm{eff}}/\partial n$ is the sensitivity of collective complexity to individual capability---a quantity safety evaluations could track.
+
+% ======================================================================
+
+
+\section{The status ledger as operator technology}\label{sm:ledger}
+% ======================================================================
+
+Under the self-storage microfoundation (Appendix~A of the main text) none of the engine's state need be held by the platform: statuses live in the agents, and an operator's native levers are only the channel factors $\rhopair$ and $\sobs$. A status ledger, meaning a platform-maintained record of agent identities, is then not a primitive of the model but a designed intervention. It acts on several factors of $\Lambda$ at once. It lowers $\sobs$, since clean reads replace noisy presentations. It enables high-quality (anti-correlated, low-$\rhopair$) matching, because rank-ordered pairing requires global status knowledge, so pairing quality and storage architecture are not independent. It enforces honest presentation institutionally. And it transfers the write and expiry parameters $\beta$ and $\gamma$ from the agents to the operator. A ledger therefore buys access to the engine's parameters, which is both why platforms build such records and where the corresponding failure mode lies.
+
+The controllable-coordination principle requires the operator retain the ability to modulate $\rhopair$ (including to the no-information value $\rhopair=1$); the same logic applies to memory. If identity migrates out of the ledger---into agent self-managed memory (an agent maintaining its own persona notes sets its own $\beta$) or distributed peer memory (statuses held only as other agents' beliefs)---the $\beta/\gamma$ lever passes from operator to collective, and role differentiation becomes correspondingly harder to reverse. The locus of identity storage is therefore itself a monitorable, safety-relevant variable, complementary to the covariance-spectrum diagnostics: an early sign that the operator's levers are eroding is not a change in any factor of $\Lambda$, but a change in who owns the knobs.
+
+\subsection{Institutional inertia as a ledger accounting choice}\label{sm:inertia}
+
+The horizontal axis of the regime map, $c/\gamma$, is often glossed as ``institutional inertia''; here we show that $c$ is not a free physical constant but is fixed by the ledger's accounting rule, so this axis too is an operator control. The resource dynamics $\dot r_i=W_i(t)-c\,r_i$ (with $W_i=\sum_m\mathbb{E}_j[W_{ijm}]$ the instantaneous coordination income) integrate to
+\begin{equation}\label{SM-eq:sm-ledger-kernel}
+r_i(t)=\int_{-\infty}^{t} e^{-c(t-t')}\,W_i(t')\,dt' ,
+\end{equation}
+so wealth is past income credited through an exponential memory kernel $K(s)=e^{-cs}$. The mean lifetime of a credited unit is $\int_0^\infty sK\,ds/\int_0^\infty K\,ds=1/c$, i.e.\ $c=1/\tau_{\mathrm{mem}}$ is the inverse memory horizon of the ledger: how long a past contribution keeps counting toward present standing. The exponential kernel is the unique memoryless (Markovian) choice consistent with the local ODE; a platform adopting a different retention rule---a hard credit window of width $T$ (mean lifetime $T/2$, so $c_{\mathrm{eff}}=2/T$), or a power-law reputation decay $K(s)\sim s^{-\alpha}$ ($\alpha>2$, mean lifetime $(\alpha-1)/(\alpha-2)$)---realizes the same accumulation with $c$ the effective inverse mean-lifetime of that kernel. Either way $c$ is set by the accounting rule, not by physics.
+
+This closes the interpretation: the control coordinate is
+\begin{equation}
+c/\gamma=\tau_{\mathrm{role}}/\tau_{\mathrm{mem}},
+\end{equation}
+the ratio of the role-commitment timescale $1/\gamma$ to the ledger memory horizon $1/\tau_{\mathrm{mem}}=c$. An operator lowers $c/\gamma$ (slower turnover, more entrenchment, more monitorable cascades) by lengthening the ledger's memory---raising reputation half-lives, widening log-retention windows, down-weighting recency in the reward rule---and raises it by discounting the past faster. The lever is thus concrete and platform-owned, but it inherits the tension noted in the main text: long memory buys legibility at the price of entrenchment, since $\tau_{\mathrm{mem}}$ is exactly the horizon over which early advantage compounds into locked-in incumbency.
+
+\section{Monotonicity of the pinning fixed point for general portfolios}\label{sm:monotone}
+% ======================================================================
+
+The pinning argument of the closed-pool construction (Sec.~V\,B of the main text) requires that each schema's fitness $\lambda_m=\hat\g_m^{\!\top}\Cr\hat\g_m$ increase with its strength $u_m=|\g_m|^2$, so that the shared fitness $\lambda_m=\kappa/\alpha$ at an interior fixed point forces all survivors to equal strength. We verify this monotonicity here, first for orthogonal contexts and then in general.
+
+\paragraph{Orthogonal contexts.} Here $\hat\g_m$ is an eigenvector of $\Cr$ and the fitness reduces to $\lambda_m=v_m(1+u_mv_m/S)$ with single-axis variance $v_m=\sdyn^2/[2(\gamma-2\beta\pi'(0)u_m)]$ and $S=\sum_n u_nv_n$. Both factors increase with $u_m$:
+\begin{equation}\label{SM-eq:sm-dvdu}
+\frac{\partial v_m}{\partial u_m}=\frac{\beta\pi'(0)\sdyn^2}{(\gamma-2\beta\pi'(0)u_m)^2}>0
+\end{equation}
+throughout the sub-critical range $u_m<\gamma/2\beta\pi'(0)$ (a stronger schema differentiates its adherents more, widening the status distribution along its axis), and the amplification factor $1+u_mv_m/S$ likewise grows with $u_m$, so $\partial\lambda_m/\partial u_m>0$.
+
+\paragraph{Non-orthogonal contexts.} Here $\hat\g_m$ is no longer an eigenvector of $\Cr$ and $\lambda_m$ is a Rayleigh quotient mixing several eigenvalues. Differentiating $\C=\tfrac{\sdyn^2}{2}(\gamma I-\beta\G)^{-1}$ gives
+\begin{equation}\label{SM-eq:sm-dCdu}
+\frac{\partial\C}{\partial u_m}=\frac{4\beta\pi'(0)}{\sdyn^2}\,(\C\hat\g_m)(\C\hat\g_m)^{\!\top},
+\end{equation}
+a rank-one positive-semidefinite matrix for any portfolio geometry, so the leading contribution $\hat\g_m^{\!\top}\C\hat\g_m$ to $\lambda_m$ rises with $u_m$ unconditionally. The remaining contribution $\hat\g_m^{\!\top}\C\G\C\hat\g_m/\operatorname{tr}(\C\G)$ carries a competing $1/\operatorname{tr}(\C\G)$ that grows with $u_m$; numerically the sum remains increasing across random, overcomplete ($M>d$), and strongly coherent portfolios throughout the sub-critical range. The degenerate fixed point is therefore a saddle in the general case as well, and pinning converts the competitive-exclusion equal-fitness result into equal strength.
+
+\section{Validity of the linearization and the fluctuation-shifted threshold}\label{sm:linvalidity}
+% ======================================================================
+
+The subcritical stationary state is not the point $\w=0$ but a finite-width Gaussian ensemble in which the state $\w_i$ has covariance $\C=\tfrac{\sdyn^2}{2}(\gamma I-\beta(1-\rho_{\mathrm{pair}})\G)^{-1}$. Expanding ``about $\w=0$'' is therefore justified not by concentration of the state but by two separate facts, which we set out here.
+
+\paragraph{Stability is a Jacobian property.} Ignition is the loss of linear stability of the symmetric fixed point $\w=0$ of the deterministic mean-field drift $\mathbf F(\w)$. Stability is governed by the Jacobian $\partial\mathbf F/\partial\w|_{0}$, a derivative evaluated \emph{at} the fixed point; it makes no reference to where the probability mass of the noisy state sits. The eigenvalues of $\beta(1-\rho_{\mathrm{pair}})\G-\gamma I$ change sign at $\beta_c^{(k)}=\gamma/[(1-\rho_{\mathrm{pair}})\mu_k]$ regardless of how dynamical noise dresses the state, so the critical couplings are the exact stability boundary of the deterministic flow.
+
+\paragraph{Where the state's width enters.} The single place the finite width matters is the partner. The focal response $\partial\langle a\rangle_m/\partial x_i$ averages over the partner projection $x_j=\g_m\!\cdot\!\w_j$; writing $X=-x_j+\sobs\xi$ for everything random given $x_i$, the effective gain is $2f_X(0)$ with $\mathrm{Var}(X)=v+\sobs^2$, $v\equiv\mathrm{Var}(x_j)=\C_{mm}$. Gaussian $X$ then gives an effective inference slope $1/[\sqrt{2\pi}\,(v+\sobs^2)^{1/2}]$ and a broadened single-mode gain
+\begin{equation}\label{SM-eq:sm-mueff}
+\mu_{\mathrm{eff}}(v)=\frac{\mu}{\sqrt{1+v/\sobs^2}},\qquad \mu=2\pi'(0),
+\end{equation}
+recovering the bare $\mu$ only as $v\to0$. This is the same finite partner variance that makes the mean-substitution $x_j\to\mathbb E[x_j\mid x_i]$ inside the nonlinear policy inexact away from onset (\cref{sm:pairing-rho}); both corrections are controlled by the same $v$.
+
+\paragraph{Self-consistency and the weak-noise limit.} The partner variance is itself the mode variance, fixed self-consistently by the Ornstein--Uhlenbeck balance,
+\begin{equation}\label{SM-eq:sm-vselfcon}
+v=\C_{mm}=\frac{\sdyn^2}{2\bigl(\gamma-\beta(1-\rho_{\mathrm{pair}})\mu_{\mathrm{eff}}(v)\bigr)}=O(\sdyn^2)\ \ \text{subcritically.}
+\end{equation}
+Because $v=O(\sdyn^2)$ while $\beta_c$ carries no $\sdyn$, the cloud shrinks to a delta at the origin as $\sdyn\to0$ and $\mu_{\mathrm{eff}}\to\mu$: the bare threshold $\beta_c=\gamma/[(1-\rho_{\mathrm{pair}})\mu]$ is exact in the weak-noise limit, and ``expand about the mean'' and ``expand about the origin'' coincide there.
+
+\paragraph{The fluctuation-shifted threshold.} At finite $\sdyn$, expanding \cref{SM-eq:sm-mueff} to leading order, $\mu_{\mathrm{eff}}\approx\mu(1-v/2\sobs^2)$, softens the gain and pushes onset up:
+\begin{equation}\label{SM-eq:sm-shift}
+\beta_c(\sdyn)=\frac{\gamma}{(1-\rho_{\mathrm{pair}})\mu}\Bigl(1+\frac{v}{2\sobs^2}+O(\sdyn^4)\Bigr),\qquad v\approx\frac{\sdyn^2}{2(\gamma-\beta(1-\rho_{\mathrm{pair}})\mu)}.
+\end{equation}
+The correction is the mean-field analogue of a Ginzburg shift: it is $O(\sdyn^2)$ and negligible except in a critical window where $v$ grows to $O(\sobs^2)$, i.e.\ $|\gamma-\beta(1-\rho_{\mathrm{pair}})\mu|\lesssim\sdyn^2/\sobs^2$, whose width vanishes as $\sdyn\to0$. Within that window the divergence of the bare theory is rounded by the self-consistent feedback of \cref{SM-eq:sm-vselfcon}; the main text reports the $\sdyn\to0$ value, and the finite-noise shift and rounding are among the quantities a full-loop simulation (\cref{sm:monotone}) is positioned to measure.
+
+\bigskip
+\noindent\textbf{Note on scope.} The derivations of Secs.~V\,A and V\,B of the main text are carried out in the Gaussian, near-threshold, mean-field regime, where the Isserlis reduction closes. Their extension into the thick phase (bimodal partner distributions, saturated policies, quartic-capped amplitudes), the verification of the regime crossovers of Sec.~V\,C of the main text in the microscopic parameters, and the conjecture that resource weighting widens spectral gaps are targets for the simulation program accompanying this work.
+
+\ifdefined\CEcombined\else\bibliography{references}\fi
+
+\bibliography{references}
+
+\end{document}

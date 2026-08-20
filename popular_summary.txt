@@ -1,0 +1,15 @@
+Societies organize themselves into complementary roles -- leader and follower,
+planner and executor -- without anyone assigning them. How does such structure
+arise from individual choices, and can it be seen coming?
+
+We show that role formation behaves like an engine that runs on information.
+Individuals read a noisy social signal to judge who should take which role, and
+acting on that judgment sharpens the signal for everyone else. Past a threshold
+the loop sustains itself and roles crystallize. Pushed further, roles appear in
+a sequence whose shape the society sets for itself: sometimes gradual and
+predictable, sometimes a sudden avalanche with no warning.
+
+That sequence is already encoded in how individual behavior varies before any
+role appears, so it can be read out in advance. This offers a way to anticipate
+the spontaneous emergence of coordinated roles among interacting artificial
+agents, while intervention is still possible.

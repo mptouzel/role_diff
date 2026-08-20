@@ -1,0 +1,491 @@
+\documentclass[
+  aps,prx,
+  reprint,
+  superscriptaddress,
+  nofootinbib,
+  longbibliography
+]{revtex4-2}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{xcolor}
+\usepackage{xfrac}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% run-in paragraph headings unnumbered (no auto 'a.' prefix)
+\setcounter{secnumdepth}{3}
+
+
+% cleveref naming (shared convention with the Supplemental Material)
+\crefname{equation}{Eq.}{Eqs.}
+\Crefname{equation}{Equation}{Equations}
+\crefname{section}{Sec.}{Secs.}
+\Crefname{section}{Section}{Sections}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Figure}{Figures}
+\newcommand{\crefrangeconjunction}{--}
+\newcommand{\Crefrangeconjunction}{--}
+
+\newcommand{\w}{\bm{\omega}}
+\newcommand{\g}{\mathbf{g}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Cr}{\mathbf{C}_r}
+\newcommand{\G}{\mathbf{G}}
+\newcommand{\etaag}{\eta_{\mathrm{agent}}}
+\newcommand{\rhopair}{\rho_{\mathrm{pair}}}
+\newcommand{\sobs}{\sigma_{\mathrm{obs}}}
+\newcommand{\sdyn}{\sigma_{\mathrm{dyn}}}
+\newcommand{\sign}{\mathrm{sign}}
+\newcommand{\ract}{r_{\mathrm{act}}}
+% Supplemental Material is cited as a reference (no cross-document xr)
+\newcommand{\smref}[1]{\cite[Sec.~#1]{SM}}
+\newcommand{\smeq}[1]{\cite[Eq.~(#1)]{SM}}
+
+\begin{document}
+
+\title{Role differentiation as ignition of a collective information engine}
+
+\author{Maximilian Puelma Touzel}
+\email{puelmatm@mila.quebec}
+\affiliation{Mila--Quebec AI Institute, 6666 St.\ Urbain Ave., Montreal, Quebec, Canada}
+
+\date{\today}
+
+\begin{abstract}
+Informational active matter research has shown how measurement-informed decisions produce collective order, so far in systems that reach consensus. We identify a collective information engine that orders by differentiation instead, and construct a minimal instance using anti-coordination games, the simplest game class in which differentiated role information has value. Agents infer their role from a noisy social signal, and role-following action feeds back into that signal, shaping the incentive to follow roles. The schemas prescribing roles are themselves dynamic: resources accrued through coordinated role-play combine with population variability to shape and reinforce the schemas that generated them. The model thereby operationalizes Sewell's duality of schemas and resources, the influential but hitherto qualitative resolution of sociology's structure--agency debate. The engine ignites when a loop gain $\Lambda$---the product of identity persistence, cognitive capacity, and social feedback channel fidelity---exceeds one. For a repertoire of such schemas, roles emerge with increasing gain in a bifurcation cascade whose functional form is fixed by the repertoire's eigenvalue spectrum, ranging from monitorable logarithmic sequences to deceptive spike-then-avalanche onsets. Resource accumulation turns schema competition into a replicator dynamics that, in mean field, selects the cascade type endogenously. Subcritical behavioral covariance reveals that type before onset, enabling early detection, and feedback channel parameters bias which type is selected. For agents interacting on a platform, adaptive platform design then becomes a control lever to throttle emergent coordination, e.g. for mitigating risks from distributional AI. Joining game theory, collective dynamics, and information engines, we open a route to an information thermodynamics of agent populations.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+A century-old question runs through the social sciences: how does macro-level social structure shape individuals while, simultaneously, individuals' choices generate that structure? Giddens proposed a resolution to this \textit{structure--agency debate} through the \textit{duality of structure} \cite{giddens1984}: it is both the medium and the outcome of the practices it organizes. Soon after, another sociologist, Sewell realized that this theory, while appealing, is not \textit{physical}: it lacks resource constraints. He proposed a resource-constrained version that recasts the duality as a feedback between \emph{schemas}, the transposable rules and conventions that give meaning to resources by prescribing behavior around their use, and \emph{resources}, the material and symbolic stocks that fuel the resource requirements of schemas, empowering agents in the process \cite{sewell1992}. Each sustains the other: schemas direct the use of resources, and resource-wielding agents reproduce (or transform) schemas. None of these proposals have established quantitative counterparts, but Sewell's version has many of the qualitative ingredients of a statistical mechanics of complex agent systems. Surprisingly, the quantitative frameworks for multiscale social dynamics---evolutionary game theory, opinion dynamics---do not operationalize its core objects. Analogous micro--macro tensions, many unresolved, recur across social science (\textit{e.g.} in cultural evolution \cite{acerbi2015} and in macroeconomics \cite{lucas1976,solow2010}), suggesting an explicit resource theory of structuration would have an impact beyond sociology.
+
+We provide such a theory, exemplified for the case of role-prescribing social schemas, and we find that its natural language is thermodynamic. First demonstrated by Szilard almost 100 years ago \cite{szilard1929}, information engines---systems that convert measurement into extractable work, subject to performance limits set by measurement quality \cite{Castro2026}---quantify the value of information for physical agents. We show that a population of agents incentivized and provided with the means to role-play (via memory in an anti-coordination game) constitutes a \emph{collective, self-fueling information engine}: coordinated role-play is the payoff-generating output---the engine's analog of extracted work---bounded by the role information being measured, analogous to the bound Szilard calculated for his illustrative model engine. As an instance of the long-noted link between Maxwell's demon and symmetry-breaking order parameters \cite{parrondo1999}, this description has a home in informational active matter research: a modern expansion of Szilard's ideas to more complex settings, where measurement-informed decisions produce collective order bounded by the information acquired \cite{vansaders2023, ziepke2022}. Those engines reach \emph{consensus} (a magnetization-like order), while here, \emph{differentiation} is produced (a covariance-like order) in which agents take complementary rather than matching roles. Social role structure is the engine's running state, sustained by the burning of role information generated by that structure.
+
+Our main results are: (i) a minimal model that couples schemas and resources through agent identities and actions, (ii) an ignition condition---$\Lambda>1$, where dimensionless loop gain $\Lambda$ factorizes into identity persistence, agent cognitive capacity, and social feedback channel fidelity---for self-sustaining role differentiation; (iii) an extension to multiple schema contexts results in a bifurcation cascade in which role dimensions activate sequentially, with functional form determined entirely by the eigenvalue spectrum of the context repertoire; (iv) an endogenous theory of that spectrum: resources convert schema competition into a replicator dynamics that, in the near-threshold mean field, selects among cascade classes, from single avalanches to logarithmic cascades; and (v) a monitoring protocol---subcritical spectral inversion of the behavioral covariance---that reads out the future cascade of the current repertoire before its onset, subject to finite-sample resolution and slow schema drift. We close by applying the monitoring framework to mitigate the risks associated with distributional AGI \cite{tomasev2026}: the hypothesis that general-level capability may emerge from the coordination of many individually limited AI agents.
+
+\section{A minimal engine of social structure}
+
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_loop_ignition}
+\caption{\textbf{The self-consistent schema--role--resource loop and its ignition.}
+\textbf{(a)} Model schematic, separating the three persistent state variables (left: context schemas $\g_m$, identities $\boldsymbol{\omega}_i$, and agent resources $r_i$) from the fast per-encounter signal chain (right: signal $s_{im}$, action $a_{im}$, reward $W_{im}$). \emph{Solid} arrows are the feed-forward read-out: schema and identity form the status signal (the schema $\g_m$ is the axis along which the status gap $\Delta_{im}$ is read), the policy thresholds it into an action, and the resulting coordination reward accumulates as resources. \emph{Dashed} arrows are the slow state updates that close the loop: resources reweight identities to reinforce schemas through the resource-weighted covariance $\C_r$, and actions are inscribed back into identities along the same axis (the write $\beta\langle a\rangle_m\g_m$). The single direction $\g_m$ thus serves as both read and write axis, making Sewell's schema--role duality a fixed-point loop. Each encounter is the information-engine cycle---read a noisy status, decide, earn a coordination reward (the engine's analog of extracted work)---and the engine ignites when the loop gain $\Lambda>1$ (top).
+\textbf{(b)} The bifurcation cascade over the $\beta$ sweep ($N=2500$, $d=M=3$, hierarchical fixed context repertoire, random pairing; Methods). Points are individual agent statuses $\boldsymbol{\omega}_i\!\cdot\!\hat{\g}_m$ along the three schema axes (snapshots of the agent cloud at each $\beta$); solid curves are the order parameter $\pm\sqrt{\lambda_k}$, the two branches of a pitchfork on each axis, with $\lambda_k$ the $k$-th eigenvalue of the population covariance $\C$. Below its critical coupling an axis is unimodal within the noise band $\pm\sqrt{\sdyn^2/2\gamma}$; above it (dashed lines) it splits into two role modes---the complementary leader/follower assignments of the anti-coordination game---which separate further with $\beta$. Dotted curves are the linear mean-field theory $\lambda_k=\sdyn^2/2(\gamma-\beta(1-\rhopair)\mu_k)$ ($\mu_k=2\pi'(0)|\g_k|^2$), diverging at $\beta_c^{(k)}=\gamma/[(1-\rhopair)\mu_k]$ (random pairing, $\rhopair=0$) while the quartic confinement saturates the simulated branch---the visible cascade signature. Axis 1 splits first, then axis 2, then axis 3. The right strip shows the status distribution at $\beta=20$ on the shared axis: axis 1 fully bimodal, axis 3 only marginally. The left axis reads the branches as the order parameter, the right axis the agents' status; both are the same role projection. Schemas are held fixed here to display the cascade cleanly; the full loop selects this ordering endogenously through resource feedback (\cref{fig:regimes}).}
+\label{fig:loop}
+\end{figure*}
+
+\paragraph{The game.} We design utility into roles in a minimal way by focussing on a generic anti-coordination game: two players playing Go or Defer actions, where both playing Go gives a high cost to both ($-1,-1$), both deferring is mediocre ($3,3$), and complementary role-play pays best on average, but asymmetrically ($6,2$). The latter is played in a role signal-based correlated equilibrium that pays $4$ per player, while the mixed Nash equilibrium pays only $2.5$.
+Even though role-following is not a dominant strategy---it is obeyed only when partners also follow---its incentive constraint is strict once roles differentiate and agents seek to maximize their payoffs (\smref{S1\,C}).
+The maximal coordination gain $w_0 = 1.5$ per encounter is the work available to an engine that assigns complementary roles through the measurement of social signals. The specific numbers are inessential: any anti-coordination game enters the theory only through this single scalar $w_0$, which in turn sets merely the scale of wealth.
+What is essential is the anti-coordination \emph{class}, in which roles are incentive-compatible: each action must be the best reply to its opposite---given Defer, Go must pay more ($6>3$), and given Go, Defer must pay more ($2>-1$).
+
+\paragraph{Agents, roles, and game contexts.} $N$ agents play the game against each other in pairwise encounters across a repertoire of $M$ distinct game contexts. We emphasize the importance of variable context in capturing both the transposability of schemas and the context-dependent nature of roles. We represent identities, $\w_i$ for agent $i$, and contexts, $\g_m$ for context $m$, as vectors $\w_i,\g_m\in\mathbb{R}^d$. Each agent stores and presents its own identity in each encounter, though a public registry is an equivalent alternative implementation (\cref{sm:gain}). For simplicity, the identity of agent $i$ in context $m$ is contextualized as the scalar $\w_i\!\cdot\!\g_m$. When paired with $j$ in an encounter, agent $i$ observes a noisy observation of the relative value $s=\Delta_{ij}+\sobs\xi$, with relative value $\Delta_{ij}=(\w_i-\w_j)\!\cdot\!\g_m$ and $\xi$ a standard Gaussian noise source. The agent's policy prescribes Go ($a=+1$; payoff 6) when this is positive and Defer ($a=-1$; payoff 2) when negative. We develop the theory for the case that averages over these two roles and so only depends on the sum of payoffs so that asymmetric roles are not prescribed. However, to keep the general case in mind, we use these asymmetric payoffs and call $s$ relative \textit{status} (as in `social status') because distinguishing the two roles (in this scalar comparison case) is illustrative. Integrating $T$ noisy samples, the Bayes-optimal decision is deterministic: $a=\sign(\tfrac1T\sum_{t}s_t)$ where .
+
+Roles require persistent identities. We take the simplest endogenous choice: each identity low-pass filters its agent's action history, evolving under a restoring force, context-dependent signed action input, and write noise,
+\begin{equation}
+\dot{\w}_i = -\gamma\,\w_i(1+|\w_i|^2) + b_0\!\sum_{e\in E_i} a_e\,\g_{m_e}\,\delta(t-t_e) + \sdyn\bm{\eta}_i ,
+\label{eq:agent}
+\end{equation}
+where $E_i$ is the set of encounters involving agent $i$, $a_e$ and $m_e$ the decision and context of encounter $e$, $b_0$ the per-encounter kick, $\gamma$ the decay rate of identity, and $\bm{\eta}_i$ a vector of standard Gaussian noise sources, the intrinsic write noise capturing the effects of unobserved degrees of freedom beyond the encounters. Encounters are Poisson at rate $\nu$, drawn across contexts with normalized frequencies $\sum_m f_m=1$ and over partners with pairing probabilities $p^{(m)}_{ij}$. Averaging each decision over observation noise (giving the expected signed action $\langle a\rangle_m$), over the drawn context and partner, taking the mean field ($N\to\infty$), and coarse-graining the Poisson kick stream in its dense-encounter diffusion limit ($\nu\to\infty$, $b_0\to0$ at fixed $\beta\equiv b_0\nu$), the drift becomes
+\begin{equation}
+\dot{\w}_i = -\gamma\,\w_i(1+|\w_i|^2) + \beta\sum_m f_m\,\langle a\rangle_m\,\g_m + \sdyn\bm{\eta}_i ,
+\label{eq:agent-mf}
+\end{equation}
+where $\langle a\rangle_m$ is the expected signed action in context $m$---a sigmoid of the deterministic status gap, $\Delta$. Writing $\pi(\Delta)=\Pr(a{=}{+}1|\langle s\rangle_{\xi}=\Delta)$ for the noise-averaged Go-probability, we have $\langle a\rangle_m=2\!\cdot\!\pi(\Delta)-1$, so its zero-gap slope is $2\pi'(0)$---the read gain that sets the ignition matrix below (here, the zero-gap slope $\pi'(0)=\sqrt{T/2\pi}/\sobs$). $\bm{\eta}_i$ is the intrinsic write noise of \cref{eq:agent}.
+For simplicity, we consider well-mixed pairing, which averages the partner projection to the population mean; this vanishes at the symmetric state, so the gap and thus $\langle a\rangle_m$ depend on $\w_i$ alone. For structured pairings, the effect enters through $p^{(m)}_{ij}$ as a graph Laplacian (see \cref{sm:micro} for extensions).
+
+Each context takes in an agent and returns a role prescription: $\g_m$ designates the status axis that carries role information and prescribes complementary play conditional on the sign of the gap along it. Role differentiation is then the direct consequence of schema-following: the decisions that $\g_m$ prescribes are inscribed back into identity along $\g_m$ (the $\beta$ term of \cref{eq:agent-mf}), so a population that follows a schema separates along exactly the axis the schema designates, exactly the duality making $g_m$ a schema in Sewell's sense.
+
+\paragraph{Resources and schemas.}
+Coordination income accumulates as agent wealth,
+\begin{equation}
+\dot r_i = \sum_m W_{im} - c\,r_i, \;\;\textrm{with} \;\;W_{im}=w_0(1-2P_{e,im})^2
+\label{eq:resource}
+\end{equation}
+the payoff above Nash at role-inference error rate $P_{e,im}$ (\smeq{S2}) and $c$ the resource-decay rate (its inverse the institutional memory). This payoff obeys a Szilard bound, $W\le 2\ln2\,w_0\,I$ with $I=1-H_{\mathrm{bin}}(P_e)$ the role information a measurement supplies (\smref{S1}). This is the differentiation case counterpart of the information bound on consensus order case in active matter \cite{vansaders2023}. The bound is information-theoretic rather than a physical energy budget: $W$ is the coordination payoff above Nash, not thermodynamic work, and the model carries no heat, entropy production, writing cost, or schema-maintenance cost, so the bound fixes the engine \emph{analogy} without entering the ignition or cascade results. The symmetric form $I=1-H_{\mathrm{bin}}(P_e)$ is the equiprobable two-role idealization; heterogeneous gaps and pairwise error rates enter through the partner average $W_{im}$ that follows. Here $W_{im}$ is a partner-average of the pairwise payoff $W_{ijm}=w_0(1-2P_{e,ijm})^2$, set by the gap to the partner and averaged over the same pairing statistics $p^{(m)}_{ij}$ that enter \cref{eq:agent} (extensions treated in \smref{S2}).
+
+Schemas are reinforced by those who profit from taking on differentiated roles along them according to the dynamics,
+\begin{equation}
+\dot{\g}_m = -\kappa\,\g_m + \alpha\, \Cr\, \g_m , \quad \textrm{where} \;\;
+\Cr = \frac{\sum_i r_i\, \w_i \w_i^{\!\top}}{\sum_i r_i}
+\label{eq:schema}
+\end{equation}
+is the resource-weighted population covariance, $\kappa$ is the context decay rate, and $\alpha$ is context reinforcement rate. The two ingredients of the reinforcement term encode Sewell's duality. It is \emph{covariance}-driven because a schema has purchase only where behaviour actually varies: the differentiation along axis $m$, $\g_m^{\!\top}\C\g_m$, is precisely what there is to organize into complementary roles, so a schema crystallizes---Hebbian-fashion---along the axes of differentiation the roles themselves produced (the engine reading its own output), while one aligned with no variance prescribes nothing and decays under $-\kappa\g_m$. It is \emph{resource}-weighted because what validates a schema is not raw differentiation but the payoff its adherents accrue: weighting by wealth $r_i$ makes reinforcement contingent on success and turns schema competition into a replicator dynamics whose fitness is resource accumulation (\cref{sm:closedpool})---the operational form of Sewell's claim that resources, accumulated by enacting a schema, sustain the schema that produced them.
+
+\Cref{eq:agent,eq:resource,eq:schema} close a three-part loop (\cref{fig:loop}a) that defines the multi-agent system dynamics and formalizes Sewell's duality as a fixed-point equation: schemas ($\g_m$) shape the role structure, roles generate resources, and resource-weighted structure ($\Cr$) selects schemas. The resource weighting is essential: without it all schemas collapse by power iteration onto the single leading axis of differentiation.
+Instead, resource-rich agents inflate $\Cr$
+ most along the axes that enriched them, partitioning schemas into niches and permitting thick, multi-dimensional structure(\cref{sm:fixedpoint})---while their residual spread along other directions raises those axes toward threshold, seeding the next niche in turn.
+
+
+
+\section{Parametrized ignition}
+
+Linearizing \cref{eq:agent-mf} about the undifferentiated state, the expected social feedback to the identity is $\beta(1-\rhopair)\,\G\,\w_i$ with gain matrix $\G = 2\pi'(0)\, \bm{P}^{\!\top}\!\bm{P}$, where $\bm{P}$ stacks the schema vectors $\g_m$ and $(1-\rhopair)$ is the pairing gain factor---set by the scheme's partner correlation $\rhopair$ (defined below), equal to $1$ for random matching and up to $2$ for status-mirrored. The symmetric state destabilizes along eigenvector $k$ of $\G$ when $\beta$ exceeds
+\begin{equation}
+\beta_c^{(k)} = \frac{\gamma}{(1-\rhopair)\mu_k} ,
+\label{eq:cascade}
+\end{equation}
+where $\mu_1\ge\cdots\ge\mu_R>0$ are the non-zero eigenvalues of $\G$ ($R=\mathrm{rank}(\bm{P})$): role axes activate one at a time as the feedback strength grows. We make the population covariance $\C=N^{-1}\sum_i \w_i\w_i^{\!\top}$ the order parameter.
+Its eigenvalues $\lambda_k$ leave the noise floor $\sdyn^2/2\gamma$ one at a
+time; the number that have crossed---the height of the cascade $N(\beta)$---is
+the cultural thickness, the count of active role dimensions.
+
+For a single axis the ignition condition $\beta\, G > \gamma$ is a loop-gain criterion which factorizes as
+\begin{equation}
+\Lambda \equiv \underbrace{\frac{2\beta}{\gamma}}_{\substack{\text{identity}\\\text{persistence}}}\cdot
+\underbrace{\etaag}_{\substack{\text{cognitive}\\\text{capacity}}}\cdot
+\underbrace{\frac{1-\rhopair}{\sobs}}_{\substack{\text{channel}\\\text{fidelity}}} > 1,
+\label{eq:lambda}
+\end{equation}
+where $\etaag \equiv \sobs\,\pi'(0)$ is the agent's dimensionless inference efficiency ($1/\sqrt{2\pi}$ for a threshold agent, $\sqrt{T/2\pi}$ with memory $T$) and $\rhopair\in[-1,1]$ is the correlation the matching scheme induces between a partner's status and one's own (at fixed context $m$); the pairing enters the loop gain only through the factor $(1-\rhopair)$. Independent (random) pairing gives $\rhopair=0$, factor $1$---the reference, recovering the mean-field threshold $\beta_c=\gamma/\mu$; rank-ordered (status-mirrored) matching drives $\rhopair\to-1$ in the population limit, factor $2$, halving the threshold (the oracle limit); assortative (homophilic) matching gives $\rhopair\to1$, factor $0$ (\smref{S2}). The correlation needs no pre-existing role poles---$\rhopair$ is a property of the matching algorithm applied to whatever status distribution currently exists, symmetric and arbitrarily narrow included---so it is as well-defined below threshold, where it sets $\beta_c$, as above it. The engine runs on two integrators---a write path ($\beta/\gamma$: decisions accumulated into persistent identity) and a read path ($\etaag$: social signals accumulated into posterior inference)---coupled by the information channel between agents. The factors compensate at linear order: well-designed matching can compensate for limited-inference agents and vice versa (similar to the measurement-quality bound on engine performance derived in \cite{Castro2026}). However, even at the best (rank-ordered) matching ($\rhopair\to-1$) ignition requires $\etaag > \sobs\gamma/4\beta$, an \emph{irreducible cognitive floor} below which no interaction orchestration can sustain role structure. At threshold where linear order is accurate, only the product $\Lambda$ is physical. Beyond this threshold the degeneracy of the factorization breaks: $\beta$ sets mode amplitudes while $\rhopair$ sets conversion efficiency, so role societies at equal $\Lambda$ but different splits are dynamically distinguishable (\smref{S2}). \Cref{fig:loop}b shows the first three bifurcations in the cascade: equilibrating the population at each $\beta$, role axes leave the noise floor one at a time around their critical coupling strengths $\beta_c^{(k)}=\gamma/[(1-\rhopair)\mu_k]$.
+
+
+\subsection{The gain matrix and the cascade of critical couplings}\label{sm:gain}
+
+We now linearize the mean-field drift \cref{eq:agent-mf} about the symmetric state, showing how the gain matrix $\G=2\pi'(0)\bm{P}^{\!\top}\!\bm{P}$ arises. Its feedback term is $\beta\sum_m f_m\langle a\rangle_m\g_m$, where $\langle a\rangle_m(\w_i)$ is the expected signed action in context $m$: the per-encounter decision is $a_{im}\in\{-1,+1\}$ (Go, $a_{im}=+1$, with probability $\pi(s_{im})$ on the noisy gap $s_{im}=(\w_i-\w_j)\cdot\g_m+\sobs\xi_{im}$), and $\langle a\rangle_m$ is its average over that observation noise and over the drawn partner.
+
+\paragraph{Mean field.} As $N\to\infty$ the partner projection $\w_j\cdot\g_m$ is replaced by its population mean, which vanishes at the symmetric fixed point, so $s_{im}\approx\w_i\cdot\g_m+\sobs\xi_{im}$ and, averaging the decision over the observation noise,
+\begin{equation}\label{SM-eq:sm-abar}
+\langle a\rangle_m(\w_i)=2\pi(\w_i\cdot\g_m)-1,
+\end{equation}
+which for the naive policy is $\operatorname{erf}\!\bigl(\w_i\cdot\g_m/(\sobs\sqrt2)\bigr)$.
+
+\paragraph{Linearization.} At $\w_i=\bm0$ each projection vanishes and $2\pi(0)-1=0$ by policy symmetry. To first order $\langle a\rangle_m\approx 2\pi'(0)(\g_m^{\!\top}\w_i)$, so the feedback term of \cref{eq:agent-mf} becomes
+\begin{equation}
+\beta\sum_m f_m\langle a\rangle_m\g_m\approx 2\beta\pi'(0)\Bigl(\sum_m f_m\,\g_m\g_m^{\!\top}\Bigr)\w_i=\beta\,\G\,\w_i,
+\end{equation}
+\begin{equation}
+\G\equiv 2\pi'(0)\sum_m f_m\,\g_m\g_m^{\!\top}=2\pi'(0)\,\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\,\bm{P},
+\end{equation}
+with $\mathbf{f}=(f_1,\ldots,f_M)$ and $\bm{P}$ the $M\times d$ matrix of stacked context vectors. We take the play frequencies uniform, $f_m=1/M$, and absorb the constant $1/M$ into $\beta$, so that $\G=2\pi'(0)\,\bm{P}^{\!\top}\bm{P}$ and $\beta$ is the per-context write rate; the frequencies are retained explicitly only where they act as a design lever (\smref{S2\,D}). They are properties of the environment, fixed over the full set of $M$ candidate contexts, and are not renormalized as schemas go extinct. Combined with the linearized restoring force (the cubic term vanishes at the origin),
+\begin{equation}\label{SM-eq:sm-linear}
+\dot{\w}_i\approx(-\gamma I+\beta\G)\w_i+\sdyn\bm\eta_i.
+\end{equation}
+The symmetric state loses stability along eigenvector $k$ of $\G$ when $\beta$ exceeds $\gamma/[(1-\rhopair)\mu_k]$ (\cref{eq:cascade}); absorbing the constant $(1-\rhopair)$ into $\beta$ as above,
+\begin{equation}\label{SM-eq:sm-cascade}
+\beta_c^{(k)}=\gamma/\mu_k,\qquad \mu_1\ge\mu_2\ge\cdots\ge\mu_d,
+\end{equation}
+the cascade of critical couplings. \emph{Scalar check:} $M=1$, $g_1=1$ gives $\G=2\pi'(0)$, $\beta_c=\gamma/2\pi'(0)=\gamma\sobs\sqrt{2\pi}/2$ for the naive policy---the Model~3 result.
+
+\emph{Validity of the linearization.} The subcritical state is not the point $\w=0$ but a Gaussian cloud of finite width about it (the state $\w_i$ having covariance $\C$), and two roles of the origin must be kept apart. Linear \emph{stability} is set by the drift's Jacobian \emph{at} the fixed point---a derivative evaluated at a point, independent of where the probability mass sits---so \cref{SM-eq:sm-cascade} is the exact stability boundary of the symmetric state at any noise level. The cloud's \emph{width} enters at only one place: the focal response averages over the partner projection $x_j=\g_m\!\cdot\!\w_j$, whose variance broadens the effective gain to $2f_X(0)$ with $\mathrm{Var}(X)=\mathrm{Var}(x_j)+\sobs^2$, recovering $\pi'(0)=1/\sobs\sqrt{2\pi}$ only as $\mathrm{Var}(x_j)\to0$. Because $\mathrm{Var}(x_j)=\C_{mm}=O(\sdyn^2)$ while $\beta_c$ is independent of $\sdyn$, the bare threshold is exact in the weak-noise limit $\sdyn\to0$, where the cloud shrinks to the origin; at finite $\sdyn$ the partner variance softens the gain and shifts onset upward by $O(\sdyn^2)$---a mean-field Ginzburg correction, negligible outside a critical window that itself narrows to zero with $\sdyn$ (\smref{S6}). The same vanishing partner variance licenses replacing the random partner by its conditional mean inside the nonlinear $\pi$, so both approximations become exact together at the bifurcation.
+
+% ======================================================================
+
+\section{The functional form of the cascade}\label{sm:cascade}
+
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_cascade_classes}
+\caption{\textbf{Cascade classes of exogenous context repertoires.} \textbf{(a)} The number of active role axes $N(\beta)$. \textbf{(b)} The bifurcation rate. Both are shown over the five spectral classes of the context Gram matrix (legend): (i) degenerate spectra give a single unheralded avalanche (blue); (ii) geometric hierarchies give a logarithmic cascade with constant bifurcations in log-space (gray); (iii) power-law (Zipf) hierarchies split at exponent $a=1$ into decelerating (informative early phase; green) and accelerating (misleading early phase; red) cascades; (iv) unstructured random repertoires (Mar\v{c}enko--Pastur; orange) start quietly, $dN/d\beta\propto(\beta-\beta_c)^{1/2}$, then burst; (v) coherent (spiked) repertoires (purple) produce an early bifurcation, a deceptive quiescent gap, then an avalanche.}
+\label{fig:classes}
+\end{figure*}
+
+We assume role-based societies emerge from some ramping of feedback strength. Under such ramping, the form of the cascade is a property of the context repertoire alone, which in this section we take as fixed and given. The number of active axes at coupling $\beta$ is the counting function $N(\beta)$. We derive the effective local rate of growth of this function as that for the eigenvalue spectrum $\rho$ in the limit $M\to\infty$, $-d\ln\rho/d\ln\mu$, which must be greater than 2 for acceleration,
+the central diagnostic separating repertoires. Only three repertoire properties shape $N(\beta)$: the strength hierarchy $\{|\g_m|^2\}$, the coherence structure $\{\g_m\!\cdot\!\g_n\}$, and the aspect ratio $M/d$. These generate five classes (\cref{fig:classes}): degenerate (single avalanche, no warning), geometric (constant rate), Zipf with exponent $a\gtrless 1$ (decelerating versus runaway acceleration), random Mar\v{c}enko--Pastur bulk (square-root-slow onset, then burst) \cite{marcenko1967}, and spiked (early bifurcation, quiescent gap, avalanche---indistinguishable from termination by rate data alone). \Cref{fig:classes}a gives an example of each for $M=50$, while we show the rate for $M\to\infty$ in \cref{fig:classes}b.
+
+
+\subsection{The counting function and acceleration criterion}
+
+Let $\mu_1\ge\cdots\ge\mu_R>0$ be the nonzero eigenvalues of $\G$, $R=\mathrm{rank}(\bm{P})\le\min(M,d)$. Axis $k$ bifurcates at $\beta_c^{(k)}=\gamma/[(1-\rhopair)\mu_k]$ (\cref{eq:cascade}); absorbing the fixed factor $(1-\rhopair)$ into $\beta$ for this section, as with the frequencies above, this is $\beta_c^{(k)}=\gamma/\mu_k$, and the number of active axes at coupling $\beta$ is
+\begin{equation}\label{SM-eq:sm-counting}
+N(\beta)=\#\{k:\mu_k>\gamma/\beta\}=R\,\bar F(\gamma/\beta),
+\end{equation}
+\begin{equation}
+\bar F(\mu)=\int_\mu^\infty\rho(\mu')\,d\mu',
+\end{equation}
+with $\rho$ the spectral density of $\G$: the cascade is the pushforward of the spectrum under $\mu\mapsto\gamma/\beta$. The rate is
+\begin{equation}\label{SM-eq:sm-rate}
+\frac{dN}{d\beta}=R\frac{\gamma}{\beta^2}\rho\!\Bigl(\frac{\gamma}{\beta}\Bigr),\qquad
+\frac{dN}{d\ln\beta}=R\,\mu\rho(\mu)\big|_{\mu=\gamma/\beta}.
+\end{equation}
+Defining the local spectral exponent $s(\mu)\equiv-d\ln\rho/d\ln\mu$, differentiating again gives the acceleration criterion
+\begin{equation}\label{SM-eq:sm-accel}
+\frac{d^2N}{d\beta^2}>0\iff\frac{d}{d\mu}[\mu^2\rho(\mu)]<0\iff s>2 \ \text{at}\ \mu=\gamma/\beta.
+\end{equation}
+A monitor extrapolating a low early rate implicitly assumes $s\le2$ in the unreached part of the spectrum; whether that holds is a computable property of the repertoire. Only three repertoire properties shape $\rho$: the strength hierarchy $\{|\g_m|^2\}$, the coherence $\{\g_m\cdot\g_n\}$, and the aspect ratio $q=M/d$.
+
+\subsection{The five exogenous classes}
+
+\cref{tab:classes} catalogs the qualitatively distinct spectral classes and the cascade each induces; any repertoire's spectrum is locally one of these, and a general cascade concatenates them.
+
+\begin{table*}[t]
+\centering
+\caption{Cascade classes of exogenous repertoires.}
+\label{tab:classes}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Spectrum & Cascade & $\mu_k$ & $N(\beta)$ & Character \\
+\midrule
+(i) degenerate & single avalanche & $\mu_k=\mu$ & step & no warning \\
+(ii) geometric & logarithmic & $\mu_k\propto e^{-k/k_0}$ & $k_0\ln(\beta/\beta_c)$ & steady per $e$-fold; extrapolable \\
+(iii) Zipf $a>1$ & decelerating & $\mu_k\propto k^{-a}$ & $(\beta/\beta_c)^{1/a}$ & early phase informative \\
+(iii) Zipf $a<1$ & accelerating & $\mu_k\propto k^{-a}$ & $(\beta/\beta_c)^{1/a}$ & early phase misleading \\
+(iv) random & quiet, then burst & Mar\v{c}enko--Pastur & $(\beta-\beta_c)^{3/2}$ onset & loop not yet closed \\
+(v) spiked & spike $+$ gap & outliers $+$ bulk & gap, then avalanche & deceptive quiescence \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The boundary $a=1$ ($s=2$) separates the decelerating and accelerating Zipf regimes. The random class \cite{marcenko1967} has $\rho\sim\sqrt{\mu_+-\mu}$ near its top edge, giving the vanishing onset rate $dN/d\beta\propto(\beta-\beta_c)^{1/2}$ before the bulk. The spiked class, from redundancy (coherent contexts sharing directions), gives one outlier $\mu_{\mathrm{sp}}=|g|^2(1+(M-1)\chi)$ over a degenerate bulk $\mu_\perp=|g|^2(1-\chi)$ at uniform coherence $\chi$, hence a quiescent interval of relative width $(1+(M-1)\chi)/(1-\chi)$ then an avalanche---indistinguishable from termination by rate data alone.
+
+\section{Schema-Resource dynamics select the cascade class}
+
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_characterization_2panel}
+\caption{\textbf{Cascade types and thickness over replicator dynamics.} Endogenous cascade regimes over the two controls of the schema replicator---resource turnover $c/\gamma$ (horizontal) and normalized context capacity $M_{\mathrm{cap}}/M$ (vertical), the fraction of the $M$ candidate schemas the finite social bandwidth $S_{\mathrm{bw}}$ can sustain as live contexts ($M_{\mathrm{cap}}=S_{\mathrm{bw}}/u_{\mathrm{sat}}$). \textbf{(a)} \textit{Capacity}: the contexts the society \emph{can} sustain. Capacity is a stationary-state property, fixed by $\Theta=M/M_{\mathrm{cap}}$ alone, and splits the plane into three equal bands with sharp counting-threshold boundaries: all $M$ contexts ($M_{\mathrm{cap}}=M$), a graded cluster of $M_{\mathrm{cap}}$, or a single context ($M_{\mathrm{cap}}=1$). Glyphs sketch the cascade $N(\beta)$ the sort passes through en route, set by turnover: avalanche to logarithmic in the thick band, decelerating ($a>1$) to accelerating ($a<1$) across $a=1$ in the middle band, and spike-plus-gap in the thin band. The random Mar\v{c}enko--Pastur class (iv of \cref{fig:classes}) does not appear here: it is the unorganized initial condition, not an endogenous endpoint the loop selects, and its persistence would signal that the schema--resource loop has not closed (\cref{sm:regimes}). Within the thick band a saturated cluster coexists with a geometric tail (hatched) below the exact boundary $c/\gamma=M/L(\Theta)$ (\cref{sm:regimes}); the arrow points from the illustrative logarithmic glyph to a point past this boundary where the spectrum is purely geometric, and the mixed inset shows the corresponding counting function $N(\beta)$ for a representative coexistence point---an early jump as the cluster ignites at once, followed by the tail's gradual ramp. Boundaries are exact in the self-averaged ($N\to\infty$) mean-field limit used throughout; finite-population realizations fluctuate around them, particularly in \emph{which} schema condenses, a symmetry-breaking choice not fixed by the class itself. The map is a mean-field \emph{prediction}: the replicator sort, its classes, and these boundaries are derived from the near-threshold Gaussian covariance (\cref{sm:closedpool}) and extended into the post-bifurcation thick phase, whose full-loop verification is left to the accompanying simulation program (\cref{sm:monotone}). \textbf{(b)} \textit{Realization}: the contexts \emph{effectively active}, the participation ratio $D_{\mathrm{eff}}=(\sum_k\mu_k)^2/\sum_k\mu_k^2$ of the gain spectrum $\{\mu_k=2\pi'(0)|\g_k|^2\}$ (the effective number of active contexts, normalized by $M$). Realization depends on how far the transient sort has progressed, hence on $c/\gamma$, and falls below capacity wherever the sort is incomplete---bright on the accelerating side (many contexts still coexisting), darker on the decelerating side (concentrated); the gap between the panels measures distance from the stationary endpoint. Exact boundaries, the ceiling $u_{\mathrm{sat}}$, and the held-fixed groups ($\alpha\langle\lambda\rangle/\kappa$, $\beta\mu_1/\gamma$, $M/d$) in \cref{sm:regimes}.\label{fig:regimes}}
+\end{figure*}
+
+\noindent In the previous section, the context set, and thus the cascade type (\cref{fig:classes}) was taken as given. In the model, however, it emerges endogenously from the stationary solution of the schema-resource dynamics. Here, we analyze that solution space through the lens of the resulting cascade type to arrive at a diagram denoting which regimes of schema-resource dynamics exhibit which cascades types across the transition to a role-based society. In particular, we take the $M$ contexts as an ambient pool of candidate schemas and ask how many survive and with what strengths: the active set is those with $u_m=|\g_m|^2$ above the seed scale (the small strength at which schemas are initialized, and above which they count as active), an emergent number $K\le M$ fixed by the dynamics rather than imposed. Rewriting \cref{eq:schema}, strengths grow by the resource-weighted variance along each axis, $\tfrac{d}{dt}\ln u_m = 2(\alpha\lambda_m(\Cr)-\kappa)$. The competition for finite social bandwidth $S_{\mathrm{bw}}=\sum_m u_m$ is then a replicator dynamics with fitness $F_m=\g_m^{\!\top}\Cr\,\g_m$ \cite{touzel2026fitnesslandscapesocialnorms,Gintis2010}, each schema's fitness generated by the engine chain: \textit{schema $\to$ differentiation $\to$ signal $\to$ coordination $\to$ resources}.
+
+
+A Gaussian mean-field evaluation (\cref{sm:closedpool}) reduces this competition to a single interior fixed point that is a saddle (\cref{sm:saddle}). It is the \emph{degenerate} state---all active schemas at one strength: a schema is stationary only at a common invasion fitness (\cref{sm:closedpool}), and because fitness rises with a schema's own strength, equal fitness forces equal strength (a \emph{pinning} condition, \cref{sm:closedpool}). The state is stable in total magnitude---an imposed capacity ceiling (\cref{sm:closedpool}) regulates the sum---but unstable in \emph{composition}: strength can shift between schemas and the one that gains is now fitter, so it grows and drains the rest---a \emph{winner-take-all} instability, diverging at each bifurcation. The dynamics leave the saddle one axis at a time. An inactive axis sits with its covariance eigenvalue pinned at the noise floor $\sdyn^2/2\gamma$; when an axis activates, the resources it generates reweight $\Cr$ toward the agents who differentiated along it, and because those agents also spread in other directions this inflates the residual variance off the active axis, growing the next schema until its eigenvalue clears the floor and ignites. Successive axes leave the floor in turn---this is the endogenous cascade.
+
+
+What are the properties of the replicator dynamics that control which cascade type is exhibited?
+The transient dynamics has two emergent rates: an \emph{activation rate} $\ract$ at which successive axes cross threshold and a \emph{compounding rate} $g$ at which an active schema's strength grows. Both are outputs of the dynamics, not control knobs; their ratio $\ract/g\propto c/\gamma$ is set by \textit{resource turnover}---the resource-decay rate relative to the role timescale. The stationary dynamics has four dimensionless quantities, but only one is needed to span the morphology between regimes (the rest set a fixed backdrop). The \emph{saturation demand} $\Theta=M/M_{\mathrm{cap}}$ is the number of schemas competing per capacity slot, where the \emph{capacity} $M_{\mathrm{cap}}=S_{\mathrm{bw}}/u_{\mathrm{sat}}$ counts how many schemas the finite bandwidth $S_{\mathrm{bw}}$ sustains at the per-schema ceiling $u_{\mathrm{sat}}$. Two independent limits fix the capacity---a per-schema resolution ceiling $u_{\mathrm{sat}}$ and the total bandwidth $S_{\mathrm{bw}}$---and $\Theta$ measures which binds first: below one, the per-schema ceiling caps every schema (all survive); above one, the shared budget binds (only $M_{\mathrm{cap}}$ do). Only this ratio is physical, so we parametrize by it rather than an absolute $u_{\mathrm{sat}}$ (\cref{sm:closedpool}). \Cref{fig:regimes} shows this principal $(\Theta,c/\gamma)$ slice: the capacity a society can sustain (\cref{fig:regimes}a) and the thickness it realizes (\cref{fig:regimes}b). Note that the two controls act on different objects. $\Theta$ selects the stationary endpoint: saturation reins condensation in when capacity exceeds demand ($\Theta<1$, giving a degenerate spectral cluster) and leaves it unchecked when the budget cannot sustain even one schema ($\Theta>M$, giving a spiked spectrum), so its boundaries are sharp phase lines. $c/\gamma$ is an inverse institutional memory that sets how fast $\Cr$ reshapes between activations---slow resource turnover entrenching incumbents, fast churning them---a smooth crossover between the geometric and Zipf cascades.
+
+
+\subsection{The self-consistent fixed point}\label{sm:fixedpoint}
+% ======================================================================
+
+The three coupled dynamics (\cref{eq:agent-mf,eq:resource,eq:schema}) evolve on separated timescales $\gamma\gg c\gg\kappa$ (agents equilibrate, then resources, then schemas):
+\begin{align}
+\dot{\w}_i&=-\gamma\w_i(1+|\w_i|^2)+\beta\sum_mf_m \langle a\rangle_m\g_m+\sdyn\bm\eta_i,\nonumber\\
+\dot r_i&=\sum_m\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i,\\
+\dot\g_m&=-\kappa\g_m+\alpha\Cr\g_m.\nonumber
+\end{align}
+
+\paragraph{Step 1: agents.} At fixed schemas the drift is a gradient, $\bm v=-\nabla_{\w}E$, with
+\begin{equation}\label{SM-eq:sm-energy}
+E(\w)=\gamma\Bigl(\tfrac{|\w|^2}{2}+\tfrac{|\w|^4}{4}\Bigr)-\beta\sum_m\Psi(\w\cdot\g_m),
+\end{equation}
+with $\Psi'(z)=2\pi(z)-1$,
+\begin{equation}
+\phantom{.}
+\end{equation}
+so the stationary distribution is Boltzmann, $p^*(\w)\propto\exp(-2E(\w)/\sdyn^2)$, and agents are i.i.d.\ draws. Near threshold, dropping the quartic and nonlinear terms gives a multivariate Ornstein--Uhlenbeck process with stationary covariance (Lyapunov equation, symmetric drift)
+\begin{equation}\label{SM-eq:sm-C-linear}
+\C=\frac{\sdyn^2}{2}(\gamma I-\beta\G)^{-1},
+\end{equation}
+valid for $\beta<\beta_c^{(1)}$; $\C$ diverges along the leading eigenvector of $\G$ at the bifurcation. Equation~\cref{SM-eq:sm-C-linear} is the monotone spectral transform inverted by the subcritical monitoring protocol of \cref{sec:monitoring}.
+
+\paragraph{Step 2: resources.} At steady state $r_i^*=c^{-1}\sum_m\mathbb{E}_{j}[W_{ijm}]$, a deterministic function of $\w_i$. Near threshold the error rate linearizes, $P_e\approx\tfrac12-|(\w-\w')\cdot\g_m|\pi'(0)$, so $W_{ijm}\approx 4w_0\pi'(0)^2((\w_i-\w_j)\cdot\g_m)^2$; averaging over partners ($\mathbb{E}_j[\w_j]=0$, $\mathbb{E}_j[(\w_j\cdot\g_m)^2]=\g_m^{\!\top}\C\g_m$),
+\begin{equation}\label{SM-eq:sm-rstar}
+r^*(\w)\approx\frac{4w_0\pi'(0)^2}{c}\sum_m\Bigl((\w\cdot\g_m)^2+\g_m^{\!\top}\C\g_m\Bigr).
+\end{equation}
+The first term is agent-specific; the second a population baseline.
+
+\paragraph{Step 3: resource-weighted covariance.} With $\Cr=\int r^*(\w)\w\w^{\!\top}p^*/\int r^*(\w)p^*$ and $r^*$ quadratic in $\w$, the numerator is a fourth moment, evaluated for Gaussian $p^*$ by Isserlis' theorem,
+\begin{equation}\label{SM-eq:sm-isserlis}
+\mathbb{E}[(\w\cdot\g_m)^2\,\omega_a\omega_b]=(\g_m^{\!\top}\C\g_m)\,C_{ab}+2(\g_m^{\!\top}\C)_a(\g_m^{\!\top}\C)_b,
+\end{equation}
+making $\Cr$ a function of $\C$ and $\{\g_m\}$ alone. Even when $\C\propto I$, $\Cr$ is anisotropic, because $r^*(\w)\propto\sum_m(\w\cdot\g_m)^2$ weights agents aligned with the context directions more heavily. This anisotropy is what resolves the collapse of Model~5: $\Cr$ inherits structure from the repertoire even when the population is isotropic.
+
+\paragraph{Step 4: schemas.} At steady state $\kappa\g_m^*=\alpha\Cr\g_m^*$: each surviving schema is an eigenvector of $\Cr$ with eigenvalue $\kappa/\alpha$. Schemas that are not eigenvectors rotate until they align; those with eigenvalue below $\kappa/\alpha$ decay.
+
+\paragraph{The loop and multiplicity.} The conditions close: $\{\g_m\}\!\to\! E\!\to\! p^*\!\to\!\C\!\to\! r^*\!\to\!\Cr\!\to\!\{\g_m\}$. The trivial solution $\g_m^*=0$ always exists; nontrivial solutions appear when an eigenvalue of the (already anisotropic) $\Cr$ exceeds $\kappa/\alpha$. Since $\Cr$ has $d$ eigenvalues, the sustained schema count is
+\begin{equation}\label{SM-eq:sm-Meff}
+M_{\mathrm{eff}}=\#\{k:\lambda_k(\Cr)\ge\kappa/\alpha\}\le d,
+\end{equation}
+the endogenous cultural thickness. Without resources ($r_i\equiv1$, $\Cr=\C$) every schema collapses onto the leading eigenvector of $\C$; the resource reweighting redistributes eigenvalues so several can clear $\kappa/\alpha$ at once---niche partitioning. Equation~\cref{SM-eq:sm-Meff} is the survivor count $K\le M$ used in the closed-pool construction of \cref{sm:cascade}.
+
+% ======================================================================
+
+\subsection{The closed-pool (survivor) construction}\label{sm:closedpool}
+
+Under the full loop the spectrum is not an input but a prediction. We treat the $M$ context directions as candidate schemas and ask how many survive. The active set is $\{m:u_m>u_0\}$ with $u_m=|\g_m|^2$ and $u_0$ the seed scale, the small strength at which schemas are seeded and above which they count as active; its size $K\le M$ is the emergent survivor count \cref{SM-eq:sm-Meff}, fixed by the dynamics. Strengths obey (from $\dot\g_m=-\kappa\g_m+\alpha\Cr\g_m$, with the finite legible-status bandwidth $S_{\mathrm{bw}}$ shared across schemas)
+\begin{equation}\label{SM-eq:sm-strength}
+\frac{d}{dt}\ln u_m=2\bigl(\alpha\lambda_m(\Cr)-\kappa-\varphi(U)\bigr),\qquad U=\sum_n u_n,
+\end{equation}
+a replicator dynamics with fitness $F_m=\g_m^{\!\top}\Cr\g_m$ and a soft budget pressure $\varphi(U)$ shared by every schema: negligible while the channel is slack ($U\ll S_{\mathrm{bw}}$, $\varphi\approx0$) and rising to cap the total as it fills ($\varphi'>0$, $\varphi\to\infty$ as $U\to S_{\mathrm{bw}}$). This term is what imposes the budget. The bare $\kappa$-only dynamics ($\varphi\equiv0$) leaves the total unregulated---since $\lambda_m$ grows with $u_m$ (below), a schema past the invasion strength would grow without bound---and the finite budget supplies the missing restoring force. Because $\varphi$ enters every axis equally it shifts the invasion threshold uniformly and does not bias which schemas survive. We keep $\kappa$ a fixed decay rate and the budget a soft inequality ($U\le S_{\mathrm{bw}}$) rather than passing to the normalized replicator (which would fix $\sum_m u_m$ and subtract the \emph{mean} fitness): the equality constraint and relative selection of the normalized form eliminate two regimes the model needs. Absolute selection against a fixed $\kappa$ admits a sub-threshold state in which every schema decays---the genuine pre-role condition the ignition onset transitions out of---and the soft inequality admits a slack regime ($\Theta<1$, $U<S_{\mathrm{bw}}$) in which all $M$ schemas coexist at the per-schema ceiling, the durable schema multiplicity central to the Sewellian picture. Normalization would force $U=S_{\mathrm{bw}}$ (violating the per-schema ceiling under slack) and make survival relative (so some schema always wins), collapsing both regimes.
+
+\paragraph{Pinning versus condensation.} Summing \cref{SM-eq:sm-isserlis} over contexts gives a closed form for the resource-weighted covariance, independent of portfolio geometry,
+\begin{equation}\label{SM-eq:sm-Cr-closed}
+\Cr=\C+\frac{\C\,\G\,\C}{\operatorname{tr}(\C\G)}.
+\end{equation}
+Since $\C=\tfrac{\sdyn^2}{2}(\gamma I-\beta\G)^{-1}$ commutes with $\G$, $\Cr$ shares the gain eigenbasis; for orthogonal contexts \cref{SM-eq:sm-Cr-closed} collapses to a scalar relation on each axis,
+\begin{equation}\label{SM-eq:sm-lambda-m}
+\lambda_m=v_m\Bigl(1+\frac{u_mv_m}{S}\Bigr),\quad v_m=\frac{\sdyn^2}{2(\gamma-2\beta\pi'(0)u_m)},\quad S\equiv\sum_n u_nv_n.
+\end{equation}
+Two competing results follow. \emph{The pinning condition.} A schema is stationary only where its replicator rate \cref{SM-eq:sm-strength} vanishes, $\alpha\lambda_m=\kappa+\varphi^\ast$ with $\varphi^\ast=\varphi(U^\ast)$ the equilibrium budget pressure, so at an interior fixed point all survivors share one fitness $\lambda_m=(\kappa+\varphi^\ast)/\alpha$. The shift $\varphi^\ast$ is common to every axis, so equal fitness still demands equal strength: because $\lambda_m$ is strictly increasing in $u_m$---both factors in \cref{SM-eq:sm-lambda-m} grow with $u_m$ across the sub-critical range $u_m<\gamma/2\beta\pi'(0)$, a property that extends to non-orthogonal portfolios (\smref{S5})---the interior fixed point carries a degenerate spectrum. This is the competitive-exclusion result for replicators, sharpened by monotonicity from equal fitness to equal strength.
+
+\emph{The condensation instability.} The pinned point is a saddle, and both of its directions follow from \cref{SM-eq:sm-strength} directly. Along the \emph{magnitude} direction $u_m=u+\delta$ (all schemas together), growth is arrested by whichever capacity ceiling binds first (\cref{sm:regimes}): the per-schema cap $u_{\mathrm{sat}}$, or the total budget through $\varphi(U)$, which subtracts a restoring $2M\varphi'(U^\ast)\,\delta$ from every growth rate against the destabilizing $2\alpha\,(\partial\lambda/\partial u)\,\delta$ and stabilizes the direction once $M\varphi'(U^\ast)>\alpha\,\partial\lambda/\partial u$. Either way an imposed ceiling supplies the restoring force that pins the total; the bare dynamics do not. Along a \emph{composition} direction $\sum_m\delta u_m=0$ the total, and hence $\varphi$, are unchanged, and \cref{SM-eq:sm-strength} linearizes to $\dot{\delta u}_m\propto\delta\lambda_m\propto\delta u_m-\overline{\delta u}$: because $\lambda_m$ increases with $u_m$, any schema pushed above the mean gains fitness and grows, draining the rest---\emph{unstable}. One stable magnitude direction and $M-1$ unstable composition directions make the equal-strength state a saddle (\cref{sm:saddle}) from which the dynamics flee toward condensation; the flight is autocatalytic near a bifurcation, where $v_m$ (and hence $\partial\lambda_m/\partial u_m$) diverges, and there the budget pressure arrests the runaway at a saturated cluster---the regulator of condensation, which selects the cascade class below.
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_pinning_saddle}
+\caption{\textbf{Pinning versus condensation as a saddle.} Phase portrait of the two-schema replicator \cref{SM-eq:sm-strength} in the strengths $(u_1,u_2)$. The degenerate (pinned) fixed point (open circle), where equal fitness pins equal strength, is a saddle. Its \emph{stable} manifold (green, $u_1=u_2$) is the magnitude direction along which the soft budget pressure $\varphi(U)$ of \cref{SM-eq:sm-strength} regulates the total and fitness equalizes to $(\kappa+\varphi^\ast)/\alpha$---the pinning condition. Its \emph{unstable} manifold (red, the budget line $u_1+u_2=S_{\mathrm{bw}}$) is the budget-conserving split: a schema above the mean gains fitness and grows, draining the other, so trajectories flee to a condensate (red points)---the condensation instability. For $M$ schemas the pinned point carries one stable (magnitude) and $M-1$ unstable (split) directions. The stable direction is supplied by the budget pressure $\varphi(U)$, not by the bare $\kappa$-only dynamics, which cap the differentiation amplitude but not the strength (\cref{sm:regimes}); when the budget binds it arrests the runaway at a saturated cluster rather than a bare condensate.\label{sm:saddle}}
+\end{figure}
+
+\paragraph{Sequential sort and the two emergent rates.} The candidate schemas do not activate simultaneously. When one axis becomes active, the resources it generates reweight $\Cr$ toward the agents who differentiated along it; since those agents also carry variance in other directions, the residual variance off the active axis is raised, and the next schema grows until it crosses threshold. Survivors therefore cross threshold in sequence. Two rates characterize the transient. The \emph{compounding rate} is read from \cref{SM-eq:sm-strength} for an active, pre-saturation schema (where the channel is slack and $\varphi\approx0$),
+\begin{equation}\label{SM-eq:sm-g}
+g\equiv 2(\alpha\lambda_\star-\kappa),
+\end{equation}
+$\lambda_\star$ the common resource-weighted variance of the growing cohort; $g$ is set by the gain-spectrum gap at the growing axis. The \emph{activation rate} $\ract$ is the rate at which successive survivors cross threshold. Because $\Cr$ can only reshape to expose the next axis as resources re-accumulate over $\tau_r=1/c$,
+\begin{equation}\label{SM-eq:sm-nu}
+\ract\propto c,
+\end{equation}
+so $\ract/g\propto c/\gamma$: the readout is fixed by the control $c/\gamma$ (the resource turnover), and is not set independently. Both $\ract$ and $g$ are emergent, not free parameters.
+
+\paragraph{Classification of stationary states.} At a fixed point of
+\cref{SM-eq:sm-strength} every schema is extinct ($u_m=0$, $\alpha\lambda_m<\kappa+\varphi^\ast$),
+marginal ($0<u_m<u_{\mathrm{sat}}$, $\alpha\lambda_m=\kappa+\varphi^\ast$, at the invasion
+threshold), or saturated ($u_m=u_{\mathrm{sat}}$). Since pinning forces equal
+fitness to equal strength, no stationary state carries a graded active
+distribution, so there are exactly two fixed-point families. (a)~The
+\emph{degenerate} state: all survivors equal, stabilized by the ceiling into a
+cluster of $\min(M,M_{\mathrm{cap}})$ saturated schemas; its flat spectrum
+bifurcates as a single avalanche (class~i). (b)~The \emph{spiked} state: one
+condensate carrying the budget with a fringe pinned at the invasion margin,
+reached when the budget cannot cap even one schema (class~v). The loading
+$\Theta$ exchanges them---the degenerate cluster shrinks from $M$ schemas
+($\Theta\le1$) to $M_{\mathrm{cap}}$ ($1<\Theta\le M$) to one ($\Theta>M$, the
+spike). The geometric and Zipf classes are \emph{not} fixed points but
+morphologies of the sequential sort toward these endpoints, and are the
+observable object because a monitor watches roles form: slow age-ordered
+relaxation is geometric (class~ii, $k_0=\ract/g$), a binding budget's
+share-proportional sort is Yule--Simon, hence Zipf (class~iii, $a\sim g/\ract$),
+and an un-organized exogenous repertoire is Marchenko--Pastur (class~iv). The
+replicator thus selects the cascade in two steps: $\Theta$ fixes the endpoint,
+the tempo $c/\gamma$ ($\propto\ract/g$) fixes the transient morphology and its
+lifetime---no spectrum is imposed.
+
+\subsection{The regime map and its exact boundaries}\label{sm:regimes}
+
+The cascade morphology depends on $\sim5$ dimensionless groups, but only two separate regimes: the saturation demand $\Theta=M/M_{\mathrm{cap}}$ and the resource turnover $c/\gamma$, the ratio of the role-commitment time to the ledger memory horizon, which is an operator control (\smref{S4\,A}). Low $c/\gamma$ is slow turnover, equivalently long institutional memory. Here $M_{\mathrm{cap}}\equiv S_{\mathrm{bw}}/u_{\mathrm{sat}}$ is the schema capacity, the number of fully saturated schemas the budget admits, so $\Theta=Mu_{\mathrm{sat}}/S_{\mathrm{bw}}$ is a loading factor: demand $M$ over capacity $M_{\mathrm{cap}}$. It is distinct from the realized survivor count $K$, since survivors need not be saturated. The two also have different ranges: $M_{\mathrm{cap}}$ exceeds $M$ in the slack regime ($\Theta<1$) and drops below $1$ in the winner-take-all regime ($\Theta>M$), whereas $K\le d$. Neither ceiling is intrinsic: the bare reinforcement supplies no turnover of its own. Along a single active axis the thick-phase strength is $\lambda(u)=\beta k u/\gamma+\sdyn^2/4(\beta k u-\gamma)-1$ (condensate amplitude plus fluctuation correction, with $\mu=ku$), which grows without turning over: $d^2\lambda/du^2=\beta^2k^2\sdyn^2/2(\beta ku-\gamma)^3>0$ throughout the supercritical range, so no \emph{intrinsic} strength exists at which reinforcement saturates. The quartic confinement of \cref{eq:agent-mf} caps the differentiation \emph{amplitude} ($m^2=\beta\mu/\gamma-1$) but not the schema \emph{strength}, which keeps rising as the two role modes separate. Two imposed ceilings arrest it, and they are distinct: a per-schema cap $u_{\mathrm{sat}}$, and the total budget $S_{\mathrm{bw}}$ enforced by the soft pressure $\varphi(U)$ of \cref{SM-eq:sm-strength}. Their ratio is the loading $\Theta=Mu_{\mathrm{sat}}/S_{\mathrm{bw}}$, which fixes which binds first. We take $u_{\mathrm{sat}}$ schema-independent. A natural substrate grounds both constants: a finite \emph{legible-status
+channel}---bounded collective attention/bandwidth, the same resource whose noise
+scale is $\sobs$. Its total capacity bounds the summed strength,
+$\sum_m u_m = S_{\mathrm{bw}}$, and its finite per-axis resolution caps any single
+schema, since an axis cannot be differentiated beyond what the channel
+resolves---so $u_{\mathrm{sat}}$ is a resolution scale set by $\sobs$ (the
+measurement-quality limit of Ref.~\cite{Castro2026}) rather than a free
+parameter. On this reading $M_{\mathrm{cap}}=S_{\mathrm{bw}}/u_{\mathrm{sat}}$ is
+a channel-capacity count---the number of roles the status channel can
+resolve---and $\Theta$ is demand measured against it. The channel-to-strength
+mapping carries a convention, so this fixes $u_{\mathrm{sat}}$ up to
+proportionality, not an absolute value---all that $\Theta$ requires. Since only the dimensionless ratio $\Theta=Mu_{\mathrm{sat}}/S_{\mathrm{bw}}$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in \cref{fig:regimes} as the capacity $M_{\mathrm{cap}}/M=1/\Theta$, and never fix an absolute $u_{\mathrm{sat}}$; the only absolute scale retained is the seed-to-budget ratio $u_0/S_{\mathrm{bw}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{sat}}/u_0)$ entering the saturated-cluster/geometric boundary. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\beta\mu_1/\gamma$, aspect ratio $M/d$) set a fixed backdrop. \cref{fig:regimes} is the principal $(\Theta,c/\gamma)$ slice, on which we normalize $c/\gamma$ to units where the readout $\ract/g=c/\gamma$ (so the generative shape parameter $r$ equals $c/\gamma$). Four endogenous regimes arise:
+\begin{itemize}
+\item \textbf{Saturated cluster.} Early saturation or hard caps arrest condensation and the pinning condition re-equalizes the winners: near-degenerate spectrum, class (i), single avalanche.
+\item \textbf{Geometric.} Slow resources ($c\ll\gamma$) with a standing cohort: strengths encode age, $u_m\propto e^{g(t-t_m)}$, and rank-ordering gives $\mu_k\propto e^{-k/k_0}$, $k_0=\ract/g$---class (ii), the log cascade, best case for monitoring.
+\item \textbf{Zipf.} A binding budget with share-proportional growth is a Yule--Simon process \cite{simon1955}, giving $\mu_k\propto k^{-a}$, $a\sim g/\ract$: entrenchment ($g\gg\ract$, slow resources) decelerates, churn ($\ract\gtrsim g$, fast resources) accelerates.
+\item \textbf{Spiked.} Unregulated condensation drives one condensate plus a fringe pinned at the invasion margin $F_m=(\kappa/\alpha)u_m$: class (v), spike--gap--avalanche---the natural endpoint of unregulated competition.
+\end{itemize}
+
+\paragraph{Exact boundaries.} On the principal slice the boundaries are exact analytic curves:
+\begin{align}
+\text{budget binds:}&\quad \Theta=1, \label{SM-eq:sm-b-theta1}\\
+\text{winner-take-all possible:}&\quad \Theta=M, \label{SM-eq:sm-b-thetaM}\\
+\text{Zipf $a=1$:}&\quad c/\gamma=1 \ \ (a=1/r,\ r=c/\gamma), \label{SM-eq:sm-b-a1}\\
+\text{sat.\ cluster$|$geometric:}&\quad c/\gamma=\frac{M}{L(\Theta)}, \label{SM-eq:sm-b-e1e2}\\
+\text{with}&\quad L(\Theta)=\ln\frac{u_{\mathrm{sat}}}{u_0}=\ln\frac{\Theta S_{\mathrm{bw}}}{Mu_0}. \nonumber
+\end{align}
+Boundary \cref{SM-eq:sm-b-e1e2} is where the number of saturation-pinned modes $n_{\mathrm{sat}}=\max(0,M-rL)$ reaches zero: below $r=M/L$ a saturated cluster of $n_{\mathrm{sat}}$ modes coexists with a geometric tail (a mixed avalanche-plus-log class); above it the cluster is gone. This transition lies within the thick capacity band, where \cref{fig:regimes} marks it by the avalanche and logarithmic glyphs rather than a drawn curve. The colour field of \cref{fig:monitor}a is the bifurcation clustering, defined as the maximal share of bifurcation points $b_k=1/\mu_k$ falling within a window $\Delta\ln\beta=0.15$. It is a continuous diagnostic and varies smoothly across these sharp analytic lines. It reaches its floor slightly before \cref{SM-eq:sm-b-e1e2}, because a few residual pinned modes still cluster just below $n_{\mathrm{sat}}=0$.
+
+\paragraph{Two classes are not endogenous fixed points.} The Marchenko--Pastur bulk (iv) is the signature of a repertoire not yet organized by resource feedback (the natural initial condition for freshly seeded schemas; it should be transient under the loop), and its persistence in data would itself indicate the loop has not closed. The exact degeneracy of the saturated-cluster regime holds only within the Gaussian pinning argument; generic cross-axis resource coupling and residual coherence broaden it into a narrow cluster.
+
+\paragraph{Transient, not stationary.} The geometric and Zipf classes are morphologies of the transient sort toward the pinned or condensed fixed point, not stationary distributions. Sustaining a hierarchy indefinitely requires continual injection of new schemas (schema innovation)---an open-repertoire process outside the closed loop, which we do not treat. Within the closed loop, the endogenous source of novelty during the sort is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
+
+\section{Monitoring: reading the cascade before it starts}\label{sec:monitoring}
+
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_monitoring}
+\caption{\textbf{Monitoring the cascade.} \textbf{a}, Monitorability over the replicator-control plane: the clustering of bifurcation onsets (colour; the maximal share arriving within $\Delta\ln\beta=0.15$, hence unmonitorability), red where onsets cluster into an unheralded burst (avalanche, spike) and green where they resolve into a sequence (logarithmic, decelerating). The $\Theta$ boundaries are sharp, the $c/\gamma$ dependence a smooth crossover; regime layout as in \cref{fig:regimes}. \textbf{b}, The monitor's view under a linear deployment sweep $\Lambda(t)$: the counting function $N(t)/R$ for four classes is nearly indistinguishable in the early observation window (grey) and separates only later---the spiked class hiding a quiescent gap and then an avalanche of its pinned fringe. This non-identifiability is why forward rate-extrapolation fails; the subcritical covariance inversion $\C=\tfrac{\sdyn^2}{2}(\gamma I-\beta\G)^{-1}$, which recovers the full $N(\beta)$ before the first bifurcation, is the remedy (\cref{sec:monitoring}).}
+\label{fig:monitor}
+\end{figure*}
+
+What can a monitor watching the first few bifurcations extrapolate about the shape of the cascade?
+The theory supplies a population-level diagnostic requiring no interpretability of individual agents: embed behavior, track the eigenspectrum of $\C$. Two results make this practical.
+First, monitoring has a speed limit.
+Estimating the relaxation time $\tau_k=1/|\gamma-\beta\mu_k|$ requires observing for $O(\tau_k)$, but $\tau_k$ diverges at threshold---the critical slowing down whose rise is a generic early-warning signal \cite{scheffer2009}; if the engine parameter is swept at rate $\dot\Lambda$, the dimensionless ratio $\mathcal{R}=\tau_k\dot\Lambda$ controls feasibility. When the forcing is fast relative to the system's internal timescale, the transition is crossed before the slowing can be measured: this is rate-induced tipping, where slowing-down indicators generically fail \cite{ashwin2012,ritchie2016}. Slow deployment ($\mathcal{R}\ll1$) preserves genuine early warning; fast deployment forecloses it. Second, and remedially, the spectrum is in principle measurable \emph{before} any bifurcation: subcritically, $\C=\tfrac{\sdyn^2}{2}(\gamma I - \beta\G)^{-1}$, so inverting the empirical eigenvalue distribution of behavioral embeddings recovers $\rho(\mu)$ and thence the full $N(\beta)$, its acceleration profile, and any avalanche hiding behind an early spike (\cref{fig:monitor})---exactly the ambiguities that rate extrapolation cannot resolve. Two caveats scope this readout. It recovers the spectrum of the \emph{current} repertoire; because $\G$ itself drifts as schemas and resources evolve, it forecasts the imminent cascade only insofar as that drift is slow relative to onset---an oracle inversion for a fixed repertoire, a forecast only for a slowly changing one. And it is a population statistic estimated from finite behavioral samples, so resolving closely spaced eigenvalues against the sampling bulk imposes a finite-sample floor, distinct from the dynamical speed limit above, that a deployment analysis must respect. The class structure also makes the cascade designable: slowing resource turnover (lower $c/\gamma$ steepens the schema-strength hierarchy---each activated schema compounds longer before the next crosses threshold, raising the Zipf exponent $a\sim g/\ract$---which spreads the bifurcation thresholds and front-loads the cascade into the extrapolable regimes; mechanisms that reset accumulated advantage (faster turnover, higher $c/\gamma$) flatten spectra and, counterintuitively, push toward avalanche-prone classes; and per-context pairing efficiencies reweight the effective spectrum $\bm{P}^{\!\top}\bm{F}_{\mathrm{pair}}\bm{P}$, letting an operator stretch clustered eigenvalues into a resolvable sequence at some cost in coordination efficiency. These levers also frame a conjecture about deployment, in which parameters $\Theta$ and $c/\gamma$ (fixed here) might evolve systematically, moving the system through the regimes in the upper right towards the avalanche-prone corner in the lower left of \cref{fig:monitor}: more mature systems sitting at lower $c/\gamma$ (persistent memory and logging make identity stickier) and higher $\Theta$ (more coordination competing for finite bandwidth). In this case, the very engineering that improves coordination may erode its own monitorability. The drift of these parameters across a system's lifetime is set by engineering practice outside the present theory; making it an endogenous trajectory would require promoting $\Theta$ and $c/\gamma$ to slow dynamical variables, a two-timescale extension we leave open.
+
+
+\subsection{Consequences for monitoring and design}
+
+The classification converts a low observed rate into a decision procedure. The first few inter-bifurcation spacings identify the class: constant ratios $\beta_{k+1}/\beta_k$ indicate geometric (estimate $k_0$, predict the rest); ratios growing as $((k{+}1)/k)^a$ indicate Zipf (the exponent's position relative to $a=1$ decides decay versus explosion); a rate rising as $(\beta-\beta_c)^{1/2}$ indicates an imminent random bulk. A long quiescent interval is not evidence that the cascade has terminated, since it is also the spiked signature, and the two cannot be distinguished from rate data alone---the ambiguity the subcritical spectral inversion resolves. The complementary design levers on the cascade class are collected in \cref{app:control}.
+
+% ======================================================================
+
+\section{Discussion}
+
+\paragraph{Distributional AGI: a control surface.} Recent safety work \cite{tomasev2026} hypothesizes that general-level AI capability may emerge not in one model but from the coordination of many sub-general agents. Our framework makes this quantitative. The thick phase is the coordinated collective. Shared substrates---task queues, codebases, finite compute---make same-action encounters interfere, giving the payoffs an anti-coordination structure. Complementary roles (planner/executor, coder/reviewer) then extract gains no member could alone, sustained by self-generated signals rather than assigned by an orchestrator. It is this emergent, unassigned case that evades inspection of the system's design. Two consequences bound the distributional AGI hypothesis. First, the transition can be crossed by improving the coordination layer alone---routing, protocols, channel noise ($\rhopair$, $\sobs$)---with no change in any agent, so per-agent capability evaluations will not see it coming, and at scale the crossover sharpens toward a discontinuity. Second, the cognitive floor bounds what orchestration can achieve: agents with $\etaag<\sobs\gamma/4\beta$ cannot ignite regardless of coordination, and the number of sustainable roles is capped by inference quality through the dense-associative-memory bound $M_{\mathrm{eff}}\le d^{\,n-1}$ \cite{krotov2016}, with $n$ (policy sharpness) rising with capability \cite{gershman2015}---crude agents sustain a coder and a reviewer, not an organization, but the ceiling rises steeply with modest gains (\smeq{S10}).
+
+The same factors that set ignition and shape the cascade are largely \emph{platform-owned}, so an operator who fixes the environment before ignition holds a control surface over which takeoff scenario is reachable. It is a design choice among settings, not control-theoretic steering during takeoff, which the rate-induced-tipping limit forbids (\cref{fig:monitor}). We set out the available levers, their costs, and the two tensions that bound them in \cref{app:control}.
+
+\paragraph{Outlook.} The model realizes Sewell's duality as a fixed-point equation---schema $\leftrightarrow$ context direction, resource $\leftrightarrow$ accumulated coordination payoff, structure $\leftrightarrow$ resource-weighted covariance, agency $\leftrightarrow$ deviation from prescribed role, transposability $\leftrightarrow$ context overlap $\g_m\!\cdot\!\g_n$. One object, the spectrum of the social gain matrix, then organizes onset, cascade shape, monitorability, and design. The main scope condition concerns transposability. Sewell locates novelty not in wholly new schemas but in the extension of an existing schema to a context it was not built for. That mechanism is present here as the overlap $\g_m\!\cdot\!\g_n$: differentiation along one axis partly resolves another, and the developing $\Cr$ raises successive orthogonal axes across the cascade. The closed loop therefore captures Sewellian agency, not merely reproduction. It does not capture his further claim that transformation is perpetual: our dynamics sort into roles and settle to a pinned or condensed fixed point, whereas a Sewellian society never settles. Sustained schema multiplicity lies outside the closed loop and requires ongoing transposition, for which an exogenous schema-innovation rate is the crudest proxy; we leave it open.
+
+Two extensions remain within the emergence regime. Retaining the role-sign dependence of coordination income, which the mean field averages away, lets the game's payoff asymmetry ($6$ versus $2$) concentrate resources in dominant roles, adding endogenous stratification to differentiation. A mixed repertoire of anti-coordination and conformity games couples the differentiation sector treated here to a consensus sector, with gain eigenvalues of both signs: role axes inflate the covariance, consensus axes shift the mean, and the covariance-spectrum monitor sees only the former. The most concrete near-term task is to test the mean-field predictions in finite-population simulation, where fluctuations select which schema condenses. Two smaller questions follow: whether resource weighting generically widens spectral gaps, which would enlarge the monitoring window, and whether truthful status presentation can be made an equilibrium of a strategic-display extension \cite{lachmann2001}.
+
+The formulation is deliberately minimal: one anti-coordination game, a Gaussian mean field, a loop that settles rather than perpetually transforms. It describes no real society, but serves as an idealization in the spirit of the harmonic oscillator---solvable, built around a single mechanism, and extended by perturbation. Here that mechanism is information-fuelled role differentiation and the cascade it drives. Whether the spectrum of a social gain matrix proves as useful across the social sciences as the oscillator's spectrum is across physics is the question we mean to raise.
+
+\begin{acknowledgments}
+The author acknowledges conversations with John Bechhoefer and Milo\v{s} Bro\'{c}i\'{c},
+and grant support from the Future of Life Institute and IVADO.
+\end{acknowledgments}
+
+\section*{Data availability}
+The simulation and figure-generation code that supports the findings of this study is
+openly available at \url{https://github.com/mptouzel/culture-engine-pages}. No
+experimental datasets were generated or analyzed.
+
+\appendix
+
+\section{Microfoundations of the mean-field dynamics}\label{sm:micro}
+
+
+The main-text role dynamics is the mean-field drift of an underlying encounter process. We record the reductions that produce it, since each is a modelling assumption with its own scope.
+
+\paragraph{Encounter clock and the write rate.} Agent $i$ plays at Poisson times with rate $\nu$. At an encounter in context $m$ against partner $j$ it commits a signed decision $a\in\{-1,+1\}$ and inscribes a fixed increment $b_0\,a\,\g_m$ into $\w_i$, which otherwise relaxes:
+\begin{equation}\label{SM-eq:sm-micro-sde}
+d\w_i = -\gamma\,\w_i(1+|\w_i|^2)\,dt + b_0\sum_m \g_m\,dN_{im}(t) + \sdyn\,d\bm B_i,
+\end{equation}
+with $N_{im}$ a counting process of rate $\nu f_m$ carrying signed jumps $a$. Taking the compensator, $\mathbb E[dN_{im}]=\nu f_m\langle a\rangle_m\,dt$, so the drift depends on $b_0$ and $\nu$ only through the product $\beta\equiv\nu b_0$: encounter frequency and per-encounter inscription are not separately identifiable at mean field. The same $\nu$ multiplies the coordination income (\cref{sm:fixedpoint}), so setting $\nu=1$ (time measured in mean encounter intervals) is a global units choice, not a per-equation one; $\beta/\gamma=\nu b_0/\gamma$ is then the number of times an identity is rewritten within its own decay horizon.
+
+\paragraph{Signed decision and its noise average.} At the decision level the action is a hard sign of the integrated evidence, $a=\sign(\tfrac1T\sum_{t}s_t)$ on samples $s_t=\Delta+\sobs\xi_t$ of the true gap $\Delta=(\w_i-\w_j)\cdot\g_m$. What enters the drift is its expectation over the observation noise,
+\begin{equation}\label{SM-eq:sm-micro-avg}
+\langle a\rangle_m(\Delta)=\mathbb E_\xi\big[\sign(\bar s_T)\big]=\operatorname{erf}\!\Big(\frac{\sqrt T\,\Delta}{\sqrt2\,\sobs}\Big),
+\end{equation}
+\begin{equation}
+\langle a\rangle_m'(0)=2\pi'(0),\quad \pi'(0)=\frac{\sqrt{T/2\pi}}{\sobs}.
+\end{equation}
+The decision rule is a function of the observation $s$; the mean-field response is a function of the true gap $\Delta$, the noise having been integrated out. It is this slope $\pi'(0)$, not the hard sign, that sets the gain: an un-averaged $\sign$ would give a singular (delta-function) susceptibility and an ill-posed threshold. Integrating $T$ samples sharpens the response as $\sqrt T$ (the read memory), whereas identity persistence $1/\gamma$ is the write memory; the two are distinct stages of the cycle.
+
+\paragraph{Context normalization.} One context is drawn per encounter, with frequencies normalized so that $\sum_m f_m=1$. The drift $\beta\sum_m f_m\langle a\rangle_m\g_m$ is then an expectation over which context is played rather than a sum that grows with $M$, and the gain operator $A=\sum_m f_m\,\g_m\g_m^{\!\top}$ has $\operatorname{tr}A=O(1)$: adding contexts at fixed budget divides the same write rate more finely rather than driving identity harder. This read budget $\sum_m f_m=1$ is the counterpart on the read side of the bandwidth budget $\sum_m u_m=S_{\mathrm{bw}}$ on the write side (\cref{sm:closedpool}). The dependence on how many contexts probe a $d$-dimensional space enters through the aspect ratio $M/d$ (\cref{sm:cascade}), not through an overall scale.
+
+\paragraph{Pairing kernel and the well-mixed reduction.} Partners are drawn with probabilities $p_{ij}^{(m)}$ ($\sum_j p_{ij}^{(m)}=1$). Linearizing the partner-averaged response near the symmetric state,
+\begin{equation}\label{SM-eq:sm-micro-lap}
+\sum_j p_{ij}^{(m)}\,\langle a\rangle_m\big((\w_i-\w_j)\cdot\g_m\big)\approx 2\pi'(0)\,\g_m^{\!\top}\big((\mathbb{I}-\bm{P}^{(m)})\w\big)_i,
+\end{equation}
+so pairing enters the gain through the graph Laplacian $\bm{L}^{(m)}=\mathbb{I}-\bm{P}^{(m)}$ of the interaction network, and ignition is governed by the spectrum of $\sum_mf_m\,\g_m\g_m^{\!\top}\otimes \bm{L}^{(m)}$---a coupling of cultural space to social space. For \emph{well-mixed} pairing $p_{ij}=1/N$, $\bm{P}=\tfrac1N\mathbf 1\mathbf 1^{\!\top}$ projects onto the population mean, $L$ acts as the identity off that mean, and the partner-average reduces to coupling to $\bar\w$ (a Curie--Weiss field). This recovers the gain $\G=2\pi'(0)\bm{P}^{\!\top}\bm{P}$ and the scalar pairing factor $(1-\rhopair)$ (the uniform diagonal reweighting of \smref{S2}). The results of this paper are the well-mixed (annealed) case; structured $p_{ij}$---homophily, communities, degree heterogeneity---makes $L^{(m)}$ nontrivial, shifting thresholds and letting network structure, not only $\|\g_m\|$, select which role axis ignites first. Because homophily makes $p_{ij}$ depend on $\{\w\}$, the interaction network then co-evolves with the culture; we bracket this by keeping $p_{ij}=1/N$, which decouples network from culture and closes the loop analytically.
+
+
+\paragraph{Shot noise.} At finite $\nu$ the compensated jump stream contributes shot noise of intensity $\nu b_0^2\sum_mf_m\g_m\g_m^{\!\top}=\beta b_0\,\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\bm{P}$. This is proportional to the gain matrix $\G$ rather than isotropic, so it is aligned with the context directions and largest along the active axes. It is not a scalar renormalization of $\sdyn$: retaining it replaces the flat floor $\sdyn^2/2\gamma$ by a mode-dependent floor that grows with $\mu_k$. The poles of the covariance are unchanged, because the shot-noise covariance shares the eigenbasis of $(\gamma I-\beta\G)^{-1}$ and reweights only its numerator. The critical couplings $\beta_c^{(k)}$ and the relaxation-time spectroscopy are therefore identical in the two cases, and only the pre-onset amplitudes differ. The intensity is $O(\beta b_0)$ and vanishes in the dense-encounter limit ($\nu\to\infty$, $b_0\to0$ at fixed $\beta$), leaving the isotropic $\sdyn^2\mathbb{I}$ that gives the flat noise floor used in \cref{sm:cascade}. We take this limit throughout.
+
+
+\paragraph{Status microfoundation.} The signal $s_{im}=(\w_i-\w_j)\cdot\g_m+\sobs\xi$ is agnostic between a noisy read of a public status gap and exact self-knowledge minus a noisy read of the partner's self-stored status; the mean-field results are identical. We adopt the second reading---each agent stores its own status and presents a noisy version---so that no public registry is presupposed. This keeps the emergence claim non-circular (a public ledger is itself an institution, analyzed as operator technology in \smref{S4}) and matches the feedback term $\beta a_{im}$, which inscribes the agent's own act. Presentation is assumed truthful; the anti-coordination payoffs penalize inflated display (feigned high status recruits deference until it collides with genuine high status at $(-1,-1)$), so honesty is a plausible equilibrium of a strategic-display extension we do not develop here.
+
+\section{Simulation details}\label{app:sim}
+
+\paragraph{Analytics.} The coordination payoff $W=w_0(1-2P_e)^2$ follows from enumerating role-assignment errors in the Go/Defer game; the gain matrix $\G=2\pi'(0)\bm{P}^{\!\top}\bm{P}$ follows from mean-field linearization of \cref{eq:agent}; the self-consistent fixed point follows a timescale-separated (agents $\to$ resources $\to$ schemas) analysis in which agents equilibrate to the Boltzmann distribution of the gradient dynamics, with resource-weighted covariances evaluated by Wick's theorem in the Gaussian regime; and the endogenous spectra from the resulting strength replicator. Full derivations are given in \crefrange{sm:gain}{sm:cascade} and \cite{SM}.
+
+\paragraph{Simulation (Fig.~1).} $N=2500$ agents, $d=M=3$, Euler--Maruyama integration of the dense-encounter limit of \cref{eq:agent} (one random pairwise matching per step, all $M$ contexts played per encounter at $f_m=1$, threshold policy), $\gamma=1$, $\sobs=0.6$, $\sdyn=0.25$. Game directions are held fixed at a hierarchical strength profile ($|\g_m|$ = $1.55,\,1.1,\,0.72$; near-orthogonal), so the covariance eigenvalues $\lambda_k(\beta)$ resolve the cascade cleanly at $\beta_c^{(k)}=\gamma/[(1-\rhopair)\mu_k]$ with $\mu_k=2\pi'(0)|\g_k|^2$ and $\rhopair=0$ (factor $1$) for random pairing. The protocol is quasi-static: at each $\beta$ on a grid we equilibrate ($1.2\times10^3$ burn-in steps, warm-started from the previous $\beta$) and average the order parameter over a further $1.5\times10^3$ steps, so panels b,c are functions of $\beta$ rather than of time. The endogenous selection of the cascade ordering under dynamic schemas (Model~6) is treated in \cref{sm:closedpool}; the full dynamic-schema code is provided with the manuscript.
+
+\section{Platform control surface}\label{app:control}
+
+The ignition and cascade factors are largely platform-owned, giving an operator a pre-ignition control surface over which takeoff scenario is reachable (\cref{fig:monitor}). Three levers are clean. \emph{Ignition} is monotone in the channel factors $\rhopair,\sobs$; because the cognitive floor must be cleared regardless of agent quality, raising channel noise or degrading matching yields a shutdown no agent improvement can overcome---acting entirely outside the models, unlike disassembly, which fails because resource-weighted inertia leaves the order intact when individual agents are removed (like removing spins from a ferromagnet).
+\emph{Cascade class} is steerable directly: the effective gain reweights the context Gram matrix by each context's play frequency times its pairing efficiency, $\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\,\mathrm{diag}(\bm{\phi})\,\bm{P}$, so per-context rate limits (the frequencies $f_m$) and matching quality (the efficiencies $\phi_m$) are interchangeable levers on it; optimizing that schedule splits a spiked spectrum---an unheralded avalanche---into a geometric, extrapolable sequence (\smref{S2\,D}); in a representative repertoire this more than halves the log-spacing variance a monitor must resolve ($1.35\to0.58$), at the cost of roughly $40\%$ of the coordination efficiency. That tradeoff is the rule: monitorability is purchased.
+Two tensions bound the surface. The first is a tradeoff between legibility and lock-in. Steering toward the extrapolable classes means slowing resource turnover, which an operator does by lengthening how far back the system's accounting reaches---longer reputation half-lives, wider log-retention windows---since $c$ is just the inverse of that memory horizon (\smref{S4\,A}). But a long memory is also what lets early advantage compound into entrenched incumbency, so the lever that buys monitorability works against the one that prevents lock-in. The second is that a benign setting must be \emph{held}, not reached: the closed loop tends on its own toward condensation (\cref{sm:closedpool}), so if the intervention is removed the system drifts back toward the avalanche-prone classes. Finally, which levers an operator holds at all depends on where identity is kept. A platform-maintained status ledger buys $\beta$, $\gamma$, and the matching correlation $\rhopair$ together; if identity memory migrates into the agents' own stores, those levers pass to the collective---and that migration is itself an early, observable warning that control over the knobs is being lost (\smref{S4}).
+
+\bibliography{references}
+
+\end{document}
