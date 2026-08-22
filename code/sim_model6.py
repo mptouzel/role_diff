@@ -19,6 +19,15 @@ Design choices made explicit (see paper):
   * ceiling implemented as a smooth logistic factor (1 - u_m/u_sat)_+ on the growth
     term; `--hard` switches to a clip, to test robustness.
   * N_eff = (sum_i r_i)^2 / sum_i r_i^2 is logged; C_r is only trustworthy for N_eff >> d.
+
+`--radial` restricts the schema dynamics to its strength (radial) sector,
+gdot_m = g_m (-kappa + alpha ghat_m^T C_r ghat_m), freezing the directions.  The
+full vector form splits exactly into this replicator plus Oja's rule on ghat_m;
+the rotation drives every schema onto C_r's leading eigenvector (all pairwise
+overlaps -> 1 in test runs), so under `--radial` the context directions are taken
+as given by the environment and the loop selects only how strongly each schema is
+institutionalized.  `--coherence chi` sets a uniform pairwise overlap
+ghat_m . ghat_n = chi in the seeded portfolio (the transposability knob).
 """
 import argparse
 import numpy as np
@@ -29,7 +38,8 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
         gamma=1.0, c=0.10, kappa=0.010, alpha=None, beta=2.2,
         sigma_obs=0.6, sigma_dyn=0.25, w0=1.5,
         u_sat=0.55, u0=1e-3, seed_spread=0.35, S_bw=None, hard_ceiling=False,
-        beta_end=None, orthogonal_seed=False, seed=0, record_every=100):
+        beta_end=None, orthogonal_seed=False, seed=0, record_every=100,
+        radial=False, coherence=0.0):
 
     rng = np.random.default_rng(seed)
     piprime = 1.0 / (sigma_obs * np.sqrt(2 * np.pi))     # threshold policy slope
@@ -38,6 +48,17 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
     if orthogonal_seed and M <= d:
         Q, _ = np.linalg.qr(rng.standard_normal((d, d)))
         dirs = Q[:, :M].T                                 # near-orthogonal candidates
+        if coherence > 0.0:
+            # Tilt every candidate equally toward their own mean direction, giving a
+            # symmetric portfolio with pairwise overlap ghat_m . ghat_n = coherence
+            # for all m != n.  This is the transposability knob: cross-axis seeding
+            # needs overlap (orthogonal contexts couple only competitively).
+            s = np.sqrt(M)
+            A = coherence / (1.0 - coherence)
+            t = -1.0 / s + np.sqrt(1.0 / s**2 + A)
+            v = dirs.sum(axis=0) / s                      # unit mean direction
+            dirs = dirs + t * v[None, :]
+            dirs /= np.linalg.norm(dirs, axis=1, keepdims=True)
     else:
         dirs = rng.standard_normal((M, d))
         dirs /= np.linalg.norm(dirs, axis=1, keepdims=True)
@@ -47,6 +68,7 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
     # --- agents, resources ---
     w = 0.01 * rng.standard_normal((N, d))
     r = np.ones(N)
+    f_ctx = np.full(M, 1.0 / M)                           # uniform play frequencies
 
     # alpha set so that a schema at the subcritical noise floor sits near the
     # invasion margin: alpha * v ~ kappa, with v = sdyn^2 / (2 gamma).
@@ -80,7 +102,10 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
         # Pe from the true gap and observation noise; W = w0 (1-2Pe)^2
         # 1-2Pe = erf(|Delta| / (sigma_obs sqrt 2))  for the threshold agent
         W = w0 * erf(np.abs(proj) / (sigma_obs * np.sqrt(2.0))) ** 2   # (N,M)
-        r += dt * (W.sum(axis=1) - c * r)
+        # play frequencies weight the income as they weight the gain matrix; under
+        # the uniform f_m used throughout this is an overall constant, which C_r
+        # divides out by normalizing, so it does not change any result here.
+        r += dt * (W @ f_ctx - c * r)
         np.maximum(r, 1e-12, out=r)
 
         # ---- schemas (slowest) ----
@@ -92,7 +117,15 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
             gate = np.ones(M)
         else:
             gate = np.clip(1.0 - u / u_sat, 0.0, 1.0)      # smooth saturation
-        G += dt * (-kappa * G + alpha * growth.T * gate[:, None])
+        if radial:
+            # radial-only: keep the strength replicator, drop the rotation.
+            # gdot_m = g_m (-kappa + alpha lambda_m),  lambda_m = ghat_m^T C_r ghat_m.
+            # Directions are set by the game contexts (environment) and never move;
+            # the loop selects only how strongly each schema is institutionalized.
+            lam_m = np.einsum('md,md->m', G, growth.T) / np.maximum(u, 1e-300)
+            G += dt * G * (-kappa + alpha * lam_m * gate)[:, None]
+        else:
+            G += dt * (-kappa * G + alpha * growth.T * gate[:, None])
         if hard_ceiling:
             un = np.sum(G**2, axis=1)
             over = un > u_sat
@@ -127,11 +160,14 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
 
     for k in rec:
         rec[k] = np.array(rec[k])
+    rec["G_final"] = G.copy()          # to check directions (radial: must equal dirs0)
+    rec["dirs0"] = dirs.copy()
     rec["params"] = dict(S_bw=S_bw, Theta=(M*u_sat/S_bw if S_bw else None),
                          N=N, d=d, M=M, dt=dt, gamma=gamma, c=c, kappa=kappa,
                          alpha=alpha, beta=beta, sigma_obs=sigma_obs,
                          sigma_dyn=sigma_dyn, u_sat=u_sat, u0=u0,
-                         hard=hard_ceiling, seed=seed, piprime=piprime)
+                         hard=hard_ceiling, seed=seed, piprime=piprime,
+                         radial=radial, coherence=coherence)
     return rec
 
 
@@ -142,10 +178,13 @@ if __name__ == "__main__":
     p.add_argument("--usat", type=float, default=0.55)
     p.add_argument("--c", type=float, default=0.10)
     p.add_argument("--hard", action="store_true")
+    p.add_argument("--radial", action="store_true")
+    p.add_argument("--coherence", type=float, default=0.0)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", default="m6.npz")
     a = p.parse_args()
-    R = run(T=a.T, beta=a.beta, u_sat=a.usat, c=a.c, hard_ceiling=a.hard, seed=a.seed)
+    R = run(T=a.T, beta=a.beta, u_sat=a.usat, c=a.c, hard_ceiling=a.hard, seed=a.seed,
+            radial=a.radial, coherence=a.coherence)
     np.savez_compressed(a.out, **{k: v for k, v in R.items() if k != "params"},
                         params=np.array([str(R["params"])], dtype=object))
     u = R["u"][-1]
