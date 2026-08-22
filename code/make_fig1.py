@@ -33,14 +33,14 @@ GRN = '#3f7a55'; PUR = '#7a3fa0'
 
 def sbox(x, y, text, fc, title, w=3.0, h=1.55):
     axA.add_patch(FancyBboxPatch((x-w/2, y-h/2), w, h, boxstyle="round,pad=0.1",
-                 fc=fc, ec='k', lw=1.0, zorder=3))
+                 fc=fc, ec='none', lw=1.0, zorder=3))
     axA.text(x, y+h/2-0.34, title, ha='center', va='center', fontsize=9.5,
              fontweight='bold', zorder=4)
     axA.text(x, y-0.25, text, ha='center', va='center', fontsize=6.5, zorder=4)
 
 def fbox(x, y, title, sub, w=2.6, h=1.15):
     axA.add_patch(FancyBboxPatch((x-w/2, y-h/2), w, h, boxstyle="round,pad=0.1",
-                 fc='#efe6f7', ec='0.3', lw=1.0, zorder=3))
+                 fc='#efe6f7', ec='none', lw=1.0, zorder=3))
     axA.text(x, y+h/2-0.32, title, ha='center', va='center', fontsize=8.5,
              fontweight='bold', zorder=4)
     axA.text(x, y-h/2+0.44, sub, ha='center', va='center', fontsize=6.5, zorder=4)

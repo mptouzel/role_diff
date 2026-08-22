@@ -1,6 +1,10 @@
 # Claude working files (not part of the submission)
 CLAUDE.md
 session_state.md
+checks.md
+
+# Python build artifacts
+__pycache__/
 
 # LaTeX build artifacts
 *.aux
