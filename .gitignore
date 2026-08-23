@@ -3,6 +3,9 @@ CLAUDE.md
 session_state.md
 checks.md
 
+# Overleaf comment/notes artifacts (not part of the submission)
+supplementNotes.bib
+
 # Python build artifacts
 __pycache__/
 
