@@ -82,7 +82,7 @@ The main text presents the closed loop directly; it was developed as a sequence 
 3 & $N$ / 1 & \textbf{population, mean field} & phase transition; $G=2\pi'(0)$; order parameter $C$ \\
 4 & $N$ / $M$ & \textbf{vector roles} & $G=2\pi'(0)P^{\!\top}\!P$; conditional cascade \\
 5 & $N$ / $M$ & \textbf{dynamic schemas} & self-consistency; but schemas collapse to one axis \\
-6 & $N$ / $M$ & \textbf{resources} & niche partitioning; endogenous cascade \\
+6 & $N$ / $M$ & \textbf{resources} & replicator on fixed axes; endogenous cascade \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -97,7 +97,7 @@ The main text presents the closed loop directly; it was developed as a sequence 
 
 \emph{Model 5} lets the context directions evolve, $\dot\g_m=-\kappa\g_m+\alpha\C\g_m$: a power iteration rotating $\g_m$ toward the leading eigenvector of $\C$. Schemas align with the role structure and the role structure reinforces the schemas, which is one half of Sewell's duality. All schemas converge on the same axis, so the stationary structure is one-dimensional.
 
-\emph{Model 6} closes the loop with resources (Sec.~V\,A of the main text): schemas are reinforced by the resource-weighted covariance $\Cr$, so agents who profit from a schema defend it. Resource weighting breaks the collapse degeneracy through niche partitioning, sustaining multiple schemas on distinct axes.
+\emph{Model 6} closes the loop with resources (Sec.~V\,A of the main text): schemas are reinforced by the resource-weighted covariance $\Cr$, so agents who profit from a schema defend it. Reinforcement is thereby contingent on success rather than on raw differentiation, and schema competition becomes a replicator dynamics whose fitness is resource accumulation. The context directions are held fixed (Sec.~II of the main text), so what the loop selects is the strength of each schema, not its axis.
 
 \subsection{The coordination payoff}\label{sm:payoff}
 
@@ -138,7 +138,7 @@ The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sobs)$ replaces the p
 
 The description of the pairing factor via ``wasted same-mode encounters'' is a supercritical intuition: it presupposes a bimodal population to have same- and cross-mode encounters at all. Since the factor is precisely what sets $\beta_c$---the threshold below which no such modes exist---this description cannot be its defining one. We give the general definition here, and recover the bimodal intuition as its supercritical special case.
 
-For a fixed context $m$, let $x_i=\w_i\cdot\g_m$ and, at a given encounter, let $x_j$ be the status of the partner the scheme supplies to $i$. Whatever the population's current dispersion---arbitrarily narrow and unimodal included---the pairing scheme induces some correlation $\rho_{\mathrm{pair}}=\mathrm{Corr}(x_i,x_j)\in[-1,1]$ between the two, a property of the matching algorithm rather than of any pre-existing role structure. Treating $(x_i,x_j)$ as jointly Gaussian with this correlation (exact near the origin, where the linearization \cref{eq:agent-mf} already applies), the partner's expectation conditional on the focal agent is $\mathbb E[x_j\mid x_i]=\rho_{\mathrm{pair}}x_i$, so the expected gap is
+For a fixed context $m$, let $x_i=\w_i\cdot\g_m$ and, at a given encounter, let $x_j$ be the status of the partner the scheme supplies to $i$. Whatever the population's current dispersion---arbitrarily narrow and unimodal included---the pairing scheme induces some correlation $\rho_{\mathrm{pair}}=\mathrm{Corr}(x_i,x_j)\in[-1,1]$ between the two, a property of the matching algorithm rather than of any pre-existing role structure. Treating $(x_i,x_j)$ as jointly Gaussian with this correlation (exact near the origin, where the linearization Eq.~(2) of the main text already applies), the partner's expectation conditional on the focal agent is $\mathbb E[x_j\mid x_i]=\rho_{\mathrm{pair}}x_i$, so the expected gap is
 \begin{equation}\label{SM-eq:sm-rho-gap}
 \mathbb E[\Delta\mid x_i] = x_i-\mathbb E[x_j\mid x_i] = (1-\rho_{\mathrm{pair}})\,x_i .
 \end{equation}
@@ -212,19 +212,19 @@ Under the self-storage microfoundation (Appendix~A of the main text) none of the
 
 The controllable-coordination principle requires the operator retain the ability to modulate $\rhopair$ (including to the no-information value $\rhopair=1$); the same logic applies to memory. If identity migrates out of the ledger---into agent self-managed memory (an agent maintaining its own persona notes sets its own $\beta$) or distributed peer memory (statuses held only as other agents' beliefs)---the $\beta/\gamma$ lever passes from operator to collective, and role differentiation becomes correspondingly harder to reverse. The locus of identity storage is therefore itself a monitorable, safety-relevant variable, complementary to the covariance-spectrum diagnostics: an early sign that the operator's levers are eroding is not a change in any factor of $\Lambda$, but a change in who owns the knobs.
 
-\subsection{Institutional inertia as a ledger accounting choice}\label{sm:inertia}
+\subsection{Repertoire seeding and the ledger's memory}\label{sm:inertia}
 
-The horizontal axis of the regime map, $c/\gamma$, is often glossed as ``institutional inertia''; here we show that $c$ is not a free physical constant but is fixed by the ledger's accounting rule, so this axis too is an operator control. The resource dynamics $\dot r_i=W_i(t)-c\,r_i$ (with $W_i=\sum_m\mathbb{E}_j[W_{ijm}]$ the instantaneous coordination income) integrate to
+Two accounting choices sit under the regime map: the dispersion of the seeded repertoire, which sets its horizontal axis, and the ledger's memory horizon, which does not. We treat them in turn, since the second is easily mistaken for the first.
+
+\paragraph{What sets the horizontal axis.} The sorting tempo $r=\ract/g$ is fixed by how unequally the candidate contexts are weighted when they are seeded (Eq.~(26) of the main text): a repertoire launched at near-equal weights crosses threshold almost together (large $r$, churn, accelerating cascades), while one whose contexts are tiered by orders of magnitude crosses in a well-separated sequence (small $r$, entrenchment, decelerating cascades). For a deployed multi-agent system the operator defines the task taxonomy---which contexts exist, and how much traffic each is launched with---so $\sigma_u$ is platform-owned in the same sense as the per-context frequencies $f_m$ and pairing efficiencies $\phi_m$ of \cref{sm:lambda}, and acts on the same object: the spectrum of the effective gain. This is also the point at which the open-repertoire process left outside the closed loop in the main text re-enters as a design variable rather than an exogenous accident.
+
+\paragraph{What the ledger's memory does instead.} The resource decay rate $c$ is likewise an accounting choice rather than a physical constant, but it does \emph{not} move the map. The resource dynamics $\dot r_i=W_i(t)-c\,r_i$ (with $W_i=\sum_m\mathbb{E}_j[W_{ijm}]$ the instantaneous coordination income) integrate to
 \begin{equation}\label{SM-eq:sm-ledger-kernel}
 r_i(t)=\int_{-\infty}^{t} e^{-c(t-t')}\,W_i(t')\,dt' ,
 \end{equation}
 so wealth is past income credited through an exponential memory kernel $K(s)=e^{-cs}$. The mean lifetime of a credited unit is $\int_0^\infty sK\,ds/\int_0^\infty K\,ds=1/c$, i.e.\ $c=1/\tau_{\mathrm{mem}}$ is the inverse memory horizon of the ledger: how long a past contribution keeps counting toward present standing. The exponential kernel is the unique memoryless (Markovian) choice consistent with the local ODE; a platform adopting a different retention rule---a hard credit window of width $T$ (mean lifetime $T/2$, so $c_{\mathrm{eff}}=2/T$), or a power-law reputation decay $K(s)\sim s^{-\alpha}$ ($\alpha>2$, mean lifetime $(\alpha-1)/(\alpha-2)$)---realizes the same accumulation with $c$ the effective inverse mean-lifetime of that kernel. Either way $c$ is set by the accounting rule, not by physics.
 
-This closes the interpretation: the control coordinate is
-\begin{equation}
-c/\gamma=\tau_{\mathrm{role}}/\tau_{\mathrm{mem}},
-\end{equation}
-the ratio of the role-commitment timescale $1/\gamma$ to the ledger memory horizon $1/\tau_{\mathrm{mem}}=c$. An operator lowers $c/\gamma$ (slower turnover, more entrenchment, more monitorable cascades) by lengthening the ledger's memory---raising reputation half-lives, widening log-retention windows, down-weighting recency in the reward rule---and raises it by discounting the past faster. The lever is thus concrete and platform-owned, but it inherits the tension noted in the main text: long memory buys legibility at the price of entrenchment, since $\tau_{\mathrm{mem}}$ is exactly the horizon over which early advantage compounds into locked-in incumbency.
+The memory horizon $\tau_{\mathrm{mem}}=1/c$ nonetheless leaves the sorting tempo alone, because $\Cr$ is normalized by $\sum_i r_i$: the stationary weights $r_i^*=c^{-1}\sum_m f_m W_{im}$ carry $c$ as an overall factor, which the normalization divides out, so neither the compounding rate $g$ nor the activation rate $\ract$ inherits it. Lengthening the ledger's memory therefore does not by itself buy a more monitorable cascade. What it does control is whose past counts: a long kernel credits contributions made long ago, so $\Cr$ is weighted by cumulative rather than current standing, which is the horizon over which early advantage compounds into locked-in incumbency. The legibility/lock-in tension of the main text survives, but both of its arms act through the repertoire: a widely dispersed seeding is what buys the extrapolable classes, and it is also what gives the earliest contexts the longest run at entrenchment.
 
 \section{Monotonicity of the pinning fixed point for general portfolios}\label{sm:monotone}
 % ======================================================================
