@@ -62,7 +62,7 @@ def frame(ax):
     ax.axhline(b_hi, color="k", lw=1.1, ls="--")
     ax.axhline(b_lo, color="k", lw=1.1, ls="--")
     ax.plot([1, 1], [b_lo, b_hi], color="k", lw=1.0, ls=":")
-    ax.set_xlabel(r"resource turnover  $c/\gamma$")
+    ax.set_xlabel(r"sorting tempo  $r=r_{\mathrm{act}}/g$")
 
 # ---- panel (a): capacity bands + glyphs ----
 axA.axhspan(b_hi, ymax, color="#e7efe9", zorder=0)
