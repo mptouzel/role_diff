@@ -59,7 +59,7 @@ for ax, p in zip(axes, panels):
     # arrowsize sets an absolute point size (not linewidth/axes-relative), so it
     # needs the same _SCALE correction applied explicitly to stay proportionate
     # now that the figure is built at true final print size.
-    ax.streamplot(g, g, V1, V2, color="0.78", linewidth=1.0*_SCALE, density=1.1, arrowsize=1.1*_SCALE)
+    ax.streamplot(g, g, V1, V2, color="0.78", linewidth=1.0*_SCALE, density=0.75, arrowsize=1.1*_SCALE)
 
     # excluded region: no schema strength can exceed u_sat=1
     ax.axvspan(u_sat, XP + 0.2, color="0.6", alpha=0.30, zorder=2, lw=0)
