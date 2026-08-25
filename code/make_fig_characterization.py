@@ -142,7 +142,7 @@ axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
 axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
-axA.set_title("(a) capacity: contexts the society can sustain", loc="left", fontsize=13)
+axA.set_title("(a) effective phase diagram: capacity the society can sustain", loc="left", fontsize=13)
 
 # ---- panel (b): observed participation ratio field ----
 pc = axB.pcolormesh(rs, ys, PRn, cmap="viridis", vmin=0, vmax=1,
