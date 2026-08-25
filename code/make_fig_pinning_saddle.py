@@ -86,12 +86,16 @@ for ax, p in zip(axes, panels):
     ax.plot([0, S], [S, 0], color="tab:red", lw=2.6*_SCALE, ls=(0,(5,2)), zorder=4)
 
     tr = trajectory(S)
-    ax.plot(tr[:, 0], tr[:, 1], color="k", lw=1.5*_SCALE, zorder=5, solid_capstyle="round")
+    # stop short of the terminal marker so the arrowhead is not buried under it
+    keep = tr[np.linalg.norm(tr - tr[-1], axis=1) > 0.06]
+    if len(keep) < 8:
+        keep = tr[:-1]
+    ax.plot(keep[:, 0], keep[:, 1], color="k", lw=3.0*_SCALE, zorder=5, solid_capstyle="round")
     ax.plot(*tr[0], "o", color="k", ms=3.2*_SCALE, zorder=5)
-    k = int(0.55 * len(tr))
-    ax.annotate("", xy=tr[min(k + 60, len(tr) - 1)], xytext=tr[k],
+    # arrowhead on the final segment, giving the trajectory its direction of travel
+    ax.annotate("", xy=keep[-1], xytext=keep[max(0, len(keep) - 10)],
                 arrowprops=dict(arrowstyle="-|>", color="k", lw=0,
-                                mutation_scale=9*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
+                                mutation_scale=15*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
 
     sad = S/2
     saddle_color = "tab:red" if p["kind"] == "theta1" else "k"
