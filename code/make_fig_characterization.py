@@ -141,14 +141,14 @@ axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
              arrowprops=dict(arrowstyle="-|>", color="0.25", lw=1.4,
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
-axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
+axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M=1/\Theta$")
 axA.set_title("(a) effective phase diagram: capacity the society can sustain", loc="left", fontsize=13)
 
 # ---- panel (b): observed participation ratio field ----
 pc = axB.pcolormesh(rs, ys, PRn, cmap="viridis", vmin=0, vmax=1,
                     shading="auto", rasterized=True)
 frame(axB)
-fig.colorbar(pc, ax=axB, pad=0.02).set_label(r"effective active contexts  $D_{\mathrm{eff}}/M$")
+fig.colorbar(pc, ax=axB, pad=0.02).set_label(r"fraction of contexts effectively active  $D_{\mathrm{eff}}/M$")
 axB.set_title("(b) realization: contexts effectively active", loc="left", fontsize=13)
 
 fig.tight_layout()
