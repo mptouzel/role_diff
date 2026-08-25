@@ -42,6 +42,22 @@ def vel(u1, u2, S):
     ddot = b * d * (1 - (d / S)**2)
     return 0.5*(sdot + ddot), 0.5*(sdot - ddot)
 
+U0 = (0.055, 0.040)   # one seeded start, slightly favouring schema 1, shared by all panels
+
+def trajectory(S, u0=U0, dt=0.002, nmax=400000):
+    """Integrate the strength dynamics from u0 until the ceiling or a fixed point."""
+    u = np.array(u0, float)
+    pts = [u.copy()]
+    for _ in range(nmax):
+        v = np.array(vel(u[0], u[1], S))
+        if not np.isfinite(v).all() or np.hypot(*v) < 1e-4:
+            break
+        u = u + dt * v
+        pts.append(u.copy())
+        if u[0] >= u_sat or u[1] >= u_sat or u.max() > XP:
+            break
+    return np.array(pts)
+
 panels = [
     dict(S=0.5, kind="condensate", title=r"(a) $\Theta=4$"),
     dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$"),
@@ -69,16 +85,24 @@ for ax, p in zip(axes, panels):
     ax.plot([0, XP], [0, XP], color="tab:green", lw=2.6*_SCALE, zorder=4)
     ax.plot([0, S], [S, 0], color="tab:red", lw=2.6*_SCALE, ls=(0,(5,2)), zorder=4)
 
+    tr = trajectory(S)
+    ax.plot(tr[:, 0], tr[:, 1], color="k", lw=1.5*_SCALE, zorder=5, solid_capstyle="round")
+    ax.plot(*tr[0], "o", color="k", ms=3.2*_SCALE, zorder=5)
+    k = int(0.55 * len(tr))
+    ax.annotate("", xy=tr[min(k + 60, len(tr) - 1)], xytext=tr[k],
+                arrowprops=dict(arrowstyle="-|>", color="k", lw=0,
+                                mutation_scale=9*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
+
     sad = S/2
     saddle_color = "tab:red" if p["kind"] == "theta1" else "k"
-    ax.plot(sad, sad, "o", mfc="white", mec=saddle_color, mew=2.8*_SCALE, ms=16*_SCALE, zorder=6)
+    ax.plot(sad, sad, "o", mfc="white", mec=saddle_color, mew=1.9*_SCALE, ms=10*_SCALE, zorder=6)
 
     if p["kind"] == "condensate":
-        ax.plot([S, 0], [0, S], "o", color="tab:red", ms=15*_SCALE, zorder=6, clip_on=False)
+        ax.plot([S, 0], [0, S], "o", color="tab:red", ms=8.5*_SCALE, zorder=6, clip_on=False)
         ax.text(S + 0.05, 0.05, r"$S_{\mathrm{bw}}=M/\Theta$", color="tab:red", fontsize=8*_CORR,
                 ha="left", va="bottom", zorder=10, path_effects=HALO)
     elif p["kind"] == "saturated":
-        ax.plot(u_sat, S - u_sat, "s", mfc="none", mec="tab:red", mew=3.0*_SCALE, ms=15*_SCALE, zorder=7)
+        ax.plot(u_sat, S - u_sat, "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=9.5*_SCALE, zorder=7)
     # theta1: the saddle marker itself (red-outlined above) sits exactly at the u_sat corner
 
     ax.set_xlim(0, XP); ax.set_ylim(0, XP); ax.set_aspect("equal")
