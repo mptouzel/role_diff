@@ -81,7 +81,7 @@ axA.text(1.12, b_lo * 2.4, r"$a=1$", fontsize=10, ha="left",
          bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
 axA.set_xlim(rs[0], rs[-1]); axA.set_ylim(ymin, ymax)
-axA.set_xlabel(r"sorting tempo  $r=r_{\mathrm{act}}/g$"); axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
+axA.set_xlabel(r"activations per compounding time  $r=r_{\mathrm{act}}/g$"); axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
 axA.set_title("(a) monitorability over the regime plane", loc="left")
 
 # ================= panel (b): monitor's view (sweep) =================
