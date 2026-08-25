@@ -98,16 +98,15 @@ for ax, p in zip(axes, panels):
                                 mutation_scale=30*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
 
     sad = S/2
-    saddle_color = "tab:red" if p["kind"] == "theta1" else "k"
-    ax.plot(sad, sad, "o", mfc="white", mec=saddle_color, mew=1.9*_SCALE, ms=10*_SCALE, zorder=6)
+    ax.plot(sad, sad, "o", mfc="white", mec="k", mew=1.9*_SCALE, ms=10*_SCALE, zorder=6)
 
     if p["kind"] == "condensate":
         ax.plot([S, 0], [0, S], "o", color="tab:red", ms=8.5*_SCALE, zorder=6, clip_on=False)
         ax.text(S + 0.05, 0.05, r"$S_{\mathrm{bw}}=M/\Theta$", color="tab:red", fontsize=8*_CORR,
                 ha="left", va="bottom", zorder=10, path_effects=HALO)
-    elif p["kind"] == "saturated":
-        ax.plot(u_sat, S - u_sat, "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=9.5*_SCALE, zorder=7)
-    # theta1: the saddle marker itself (red-outlined above) sits exactly at the u_sat corner
+    elif p["kind"] in ("saturated", "theta1"):
+        # ceiling arrest; at Theta=1 it lands on the saddle itself, at the u_sat corner
+        ax.plot(u_sat, S - u_sat, "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=11*_SCALE, zorder=7)
 
     ax.set_xlim(0, XP); ax.set_ylim(0, XP); ax.set_aspect("equal")
     ax.set_xticks([0, u_sat]); ax.set_xticklabels(["0", "1"])
