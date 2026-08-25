@@ -135,6 +135,12 @@ axA.annotate("", xy=(0.975, 0.685), xycoords="axes fraction",
              arrowprops=dict(arrowstyle="-|>", color="tab:blue", lw=1.4,
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
+# arrow from the 'avalanche' glyph toward r -> 0, where the cascade is a pure avalanche
+axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
+             xytext=(0.082, 0.8475), textcoords="axes fraction",
+             arrowprops=dict(arrowstyle="-|>", color="0.25", lw=1.4,
+                              shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
+
 axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
 axA.set_title("(a) capacity: contexts the society can sustain", loc="left", fontsize=13)
 
