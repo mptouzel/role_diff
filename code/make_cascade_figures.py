@@ -105,7 +105,6 @@ axA.set_ylim(-0.02, 1.05)
 axA.set_xlabel(r"$\beta/\beta_c^{(1)}$   (equivalently $\Lambda/\Lambda_c$)")
 axA.set_ylabel(r"activated fraction  $N(\beta)/R$")
 axA.axvline(1.0, color="0.8", lw=0.8, zorder=0)
-axA.legend(loc="lower right", frameon=False, handlelength=1.6)
 axA.set_title(r"(a)  cascade counting function", loc="left")
 
 # annotate the deceptive features
@@ -159,7 +158,7 @@ def slope_guide(x0, x1, y0, p, txt, dx=1.0, dy=1.4):
     axB.plot(xs, y0 * (xs / x0) ** p, color="0.6", lw=0.8, ls=":")
     axB.text(x1 * dx, y0 * (x1 / x0) ** p * dy, txt, fontsize=8, color="0.45")
 
-slope_guide(6, 60, 0.35, -1.0, r"slope $-1$")
+slope_guide(6, 60, 0.35, -1.0, r"slope $-1$", dx=1.18, dy=0.72)
 slope_guide(6, 60, 0.020, -0.5, r"$-\frac{1}{2}$")
 slope_guide(1.6, 4.5, 0.055, +1.0, r"$+1$", dx=1.05, dy=1.0)
 
@@ -170,6 +169,7 @@ axB.set_ylim(3e-4, 3)
 axB.set_xlabel(r"$\beta/\beta_c^{(1)}$")
 axB.set_ylabel(r"cascade rate  $R^{-1}\,dN/d\beta$")
 axB.set_title(r"(b)  rate: slope $=(1{-}a)/a$;  accel. iff slope $>0$ iff $s>2$", loc="left")
+axB.legend(*axA.get_legend_handles_labels(), loc="upper right", frameon=False, handlelength=1.6)
 
 fig.tight_layout()
 fig.savefig("./fig_cascade_classes.pdf")

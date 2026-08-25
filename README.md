@@ -1,14 +1,14 @@
 # Role differentiation as ignition of a collective information engine
 
-PRX submission package (REVTeX 4.2).
+Manuscript package (REVTeX 4.2).
 
 ## Files
 
-- `main.tex`        — the article. Sections I–VII plus Appendices A–C.
+- `main.tex`        — the article. Sections I–VII plus Appendices A–D.
 - `supplement.tex`  — Supplemental Material (Secs. S1–S4), deposited separately.
 - `references.bib`  — shared bibliography. Contains the `SM` entry that the
                       article cites for the Supplemental Material.
-- `popular_summary.txt` — PRX popular summary, 147 words.
+- `popular_summary.txt` — non-technical summary, 147 words.
 - `figures/`, `code/` — figures and the scripts that generate them.
 
 ## Compiling
@@ -58,10 +58,11 @@ hand — they are plain text, not references.
 
 Article: I Introduction · II Model · III Ignition (III A gain matrix and
 critical couplings) · IV Cascade (IV A counting function, IV B five classes) ·
-V Endogenous selection (V A fixed point, V B closed pool, V C regime map) ·
+V Schema-resource selection of the cascade class (V A fixed point, V B closed
+pool, V C regime map) ·
 VI Monitoring (VI A consequences for monitoring and design) · VII Discussion.
 Appendices: A microfoundations · B simulation details · C platform control
-surface.
+surface · D schema directions and the vector form.
 
 Supplemental Material: S1 model ladder, coordination payoff, correlated
 equilibrium · S2 pairing statistics and the Λ factorization · S3
