@@ -114,6 +114,16 @@ axA.annotate("single avalanche", xy=(1.02, 0.97), xytext=(1.7, 0.86),
 axA.annotate("quiescent interval", xy=(3.4, 0.06), xytext=(3.2, 0.42),
              color="tab:purple", fontsize=8, ha="center",
              arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.7))
+# identify the three curves that carry no feature callout
+axA.annotate("accelerating", xy=(4.6, 0.46), xytext=(1.12, 0.70),
+             color="tab:red", fontsize=8, ha="left",
+             arrowprops=dict(arrowstyle="-", color="tab:red", lw=0.7))
+axA.annotate("logarithmic", xy=(60, 0.69), xytext=(170, 0.46),
+             color="tab:blue", fontsize=8, ha="center",
+             arrowprops=dict(arrowstyle="-", color="tab:blue", lw=0.7))
+axA.annotate("decelerating", xy=(300, 0.36), xytext=(170, 0.12),
+             color="tab:green", fontsize=8, ha="center",
+             arrowprops=dict(arrowstyle="-", color="tab:green", lw=0.7))
 axA.annotate("quiet start", xy=(1.35, 0.035), xytext=(0.85, 0.15),
              color="tab:orange", fontsize=8,
              arrowprops=dict(arrowstyle="-", color="tab:orange", lw=0.7))
