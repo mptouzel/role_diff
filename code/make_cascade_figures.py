@@ -65,12 +65,12 @@ bulk = mu_bulk * (1 + 0.05 * rng.normal(size=R - 1))
 spec["spiked"] = np.sort(np.concatenate([[mu_sp], bulk]))[::-1]
 
 styles = {
-    "degenerate":   dict(color="0.35",       label=r"(i) degenerate"),
-    "geometric":    dict(color="tab:blue",   label=r"(ii) geometric ($k_0{=}8$)"),
-    "zipf_steep":   dict(color="tab:green",  label=r"(iii) Zipf $a{=}2$"),
-    "zipf_shallow": dict(color="tab:red",    label=r"(iii) Zipf $a{=}\frac{1}{2}$"),
-    "mp":           dict(color="tab:orange", label=r"(iv) random (MP, $q{=}2$)"),
-    "spiked":       dict(color="tab:purple", label=r"(v) spiked ($\chi{=}0.2$)"),
+    "degenerate":   dict(color="0.35",       label=r"(i) single avalanche"),
+    "geometric":    dict(color="tab:blue",   label=r"(ii) logarithmic ($k_0{=}8$)"),
+    "zipf_steep":   dict(color="tab:green",  label=r"(iii) decelerating ($a{=}2$)"),
+    "zipf_shallow": dict(color="tab:red",    label=r"(iii) accelerating ($a{=}\frac{1}{2}$)"),
+    "mp":           dict(color="tab:orange", label=r"(iv) quiet, then burst ($q{=}2$)"),
+    "spiked":       dict(color="tab:purple", label=r"(v) one, gap, then all ($\chi{=}0.2$)"),
 }
 
 
@@ -108,10 +108,10 @@ axA.axvline(1.0, color="0.8", lw=0.8, zorder=0)
 axA.set_title(r"(a)  cascade counting function", loc="left")
 
 # annotate the deceptive features
-axA.annotate("avalanche", xy=(1.02, 0.97), xytext=(1.7, 0.86),
+axA.annotate("single avalanche", xy=(1.02, 0.97), xytext=(1.7, 0.86),
              color="0.35", fontsize=8,
              arrowprops=dict(arrowstyle="-", color="0.35", lw=0.7))
-axA.annotate("quiescent gap", xy=(3.4, 0.06), xytext=(3.2, 0.42),
+axA.annotate("quiescent interval", xy=(3.4, 0.06), xytext=(3.2, 0.42),
              color="tab:purple", fontsize=8, ha="center",
              arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.7))
 axA.annotate("quiet start", xy=(1.35, 0.035), xytext=(0.85, 0.15),
@@ -150,7 +150,7 @@ axB.plot(b, rate_sp, color="tab:purple", lw=1.8)
 for x0, c, dy in [(1.0, "0.35", 1.0)]:
     axB.annotate("", xy=(x0, 2.0), xytext=(x0, 0.15),
                  arrowprops=dict(arrowstyle="-|>", color=c, lw=1.6))
-axB.text(1.06, 1.1, r"$\delta$ (avalanche;" "\n" r"also spike of (v))", fontsize=8, color="0.35")
+axB.text(1.06, 1.1, r"$\delta$ (avalanche;" "\n" r"also the early onset of (v))", fontsize=8, color="0.35")
 
 # slope guides
 def slope_guide(x0, x1, y0, p, txt, dx=1.0, dy=1.4):
