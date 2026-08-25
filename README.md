@@ -66,7 +66,8 @@ surface · D schema directions and the vector form.
 
 Supplemental Material: S1 model ladder, coordination payoff, correlated
 equilibrium · S2 pairing statistics and the Λ factorization · S3
-associative-memory mapping and role capacity · S4 status ledger.
+associative-memory mapping and role capacity · S4 status ledger · S5
+monotonicity of the pinning fixed point · S6 validity of the linearization.
 
 ## Figure sources
 
