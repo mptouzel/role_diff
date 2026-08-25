@@ -87,7 +87,7 @@ for ax, p in zip(axes, panels):
 
     tr = trajectory(S)
     # stop short of the terminal marker so the arrowhead is not buried under it
-    keep = tr[np.linalg.norm(tr - tr[-1], axis=1) > 0.06]
+    keep = tr[np.linalg.norm(tr - tr[-1], axis=1) > 0.085]
     if len(keep) < 8:
         keep = tr[:-1]
     ax.plot(keep[:, 0], keep[:, 1], color="k", lw=3.0*_SCALE, zorder=5, solid_capstyle="round")
@@ -95,7 +95,7 @@ for ax, p in zip(axes, panels):
     # arrowhead on the final segment, giving the trajectory its direction of travel
     ax.annotate("", xy=keep[-1], xytext=keep[max(0, len(keep) - 10)],
                 arrowprops=dict(arrowstyle="-|>", color="k", lw=0,
-                                mutation_scale=15*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
+                                mutation_scale=30*_SCALE, shrinkA=0, shrinkB=0), zorder=5)
 
     sad = S/2
     saddle_color = "tab:red" if p["kind"] == "theta1" else "k"
