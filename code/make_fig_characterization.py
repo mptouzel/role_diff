@@ -93,7 +93,7 @@ glyph(axA, 0.09, 0.80, "step", "0.25", "avalanche")
 glyph(axA, 0.74, 0.80, "log", "tab:blue", "logarithmic")
 glyph(axA, 0.09, 0.46, "concave", "tab:green", "decelerating")
 glyph(axA, 0.70, 0.46, "convex", "tab:red", "accelerating")
-glyph(axA, 0.38, 0.135, "spike", "tab:purple", "spike + gap")
+glyph(axA, 0.38, 0.135, "spike", "tab:purple", "one, gap, then all")
 
 def mixed_glyph(ax, cx, cy, r_ex, Theta_ex, label):
     ia = ax.inset_axes([cx, cy, 0.145, 0.095], transform=ax.transAxes)
