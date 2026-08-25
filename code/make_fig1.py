@@ -111,11 +111,10 @@ axA.text(-0.05, 6.35, "reinforce\n" r"$\mathbf{C}_r$", fontsize=6.6, ha='center'
          color=GRN, zorder=6)
 axA.text(5.5, 1.86, "accumulate", fontsize=6.5, ha='center', color='0.3', zorder=6)
 axA.text(-0.02, 1.01, 'a', transform=axA.transAxes, fontsize=12, fontweight='bold')
-axA.text(3.7, 10.05, '(critical loop gain):', ha='right', va='center', fontsize=9.5, zorder=6)
-axA.text(1.95, 10.62, 'ignition', ha='center', va='center', fontsize=9.5, zorder=6)
-axA.text(3.95, 10.05,
-         r'$\Lambda=\dfrac{2\beta}{\gamma}\,\dfrac{\eta_{\rm agent}(1-\rho_{\rm pair})}{\sigma_{\rm obs}}>1$',
-         ha='left', va='center', fontsize=9.5, zorder=6)
+axA.text(4.9, 10.60, 'ignition at', ha='center', va='center', fontsize=9.5, zorder=6)
+axA.text(4.9, 9.92,
+         r'critical loop gain  $\Lambda=\dfrac{2\beta}{\gamma}\,\dfrac{\eta_{\rm agent}(1-\rho_{\rm pair})}{\sigma_{\rm obs}}=1$',
+         ha='center', va='center', fontsize=9.5, zorder=6)
 
 # ------- (b) merged: agent-status swarm + order-parameter branches + histogram -------
 _bpos = gs[:, 1].get_position(fig); _bm = _bpos.height*0.11
