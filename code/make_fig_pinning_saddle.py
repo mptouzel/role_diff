@@ -67,7 +67,7 @@ panels = [
 g = np.linspace(0.02, XP, 80)
 G1, G2 = np.meshgrid(g, g)
 
-fig, axes = plt.subplots(1, 3, figsize=(10.2*_SCALE, 3.9*_SCALE), sharex=True, sharey=True)
+fig, axes = plt.subplots(1, 3, figsize=(10.2*_SCALE, 4.8*_SCALE), sharex=True, sharey=True)
 
 for ax, p in zip(axes, panels):
     S = p["S"]
