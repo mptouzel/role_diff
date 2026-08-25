@@ -71,17 +71,18 @@ def bez(P0, P1, P2, P3, color, dashed=True, lw=1.7):
         capstyle='round'))
 
 # LEFT: the three state variables; RIGHT: the fast signal-flow chain
-sbox(1.7, 8.4, r"context $\mathbf{g}_m$" "\n"
-     r"$\dot{\mathbf{g}}_m=-\kappa\mathbf{g}_m+\alpha\mathbf{C}_r\mathbf{g}_m$",
-     '#dbe9f6', 'Schema', w=3.5)
+sbox(1.7, 8.4, r"context $\mathbf{g}_m=\sqrt{u_m}\,\hat{\mathbf{g}}_m$" "\n"
+     r"$\dot u_m=2u_m(\alpha\lambda_m-\kappa)$" "\n"
+     r"$\lambda_m=\hat{\mathbf{g}}_m^{\top}\mathbf{C}_r\hat{\mathbf{g}}_m$",
+     '#dbe9f6', 'Schema', w=3.9, h=1.95)
 sbox(2.9, 5.0, r"identity states $\boldsymbol{\omega}_i$" "\n"
      r"$\dot{\boldsymbol{\omega}}_i\approx-\gamma\boldsymbol{\omega}_i+\beta\langle a\rangle_m\mathbf{g}_m+\boldsymbol{\eta}_i$",
      '#e7f2e4', 'Identity', w=4.3)
 sbox(2.45, 1.5, r"wealth $r_i$" "\n"
-     r"$\dot r_i=\sum_m W_{im}-c\,r_i$", '#fdeede', 'Resources', w=3.2)
+     r"$\dot r_i=\sum_m f_m W_{im}-c\,r_i$", '#fdeede', 'Resources', w=3.2)
 SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
-     r"$\Delta_{im}=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\!\cdot\!\mathbf{g}_m$" "\n"
+     r"$\Delta_{im}=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
      r"$s_{im}=\Delta_{im}+\sigma_{\rm obs}\xi$", w=3.4, h=1.55)
 fbox(SX, 5.0, 'Action', r"$a_{im}=\mathrm{sign}(s_{im})$", w=3.1, h=1.15)
 fbox(SX, 1.5, 'Reward',
@@ -95,7 +96,7 @@ A((SX, 7.63), (SX, 5.58)); A((SX, 4.42), (SX, 2.28)); A((6.7, 1.5), (4.10, 1.5))
 # GREEN reinforce (slow): Resources + Identity -> Schema, nested up the left
 bez((0.85, 1.55), (-0.55, 1.55), (0.25, 6.25), (0.90, 6.75), GRN)
 bez((1.10, 5.55), (0.65, 6.05), (0.75, 6.55), (0.90, 6.75), GRN)
-A((0.90, 6.75), (1.50, 7.62), color=GRN, dashed=False, sA=0, sB=6)
+A((0.90, 6.75), (1.50, 7.42), color=GRN, dashed=False, sA=0, sB=6)
 # PURPLE write (slow): Action + Schema merge, then one trunk up into Identity's base
 bez((3.25, 8.4), (4.8, 8.4), (5.8, 4.30), (5.8, 3.70), PUR)
 bez((SX-1.3, 5.00), (6.3, 4.55), (5.8, 4.30), (5.8, 3.70), PUR)
@@ -195,7 +196,7 @@ for _sp in ('top', 'bottom', 'right'):
 axH.tick_params(axis='y', which='both', left=False, right=False,
                 labelleft=False, labelright=False)
 axH.yaxis.set_label_position('right')
-axH.set_ylabel(r'agent status  $\boldsymbol{\omega}_i\!\cdot\!\hat{\mathbf{g}}_m$'
+axH.set_ylabel(r'agent status  $\boldsymbol{\omega}_i\cdot\hat{\mathbf{g}}_m$'
                '\n' r'(individual agents shown as dots at left)', fontsize=8)
 axH.set_title(rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 
@@ -205,4 +206,4 @@ axH.set_title(rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 for stem in ('fig_loop_ignition',):
     plt.savefig(os.path.join(FIG_DIR, stem + '.png'), dpi=300, bbox_inches='tight')
     plt.savefig(os.path.join(FIG_DIR, stem + '.pdf'), bbox_inches='tight')
-print('saved:', ', '.join(('fig_loop_full', 'fig_loop_ignition')))
+print('saved:', 'fig_loop_ignition')

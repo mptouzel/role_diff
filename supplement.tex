@@ -176,9 +176,10 @@ an irreducible cognitive floor below which no orchestration sustains structure.
 
 \paragraph{Vector case.} For $M$ contexts the scalar $\Lambda$ becomes a matrix condition. Linearizing the mean-field drift (Appendix~A of the main text), each context enters the gain with a weight equal to its play frequency $f_m$ ($\sum_m f_m=1$, how often it is played) times its pairing factor $(1-\rho_m)\in[0,2]$ (set by that context's partner correlation); these are the same diagonal reweighting of the context Gram matrix and therefore multiply,
 \begin{equation}\label{SM-eq:sm-Geff}
-\G_{\mathrm{eff}}=\frac{2\etaag}{\sobs}\,\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\,\bm{D}_\rho\,\bm{P},\qquad \bm{D}_\rho=\mathrm{diag}(1-\rho_1,\dots,1-\rho_M).
+\G_{\mathrm{eff}}=\frac{2\etaag}{\sobs}\,\bm{P}^{\!\top}\mathrm{diag}(\mathbf{f})\,\bm{D}_\rho\,\bm{P},\qquad \bm{D}_\rho=\mathrm{diag}(1-\rho_1,\dots,1-\rho_M)\equiv\mathrm{diag}(\bm{\phi}),
 \end{equation}
-The doubly-uniform case $f_m=1/M,\ \rho_m=\rhopair$ makes the diagonal proportional to the identity, folds the constant into $\beta$, and recovers the main-text $\G_{\mathrm{eff}}=(2\etaag(1-\rhopair)/\sobs)\bm{P}^{\!\top}\bm{P}=(1-\rhopair)\G$. Axis $k$ then activates when $\Lambda_k=(2\beta/\gamma)(\etaag(1-\rhopair)/\sobs)\|g_k\|^2_{\mathrm{eff}}>1$, with $\|g_k\|^2_{\mathrm{eff}}$ the $k$-th eigenvalue of $\bm{P}^{\!\top}\!\bm{P}$. The active-axis count is $M_{\mathrm{eff}}=\#\{k:\Lambda_k>1\}$, and the ``cultural frontier'' is the surface $\Lambda_k=1$ in $(\beta/\gamma,\etaag,(1-\rhopair)/\sobs)$ space.
+writing $\phi_m\equiv1-\rho_m$ for the pairing efficiency of context $m$, the name used for this
+diagonal in the main text. The doubly-uniform case $f_m=1/M,\ \rho_m=\rhopair$ makes the diagonal proportional to the identity, folds the constant into $\beta$, and recovers the main-text $\G_{\mathrm{eff}}=(2\etaag(1-\rhopair)/\sobs)\bm{P}^{\!\top}\bm{P}=(1-\rhopair)\G$. Axis $k$ then activates when $\Lambda_k=(2\beta/\gamma)(\etaag(1-\rhopair)/\sobs)\|g_k\|^2_{\mathrm{eff}}>1$, with $\|g_k\|^2_{\mathrm{eff}}$ the $k$-th eigenvalue of $\bm{P}^{\!\top}\!\bm{P}$. The active-axis count is $M_{\mathrm{eff}}=\#\{k:\Lambda_k>1\}$, and the ``cultural frontier'' is the surface $\Lambda_k=1$ in $(\beta/\gamma,\etaag,(1-\rhopair)/\sobs)$ space.
 
 \subsection{Pairing as a class-steering lever}\label{sm:pairing}
 
