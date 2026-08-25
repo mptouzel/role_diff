@@ -158,8 +158,8 @@ def slope_guide(x0, x1, y0, p, txt, dx=1.0, dy=1.4):
     axB.plot(xs, y0 * (xs / x0) ** p, color="0.6", lw=0.8, ls=":")
     axB.text(x1 * dx, y0 * (x1 / x0) ** p * dy, txt, fontsize=8, color="0.45")
 
-slope_guide(6, 60, 0.35, -1.0, r"slope $-1$", dx=1.18, dy=0.72)
-slope_guide(6, 60, 0.020, -0.5, r"$-\frac{1}{2}$")
+slope_guide(6, 60, 0.0229, -1.0, r"slope $-1$", dx=1.05, dy=1.0)
+slope_guide(6, 60, 0.0035, -0.5, r"$-\frac{1}{2}$", dx=1.05, dy=1.0)
 slope_guide(1.6, 4.5, 0.055, +1.0, r"$+1$", dx=1.05, dy=1.0)
 
 axB.set_xscale("log")
