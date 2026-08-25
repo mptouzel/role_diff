@@ -59,9 +59,9 @@ def trajectory(S, u0=U0, dt=0.002, nmax=400000):
     return np.array(pts)
 
 panels = [
-    dict(S=0.5, kind="condensate", title=r"(a) $\Theta=4$"),
-    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$"),
-    dict(S=2.0, kind="theta1",     title=r"(c) $\Theta=1$"),
+    dict(S=0.5, kind="condensate", title=r"(a) $\Theta=4$", sub="low saturation,\ncondensed state"),
+    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$", sub="moderate saturation,\nmixed state"),
+    dict(S=2.0, kind="theta1",     title=r"(c) $\Theta=1$", sub="high saturation,\nnear pinned state"),
 ]
 
 g = np.linspace(0.02, XP, 80)
@@ -105,13 +105,15 @@ for ax, p in zip(axes, panels):
         ax.text(S + 0.05, 0.05, r"$S_{\mathrm{bw}}=M/\Theta$", color="tab:red", fontsize=8*_CORR,
                 ha="left", va="bottom", zorder=10, path_effects=HALO)
     elif p["kind"] in ("saturated", "theta1"):
-        # ceiling arrest; at Theta=1 it lands on the saddle itself, at the u_sat corner
-        ax.plot(u_sat, S - u_sat, "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=11*_SCALE, zorder=7)
+        # ceiling arrest: where this trajectory is stopped by u_sat, i.e. its endpoint
+        ax.plot(*tr[-1], "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=11*_SCALE, zorder=7)
 
     ax.set_xlim(0, XP); ax.set_ylim(0, XP); ax.set_aspect("equal")
     ax.set_xticks([0, u_sat]); ax.set_xticklabels(["0", "1"])
     ax.set_yticks([0, u_sat]); ax.set_yticklabels(["0", "1"])
-    ax.set_title(p["title"], fontsize=BODY_PT)  # matches \normalsize body text (10pt)
+    ax.set_title(p["title"], fontsize=BODY_PT, pad=50*_SCALE)  # matches \normalsize body text (10pt)
+    ax.text(0.5, 1.01, p["sub"], transform=ax.transAxes, ha="center", va="bottom",
+            fontsize=6.2*_CORR, linespacing=1.2)
 
 axes[0].set_ylabel(r"$u_2$ (units of $u_{\mathrm{sat}}$)", fontsize=9*_CORR)
 fig.supxlabel(r"$u_1$ (units of $u_{\mathrm{sat}}$)", fontsize=9*_CORR)
