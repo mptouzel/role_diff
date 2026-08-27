@@ -72,14 +72,14 @@ def bez(P0, P1, P2, P3, color, dashed=True, lw=1.7):
         capstyle='round'))
 
 # LEFT: the three state variables; RIGHT: the fast signal-flow chain
-sbox(1.7, 8.4, r"context $\mathbf{g}_m=\sqrt{u_m}\,\hat{\mathbf{g}}_m$" "\n"
+sbox(1.7, 8.4, r"$M$ contexts $\mathbf{g}_m=\sqrt{u_m}\,\hat{\mathbf{g}}_m$" "\n"
      r"$\dot u_m=2u_m(\alpha\lambda_m-\kappa)$" "\n"
      r"$\lambda_m=\hat{\mathbf{g}}_m^{\top}\mathbf{C}_r\hat{\mathbf{g}}_m$",
-     '#dbe9f6', 'Schema', w=3.9, h=1.95)
-sbox(2.9, 5.0, r"identity states $\boldsymbol{\omega}_i$" "\n"
+     '#dbe9f6', 'Schemas', w=3.9, h=1.95)
+sbox(2.9, 5.0, r"$N_{\mathrm{a}}$ identity states $\boldsymbol{\omega}_i$" "\n"
      r"$\dot{\boldsymbol{\omega}}_i\approx-\gamma\boldsymbol{\omega}_i+\beta\langle a\rangle_m\mathbf{g}_m+\boldsymbol{\eta}_i$",
-     '#e7f2e4', 'Identity', w=4.3)
-sbox(2.45, 1.5, r"wealth $r_i$" "\n"
+     '#e7f2e4', 'Identities', w=4.3)
+sbox(2.45, 1.5, r"agent wealth $r_i$" "\n"
      r"$\dot r_i=\sum_m f_m W_{im}-c\,r_i$", '#fdeede', 'Resources', w=3.2)
 SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
