@@ -205,5 +205,5 @@ axH.set_title(rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 # article compiles against this final version without a source edit.
 for stem in ('fig_loop_ignition',):
     plt.savefig(os.path.join(FIG_DIR, stem + '.png'), dpi=300, bbox_inches='tight')
-    plt.savefig(os.path.join(FIG_DIR, stem + '.pdf'), bbox_inches='tight')
+    plt.savefig(os.path.join(FIG_DIR, stem + '.pdf'), dpi=600, bbox_inches='tight')   # rasterized scatter
 print('saved:', 'fig_loop_ignition')

@@ -96,9 +96,10 @@ b_near, b_far = 1/m_near, 1/m_far
 FAC = m_near/m_far                      # the one number the panel is about
 
 CN, CF = "tab:purple", "0.45"
-for mu, col, lw, lab in [(mu_far, CF, 3.0, "fringe far below threshold"),
-                         (mu_near, CN, 1.8, "fringe just below threshold")]:
-    bg, Ng = counting_curve(mu); axB.plot(bg, Ng, lw=lw, color=col, label=lab, solid_joinstyle="miter")
+hand = {}
+for key, mu, col, lw in [("B", mu_far, CF, 3.0), ("A", mu_near, CN, 1.8)]:
+    bg, Ng = counting_curve(mu)
+    hand[key], = axB.plot(bg, Ng, lw=lw, color=col, solid_joinstyle="miter")
 
 axB.set_xscale("log"); axB.set_xlim(0.62, 300); axB.set_ylim(-0.02, 1.06)
 axB.set_xlabel("ramp\n" r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$")
@@ -113,13 +114,13 @@ axB.annotate("", xy=(b_near, YA), xytext=(b_far, YA),
              arrowprops=dict(arrowstyle="<->", color="k", lw=1.3, shrinkA=0, shrinkB=0))
 axB.text(np.sqrt(b_near*b_far), YA + 0.035, r"$\times%.0f$" % FAC, ha="center",
          va="bottom", fontsize=12)
-axB.legend(loc="upper left", bbox_to_anchor=(0.015, 0.99), frameon=True,
-           framealpha=0.92, edgecolor="0.85", fontsize=9.5)
+axB.legend([hand["A"], hand["B"]], ["repertoire A", "repertoire B"], loc="upper left",
+           bbox_to_anchor=(0.015, 0.99), frameon=True, framealpha=0.92, edgecolor="0.85", fontsize=10)
 axB.set_title("(b) identical rate data, different spectra", loc="left")
 
 # inset: the gain spectrum recovered from the subcritical covariance at BOBS, before
 # either repertoire has bifurcated. The same factor separates the two bulks.
-axI = axB.inset_axes([0.085, 0.115, 0.325, 0.295])   # between the two rises, clear of both
+axI = axB.inset_axes([0.155, 0.205, 0.29, 0.265])   # inside the whitespace between the two rises
 bins = np.logspace(np.log10(4e-3), np.log10(2.6), 46)
 for mu, col in [(mu_far, CF), (mu_near, CN)]:
     lam = S2/(GAMMA - BOBS*np.sort(mu)[::-1])      # C = (sdyn^2/2)(gamma I - beta G)^{-1}
@@ -127,17 +128,18 @@ for mu, col in [(mu_far, CF), (mu_near, CN)]:
     axI.hist(mu_rec, bins=bins, color=col, alpha=0.85, edgecolor=col, lw=0.6)
 axI.set_xscale("log"); axI.set_yscale("log")
 axI.set_xlim(4e-3, 2.6); axI.set_ylim(0.6, 320)
-axI.set_xlabel(r"recovered $\mu_k$", fontsize=7.5, labelpad=1)
-axI.set_ylabel("count", fontsize=7.5, labelpad=1)
-axI.tick_params(labelsize=6.5, length=2.2, pad=1.2)
-axI.set_title(r"gain spectrum from $\mathbf{C}$ at $\beta=0.95\,\beta_c^{(1)}$", fontsize=7.5, pad=3)
+axI.set_xlabel(r"recovered $\mu_k$", fontsize=8.5, labelpad=1.5)
+axI.set_ylabel("count", fontsize=8.5, labelpad=1.5)
+axI.tick_params(labelsize=8.5, length=2.4, pad=1.4)
+axI.set_title(r"from $\mathbf{C}$ at $\beta=0.95\,\beta_c^{(1)}$", fontsize=8.5, pad=3)
 YI = 90
 axI.annotate("", xy=(m_near, YI), xytext=(m_far, YI),
              arrowprops=dict(arrowstyle="<->", color="k", lw=1.1, shrinkA=0, shrinkB=0))
-axI.text(np.sqrt(m_near*m_far), YI*1.35, r"$\times%.0f$" % FAC, ha="center", va="bottom", fontsize=9)
+axI.text(np.sqrt(m_near*m_far), YI*1.35, r"$\times%.0f$" % FAC, ha="center", va="bottom", fontsize=10)
 for sp in ("top", "right"): axI.spines[sp].set_visible(False)
 axI.patch.set_alpha(0.94)
 
 fig.tight_layout()
-fig.savefig("fig4_monitoring.pdf"); fig.savefig("fig4_monitoring.png", dpi=190)
+fig.savefig("fig4_monitoring.pdf", dpi=600)   # the rasterized colour field needs print dpi
+fig.savefig("fig4_monitoring.png", dpi=300)
 print("done")

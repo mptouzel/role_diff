@@ -183,7 +183,7 @@ axB.legend(*axA.get_legend_handles_labels(), loc="upper right", frameon=False, h
 
 fig.tight_layout()
 fig.savefig("./fig_cascade_classes.pdf")
-fig.savefig("./fig_cascade_classes.png", dpi=200)
+fig.savefig("./fig_cascade_classes.png", dpi=300)
 plt.close(fig)
 
 # ----------------------------------------------------------------------
@@ -285,7 +285,7 @@ ax.set_title("Endogenous cascade classes selected by the schema--resource dynami
 
 fig.tight_layout()
 fig.savefig("./fig_regime_diagram.pdf")
-fig.savefig("./fig_regime_diagram.png", dpi=200)
+fig.savefig("./fig_regime_diagram.png", dpi=300)
 plt.close(fig)
 
 # ----------------------------------------------------------------------
@@ -327,7 +327,7 @@ ax.set_title("The monitor's view under linear ramping of loop gain", fontsize=10
 
 fig.tight_layout()
 fig.savefig("./fig_monitor_view.pdf")
-fig.savefig("./fig_monitor_view.png", dpi=200)
+fig.savefig("./fig_monitor_view.png", dpi=300)
 plt.close(fig)
 
 print("done")

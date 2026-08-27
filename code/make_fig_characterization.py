@@ -152,5 +152,6 @@ fig.colorbar(pc, ax=axB, pad=0.02).set_label(r"fraction of contexts effectively 
 axB.set_title("(b) realization: contexts effectively active", loc="left", fontsize=13)
 
 fig.tight_layout()
-fig.savefig("fig_characterization_2panel.pdf"); fig.savefig("fig_characterization_2panel.png", dpi=190)
+fig.savefig("fig_characterization_2panel.pdf", dpi=600)   # rasterized colour field
+fig.savefig("fig_characterization_2panel.png", dpi=300)
 print("done")
