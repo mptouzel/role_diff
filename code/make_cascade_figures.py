@@ -2,12 +2,12 @@
 Figures for Sec. 'The functional form of the bifurcation cascade'.
 
 Fig 1 (fig:cascade-classes): (a) counting function N(beta)/R for the six
-spectral classes; (b) cascade rate dN/dbeta on log-log axes with slope refs.
+spectral classes; (b) bifurcation rate dN/dbeta on log-log axes with slope refs.
 Fig 2 (fig:regime-diagram): schematic phase diagram of endogenous regimes
 E1-E4 in the (nu/g, condensation-regulation) plane, with miniature cascade
 glyphs in each region.
 Fig 3 (fig:monitor-view): the monitor's view -- N(t) under a linear Lambda
-sweep, showing why early observation windows are non-identifying.
+ramping of the loop gain, showing why early observation windows are non-identifying.
 
 All beta in units of beta_c^(1) (i.e., spectra normalized to mu_1 = 1,
 bifurcation points b_k = 1/mu_k).
@@ -177,8 +177,8 @@ axB.set_yscale("log")
 axB.set_xlim(0.75, BMAX)
 axB.set_ylim(3e-4, 3)
 axB.set_xlabel(r"$\beta/\beta_c^{(1)}$")
-axB.set_ylabel(r"cascade rate  $R^{-1}\,dN/d\beta$")
-axB.set_title(r"(b)  rate: slope $=(1{-}a)/a$;  accel. iff slope $>0$ iff $s>2$", loc="left")
+axB.set_ylabel(r"bifurcation rate  $R^{-1}\,dN/d\beta$")
+axB.set_title(r"(b)  rate: slope $=(1{-}a)/a$;  accel. iff slope $>0$ iff $\zeta>2$", loc="left")
 axB.legend(*axA.get_legend_handles_labels(), loc="upper right", frameon=False, handlelength=1.6)
 
 fig.tight_layout()
@@ -238,7 +238,7 @@ ax.text(2.8, 0.315, "churn: $a<1$\naccelerating (deceptive)",
 ax.text(0.095, 0.16, "E4  unregulated (autocatalytic) condensation;\n"
         r"fringe pinned at invasion margin $F=(\kappa/\alpha)u$"
         "\n" r"$\Rightarrow$ spiked spectrum", va="center", fontsize=9)
-ax.text(3.0, 0.13, "spike, quiescent gap,\nclustered avalanche",
+ax.text(3.0, 0.13, "spike, quiescent interval,\nclustered avalanche",
         va="center", ha="center", fontsize=9, color="#5a2d82")
 
 # miniature N(beta) glyphs
@@ -289,7 +289,7 @@ fig.savefig("./fig_regime_diagram.png", dpi=200)
 plt.close(fig)
 
 # ----------------------------------------------------------------------
-# Figure 3: the monitor's view (linear sweep)
+# Figure 3: the monitor's view (linear ramp in loop gain)
 # ----------------------------------------------------------------------
 fig, ax = plt.subplots(figsize=(6.6, 4.0))
 
@@ -305,7 +305,7 @@ bg, Ng = counting_curve(spec["spiked"]); ax.plot(bg, Ng, lw=1.8, color="tab:purp
 
 ax.set_xlim(0, BLIN)
 ax.set_ylim(-0.02, 1.05)
-ax.set_xlabel(r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$   (linear sweep, $\dot\Lambda$ const.)")
+ax.set_xlabel(r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$   (linear ramp, $\dot\Lambda$ const.)")
 ax.set_ylabel(r"$N(t)/R$")
 
 # early observation window
@@ -316,14 +316,14 @@ ax.text(1.5, 0.995, "early observation\nwindow: classes\nnearly indistinguishabl
 ax.annotate("avalanche of pinned fringe", xy=(12.6, 0.50), xytext=(8.3, 0.30),
             fontsize=8.5, color="tab:purple",
             arrowprops=dict(arrowstyle="-|>", color="tab:purple", lw=0.9))
-ax.annotate(r"quiescent gap $\simeq \frac{1+(M{-}1)\chi}{1-\chi}$",
+ax.annotate(r"quiescent interval $\simeq \frac{1+(M{-}1)\chi}{1-\chi}$",
             xy=(6.5, 0.045), xytext=(5.1, 0.20), fontsize=8.5, color="tab:purple",
             arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.8))
 ax.annotate(r"$N \propto (\beta-\beta_c)^{3/2}$", xy=(2.1, 0.075), xytext=(2.8, 0.33),
             fontsize=8.5, color="tab:orange",
             arrowprops=dict(arrowstyle="-", color="tab:orange", lw=0.8))
 ax.legend(loc="upper left", bbox_to_anchor=(0.42, 0.99), frameon=True, framealpha=0.92, edgecolor="0.85", fontsize=8.5)
-ax.set_title("The monitor's view under a linear deployment sweep", fontsize=10.5)
+ax.set_title("The monitor's view under linear ramping of loop gain", fontsize=10.5)
 
 fig.tight_layout()
 fig.savefig("./fig_monitor_view.pdf")

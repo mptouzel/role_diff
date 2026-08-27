@@ -80,7 +80,7 @@ def run(N=3000, d=12, M=24, T=40000, dt=0.01,
     rec = {k: [] for k in ["t", "u", "lam", "Neff", "Sbw", "K", "Cspec", "beta", "Nact"]}
 
     for step in range(T):
-        if beta_end is not None:                 # linear deployment sweep in beta
+        if beta_end is not None:                 # linear ramp of the loop gain, in beta
             beta = beta0 + (beta_end - beta0) * step / T
         # ---- encounters: one random perfect matching (N even) ----
         perm = rng.permutation(N)

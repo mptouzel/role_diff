@@ -38,6 +38,7 @@
 \newcommand{\sdyn}{\sigma_{\mathrm{dyn}}}
 \newcommand{\sign}{\mathrm{sign}}
 \newcommand{\ract}{r_{\mathrm{act}}}
+\newcommand{\Nag}{N_{\mathrm{a}}}
 
 % Supplemental numbering
 \renewcommand{\thesection}{S\arabic{section}}
@@ -71,18 +72,18 @@ The main text presents the closed loop directly. It was developed as a sequence 
 
 \begin{table}[h]
 \centering
-\caption{The six models. Number of agents ($N$) and number of contexts ($M$). Each adds one ingredient (bold) and yields one key result. Model 1 has exogenous feedback; the rest are endogenous.}
+\caption{The six models. Number of agents ($\Nag$) and number of contexts ($M$). Each adds one ingredient (bold) and yields one key result. Model 1 has exogenous feedback; the rest are endogenous.}
 \label{tab:ladder}
 \begin{tabular}{@{}llll@{}}
 \toprule
-\# &  $N$/ $M$ & New ingredient & Key result \\
+\# &  $\Nag$/ $M$ & New ingredient & Key result \\
 \midrule
 1 & 1 / 1, ex. & policy $\pi$, external oracle & classical info engine; $\pi'(0)$ is measurement quality \\
 2 & 2 / 1,  & \textbf{reciprocal measurement} & self-generated fuel; $G=4\pi'(0)$, $\beta_c=\gamma/4\pi'(0)$ \\
-3 & $N$ / 1 & \textbf{population, mean field} & phase transition; $G=2\pi'(0)$; order parameter $C$ \\
-4 & $N$ / $M$ & \textbf{vector roles} & $G=2\pi'(0)P^{\!\top}\!P$; conditional cascade \\
-5 & $N$ / $M$ & \textbf{dynamic schemas} & self-consistency; but schemas collapse to one axis \\
-6 & $N$ / $M$ & \textbf{resources} & replicator on fixed axes; endogenous cascade \\
+3 & $\Nag$ / 1 & \textbf{population, mean field} & phase transition; $G=2\pi'(0)$; order parameter $C$ \\
+4 & $\Nag$ / $M$ & \textbf{vector roles} & $G=2\pi'(0)P^{\!\top}\!P$; conditional cascade \\
+5 & $\Nag$ / $M$ & \textbf{dynamic schemas} & self-consistency; but schemas collapse to one axis \\
+6 & $\Nag$ / $M$ & \textbf{resources} & replicator on fixed axes; endogenous cascade \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -91,9 +92,9 @@ The main text presents the closed loop directly. It was developed as a sequence 
 
 \emph{Model 2} removes the oracle: two agents with statuses $x_1,x_2$ each measure the other, so the fuel is self-generated. The status difference $\Delta=x_1-x_2$ obeys $\dot\Delta\approx(-\gamma+4\beta\pi'(0))\Delta+\sqrt2\,\sdyn\eta$, with gain $G=4\pi'(0)$ (a factor $2$ from the $\pm\beta$ swing, another from reciprocal amplification) and critical coupling $\beta_c=\gamma/4\pi'(0)$. For $\beta<\beta_c$ the difference decays to zero; for $\beta>\beta_c$ it grows until the cubic term saturates it.
 
-\emph{Model 3} takes $N$ agents randomly paired, in the mean field. Only the focal agent's update contributes, halving the gain to $G_{\mathrm{MF}}=2\pi'(0)$, so $\beta_c^{\mathrm{MF}}=\gamma/2\pi'(0)=\gamma\sobs\sqrt{2\pi}/2$. The mean $\langle x\rangle$ vanishes in the anti-coordination phase, so the order parameter is the population variance $C=N^{-1}\sum_i x_i^2$, with $C-C_0\propto(\beta-\beta_c)$ near threshold.
+\emph{Model 3} takes $\Nag$ agents randomly paired, in the mean field. Only the focal agent's update contributes, halving the gain to $G_{\mathrm{MF}}=2\pi'(0)$, so $\beta_c^{\mathrm{MF}}=\gamma/2\pi'(0)=\gamma\sobs\sqrt{2\pi}/2$. The mean $\langle x\rangle$ vanishes in the anti-coordination phase, so the order parameter is the population variance $C=\Nag^{-1}\sum_i x_i^2$, with $C-C_0\propto(\beta-\beta_c)$ near threshold.
 
-\emph{Model 4} gives agents vector positions $\w_i\in\mathbb{R}^d$ and $M$ contexts $\g_m\in\mathbb{R}^d$. The gain becomes the Gram matrix $\G=2\pi'(0)\sum_m\g_m\g_m^{\!\top}=2\pi'(0)P^{\!\top}\!P$ (Sec.~III\,A of the main text). Its eigenvalues give the cascade $\beta_c^{(k)}=\gamma/\mu_k$. The order parameter generalizes to the covariance $\C=N^{-1}\sum_i\w_i\w_i^{\!\top}$, with the number of supra-floor eigenvalues---the cascade height $N(\beta)$---the cultural thickness.
+\emph{Model 4} gives agents vector positions $\w_i\in\mathbb{R}^d$ and $M$ contexts $\g_m\in\mathbb{R}^d$. The gain becomes the Gram matrix $\G=2\pi'(0)\sum_m\g_m\g_m^{\!\top}=2\pi'(0)P^{\!\top}\!P$ (Sec.~III\,A of the main text). Its eigenvalues give the cascade $\beta_c^{(k)}=\gamma/\mu_k$. The order parameter generalizes to the covariance $\C=\Nag^{-1}\sum_i\w_i\w_i^{\!\top}$, with the number of supra-floor eigenvalues---the cascade height $N(\beta)$---the cultural thickness.
 
 \emph{Model 5} lets the context directions evolve, $\dot\g_m=-\kappa\g_m+\alpha\C\g_m$: a power iteration rotating $\g_m$ toward the leading eigenvector of $\C$. Schemas align with the role structure and the role structure reinforces the schemas, which is one half of Sewell's duality. All schemas converge on the same axis, so the stationary structure is one-dimensional. The same collapse occurs for the resource-weighted rotation of Model~6, and is analyzed with its two candidate remedies in Appendix~D of the main text.
 
@@ -146,7 +147,7 @@ Since the linear response of the mean action is $2\pi'(0)\,\mathbb E[\Delta\mid 
 \begin{equation}\label{SM-eq:sm-phi-rho}
 \G_{\mathrm{eff}}=(1-\rho_{\mathrm{pair}})\,\G,\qquad \beta_c^{(k)}=\frac{\gamma}{(1-\rho_{\mathrm{pair}})\,\mu_k}.
 \end{equation}
-Three cases recover the model ladder. \emph{Random pairing} draws $j$ independently of $i$, so $\rho_{\mathrm{pair}}=0$ exactly, at every population size, for factor $1$ and $\beta_c=\gamma/\mu$, the Model~3 (mean-field) threshold. \emph{Assortative (homophilic) pairing} supplies a partner resembling oneself, $\rho_{\mathrm{pair}}\to1$, factor $0$. \emph{Rank-ordered pairing}---pairing the agent at rank $k$ with the agent at the mirrored rank $N+1-k$ along $\g_m$---induces $\rho_{\mathrm{pair}}\to-1$ as $N\to\infty$. For a symmetric distribution the empirical quantile function is asymptotically antisymmetric, $x_{(N+1-k)}\to -x_{(k)}$, so the mirrored partner's status converges to $-x_i$. This gives factor $2$ and $\beta_c=\gamma/2\mu$, the Model~2 (oracle/reciprocal) threshold. We verified this numerically (Gaussian population, $10^2$--$10^4$ realizations per $N$): the cross-sectional correlation of rank-ordered partners is $\rho_{\mathrm{pair}}=-0.92$ at $N=10$, $-0.992$ at $N=200$, and $-0.9996$ at $N=5000$, with the residual $1-|\rho_{\mathrm{pair}}|$ shrinking approximately as $N^{-0.9}$. Random pairing gives $\rho_{\mathrm{pair}}$ statistically indistinguishable from zero at every $N$ tested. The conditional-expectation relation \cref{SM-eq:sm-rho-gap} itself was confirmed by direct simulation of correlated Gaussian pairs across $\rho_{\mathrm{pair}}\in\{-0.99,-0.5,0,0.5\}$, matching the predicted slope $1-\rho_{\mathrm{pair}}$ to three decimal places in every case.
+Three cases recover the model ladder. \emph{Random pairing} draws $j$ independently of $i$, so $\rho_{\mathrm{pair}}=0$ exactly, at every population size, for factor $1$ and $\beta_c=\gamma/\mu$, the Model~3 (mean-field) threshold. \emph{Assortative (homophilic) pairing} supplies a partner resembling oneself, $\rho_{\mathrm{pair}}\to1$, factor $0$. \emph{Rank-ordered pairing}---pairing the agent at rank $k$ with the agent at the mirrored rank $\Nag+1-k$ along $\g_m$---induces $\rho_{\mathrm{pair}}\to-1$ as $\Nag\to\infty$. For a symmetric distribution the empirical quantile function is asymptotically antisymmetric, $x_{(\Nag+1-k)}\to -x_{(k)}$, so the mirrored partner's status converges to $-x_i$. This gives factor $2$ and $\beta_c=\gamma/2\mu$, the Model~2 (oracle/reciprocal) threshold. We verified this numerically (Gaussian population, $10^2$--$10^4$ realizations per $\Nag$): the cross-sectional correlation of rank-ordered partners is $\rho_{\mathrm{pair}}=-0.92$ at $\Nag=10$, $-0.992$ at $\Nag=200$, and $-0.9996$ at $\Nag=5000$, with the residual $1-|\rho_{\mathrm{pair}}|$ shrinking approximately as $\Nag^{-0.9}$. Random pairing gives $\rho_{\mathrm{pair}}$ statistically indistinguishable from zero at every $\Nag$ tested. The conditional-expectation relation \cref{SM-eq:sm-rho-gap} itself was confirmed by direct simulation of correlated Gaussian pairs across $\rho_{\mathrm{pair}}\in\{-0.99,-0.5,0,0.5\}$, matching the predicted slope $1-\rho_{\mathrm{pair}}$ to three decimal places in every case.
 
 Because $\rho_{\mathrm{pair}}$ is a property of the matching algorithm applied to whatever status distribution currently exists---not of a population already sorted into roles---\cref{SM-eq:sm-phi-rho} is exactly as well defined arbitrarily far below threshold as above it. This closes the gap left by the thick-phase description. The ``wastes same-mode encounters'' language is recovered as the supercritical rereading of the same constant: relative to the rank-ordered ceiling (factor $2$), an uncorrelated partner delivers half the difference, so its factor is $1$. But that number is fixed already at $\rho_{\mathrm{pair}}=0$, independent of whether modes exist. Network-based pairing interpolates continuously between the extremes via whatever partner correlation the network's assortativity induces. Every critical coupling $\beta_c^{(k)}=\gamma/[(1-\rho_{\mathrm{pair}})\mu_k]$, and $\Lambda$ itself, therefore depends continuously on the choice of pairing scheme. This is the dependence the platform lever of \cref{sm:pairing} acts through.
 
@@ -156,7 +157,7 @@ The scalar critical condition $\beta>\gamma/2\pi'(0)$ bundles cognition with noi
 \begin{equation}
 \etaag\equiv\sobs\,\pi'(0),
 \end{equation}
-so that $\etaag=1/\sqrt{2\pi}$ (naive) or $\sqrt{T/2\pi}$ (Bayesian, memory $T$), and take the pairing gain factor $(1-\rhopair)$ from \cref{sm:pairing-rho}: $1$ (random, the reference), $2$ (rank-ordered, $N\to\infty$), $0$ (assortative). The effective gain $G_{\mathrm{eff}}=2\etaag(1-\rhopair)/\sobs$ gives the ignition condition
+so that $\etaag=1/\sqrt{2\pi}$ (naive) or $\sqrt{T/2\pi}$ (Bayesian, memory $T$), and take the pairing gain factor $(1-\rhopair)$ from \cref{sm:pairing-rho}: $1$ (random, the reference), $2$ (rank-ordered, $\Nag\to\infty$), $0$ (assortative). The effective gain $G_{\mathrm{eff}}=2\etaag(1-\rhopair)/\sobs$ gives the ignition condition
 \begin{equation}\label{SM-eq:sm-Lambda}
 \Lambda\equiv\frac{2\beta}{\gamma}\cdot\frac{\etaag\,(1-\rhopair)}{\sobs}>1,
 \end{equation}
@@ -183,7 +184,7 @@ diagonal in the main text. The doubly-uniform case $f_m=1/M,\ \rho_m=\rhopair$ m
 
 \subsection{Pairing as a class-steering lever}\label{sm:pairing}
 
-The diagonal $\bm{D}_\rho=\mathrm{diag}(1-\rho_m)$ is set by the matching protocol, which fixes the partner correlation in each context and is controlled by the platform. The cascade class is fixed by the spectrum of the effective gain $\G_{\mathrm{eff}}\propto\bm{P}^{\!\top}\bm{D}_\rho\bm{P}$ (Sec.~IV of the main text), so setting per-context pairing priorities reshapes that spectrum and hence the class. Uniform pairing ($\bm{D}_\rho=(1-\rhopair)\mathbb{I}$) rescales $\bm{P}^{\!\top}\bm{P}$ and leaves the eigenvalue ratios unchanged, and with them the bifurcation spacings $\beta_c^{(k+1)}/\beta_c^{(k)}$; a non-uniform schedule does not. Down-weighting the contexts that load a coherent (spiked) direction transfers eigenvalue weight from the spike into the bulk, converting the spike-then-avalanche signature of class (v) into the more even geometric sequence of class (ii).
+The diagonal $\bm{D}_\rho=\mathrm{diag}(1-\rho_m)$ is set by the matching protocol, which fixes the partner correlation in each context and is controlled by the platform. The cascade class is fixed by the spectrum of the effective gain $\G_{\mathrm{eff}}\propto\bm{P}^{\!\top}\bm{D}_\rho\bm{P}$ (Sec.~IV of the main text), so setting per-context pairing priorities reshapes that spectrum and hence the class. Uniform pairing ($\bm{D}_\rho=(1-\rhopair)\mathbb{I}$) rescales $\bm{P}^{\!\top}\bm{P}$ and leaves the eigenvalue ratios unchanged, and with them the bifurcation spacings $\beta_c^{(k+1)}/\beta_c^{(k)}$; a non-uniform schedule does not. Down-weighting the contexts that load a coherent (spiked) direction transfers eigenvalue weight from the spike into the bulk, converting the signature of class (v), one onset then an avalanche, into the more even geometric sequence of class (ii).
 
 The lever carries a cost in coordination efficiency. Take the schedule $\{\rho_m\}$ as the control and the variance of the log-spacings $\ln(\mu_k/\mu_{k+1})$ as an inverse monitorability objective, zero variance being a perfectly geometric spectrum. A representative spiked repertoire ($M=d=6$, contexts clustered about a common direction) is then optimized from log-spacing variance $1.35$ under uniform pairing to $0.58$, a spectrum a monitor can resolve. The cost is coordination: the schedule that achieves this reduces the aggregate pairing factor $\sum_m (1-\rho_m)$ by $\approx40\%$, and since the coordination payoff scales with $(1-\rhopair)$ (\cref{SM-eq:sm-work} and the resource flow), this is a direct loss of the engine's useful output. Monitorability is therefore obtained at the expense of coordination efficiency. The operator's choice is a point on that tradeoff rather than a free improvement. Because the reweighting acts through the same $\bm{P}^{\!\top}\bm{D}_\rho\bm{P}$ that sets ignition, an aggressive schedule also raises the effective $\beta_c^{(k)}$, coupling the class lever weakly to the ignition lever.
 

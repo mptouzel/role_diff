@@ -27,7 +27,8 @@ gs = gridspec.GridSpec(2, 2, width_ratios=[1.05, 1.0], height_ratios=[1, 1],
                        top=0.955, bottom=0.09)
 
 # ---------------- (a) state / signal-flow schematic ---------------------
-axA = fig.add_subplot(gs[:, 0]); axA.set_xlim(-0.7, 10.5); axA.set_ylim(0.55, 10.75)
+axA = fig.add_subplot(gs[:, 0]); axA.set_xlim(-0.7, 10.5); axA.set_ylim(0.55, 11.05)   # top extended by 0.30 to
+# drop the diagram slightly clear of the ignition text above it
 axA.axis('off')
 GRN = '#3f7a55'; PUR = '#7a3fa0'
 
@@ -111,8 +112,8 @@ axA.text(-0.05, 6.35, "reinforce\n" r"$\mathbf{C}_r$", fontsize=6.6, ha='center'
          color=GRN, zorder=6)
 axA.text(5.5, 1.86, "accumulate", fontsize=6.5, ha='center', color='0.3', zorder=6)
 axA.text(-0.02, 1.01, 'a', transform=axA.transAxes, fontsize=12, fontweight='bold')
-axA.text(4.9, 10.60, 'ignition at', ha='center', va='center', fontsize=9.5, zorder=6)
-axA.text(4.9, 9.92,
+axA.text(4.9, 10.90, 'ignition at', ha='center', va='center', fontsize=9.5, zorder=6)
+axA.text(4.9, 10.22,
          r'critical loop gain  $\Lambda=\dfrac{2\beta}{\gamma}\,\dfrac{\eta_{\rm agent}(1-\rho_{\rm pair})}{\sigma_{\rm obs}}=1$',
          ha='center', va='center', fontsize=9.5, zorder=6)
 

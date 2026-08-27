@@ -1,8 +1,8 @@
 """Saddle phase portrait of the two-schema replicator, as three small multiples
 sharing one (u1,u2) frame in units of the per-schema ceiling u_sat=1: the
-budget S_bw grows left to right (condensate -> saturated cluster -> Theta=1),
-so the pinned (saddle) point S_bw/2 climbs the u1=u2 diagonal panel to panel,
-reaching exactly the u_sat corner (1,1) when Theta=1 (S_bw=M*u_sat)."""
+budget U_cap grows left to right (condensate -> saturated cluster -> Theta=1),
+so the pinned (saddle) point U_cap/2 climbs the u1=u2 diagonal panel to panel,
+reaching exactly the u_sat corner (1,1) when Theta=1 (U_cap=M*u_sat)."""
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -102,8 +102,15 @@ for ax, p in zip(axes, panels):
 
     if p["kind"] == "condensate":
         ax.plot([S, 0], [0, S], "o", color="tab:red", ms=8.5*_SCALE, zorder=6, clip_on=False)
-        ax.text(S + 0.05, 0.05, r"$S_{\mathrm{bw}}=M/\Theta$", color="tab:red", fontsize=8*_CORR,
-                ha="left", va="bottom", zorder=10, path_effects=HALO)
+        # label the budget where it meets the axis, in the x tick-label position
+        # under the red dot. A real tick is not usable: sharex=True would put it
+        # on all three panels, whose S differ.
+        ax.annotate(r"$U_{\mathrm{cap}}$", xy=(S, 0), xycoords=("data", "axes fraction"),
+                    xytext=(0, -(mpl.rcParams["xtick.major.size"]
+                                 + mpl.rcParams["xtick.major.pad"])),
+                    textcoords="offset points", ha="center", va="top",
+                    color="tab:red", fontsize=mpl.rcParams["xtick.labelsize"],
+                    annotation_clip=False, zorder=10)
     elif p["kind"] in ("saturated", "theta1"):
         # ceiling arrest: where this trajectory is stopped by u_sat, i.e. its endpoint
         ax.plot(*tr[-1], "s", mfc="none", mec="tab:red", mew=2.1*_SCALE, ms=11*_SCALE, zorder=7)
@@ -115,8 +122,8 @@ for ax, p in zip(axes, panels):
     ax.text(0.5, 1.01, p["sub"], transform=ax.transAxes, ha="center", va="bottom",
             fontsize=6.2*_CORR, linespacing=1.2)
 
-axes[0].set_ylabel(r"$u_2$ (units of $u_{\mathrm{sat}}$)", fontsize=9*_CORR)
-fig.supxlabel(r"$u_1$ (units of $u_{\mathrm{sat}}$)", fontsize=9*_CORR)
+axes[0].set_ylabel(r"$u_2$ (units of $u_{\mathrm{cap}}$)", fontsize=9*_CORR)
+fig.supxlabel(r"$u_1$ (units of $u_{\mathrm{cap}}$)", fontsize=9*_CORR)
 fig.tight_layout()
 fig.subplots_adjust(wspace=0.03)
 fig.savefig("saddle.png", dpi=600, bbox_inches="tight")

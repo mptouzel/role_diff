@@ -1,6 +1,6 @@
 """Figure 4 (monitoring), two panels:
    (a) monitorability over the replicator-control plane (bifurcation clustering);
-   (b) the monitor's view under a linear deployment sweep (why early windows
+   (b) the monitor's view under linear ramping of the loop gain (why early windows
        are non-identifying, and the covariance early-warning remedy)."""
 import numpy as np
 import matplotlib as mpl
@@ -41,14 +41,8 @@ def avalanche_fraction(u):
         best = max(best, j - i)
     return best / M
 
-# ---------- panel (b) spectra + counting curves ----------
+# ---------- panel (b): the two repertoires compared ----------
 R = 48; kk = np.arange(1, R + 1)
-spec = {"geometric": np.exp(-(kk - 1) / 8.0), "zipf_shallow": kk ** (-0.5)}
-Pmp = rng.normal(size=(800, 400)) / np.sqrt(800)
-mp = np.sort(np.linalg.eigvalsh(Pmp.T @ Pmp))[::-1]; mp /= mp[0]
-spec["mp"] = np.quantile(mp, 1 - (np.arange(R) + 0.5) / R)
-chi = 0.20; mu_bulk = (1 - chi) / (1 + (R - 1) * chi)
-spec["spiked"] = np.sort(np.concatenate([[1.0], mu_bulk * (1 + 0.05 * rng.normal(size=R - 1))]))[::-1]
 
 def counting_curve(mu):
     b = np.sort(1.0 / mu); bg, Ng = [0.5], [0.0]
@@ -81,29 +75,68 @@ axA.text(1.12, b_lo * 2.4, r"$a=1$", fontsize=10, ha="left",
          bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
 axA.set_xlim(rs[0], rs[-1]); axA.set_ylim(ymin, ymax)
-axA.set_xlabel(r"activations per compounding time  $r=r_{\mathrm{act}}/g$"); axA.set_ylabel(r"normalized context capacity  $M_{\mathrm{cap}}/M$")
+axA.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/g$"); axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
 axA.set_title("(a) monitorability over the regime plane", loc="left")
 
-# ================= panel (b): monitor's view (sweep) =================
-BLIN = 15
-for name, col, lab in [("geometric", "tab:blue", "geometric (extrapolable)"),
-                       ("zipf_shallow", "tab:red", r"Zipf $a{=}\frac{1}{2}$ (accelerating)"),
-                       ("mp", "tab:orange", "random MP (quiet start)"),
-                       ("spiked", "tab:purple", "spiked (gap, then avalanche)")]:
-    bg, Ng = counting_curve(spec[name]); axB.plot(bg, Ng, lw=1.9, color=col, label=lab)
-axB.set_xlim(0, BLIN); axB.set_ylim(-0.02, 1.05)
-axB.set_xlabel(r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$   (linear sweep, $\dot\Lambda$ const.)")
+# ================= panel (b): the measurement term =================
+# Two repertoires whose counting functions coincide until one avalanches: both
+# activate one axis at beta_c^(1), then go quiescent. One has its remaining R-1 modes
+# just below threshold, the other the same modes 8x further down. Rate data cannot
+# separate them, because the two spectra differ only below gamma/beta. On a log axis
+# the gap between the two rises equals the gap between the two recovered bulks: the
+# same factor of 8, read off the subcritical covariance before either bifurcates.
+GAMMA, S2 = 1.0, 1.0                    # gamma, sigma_dyn^2/2 (the scale drops out)
+BOBS = 0.95                             # observation coupling, below beta_c^(1)=1
+
+chi_s = 0.20
+mu_near = np.concatenate([[1.0], (1-chi_s)/(1+(R-1)*chi_s)*(1+0.03*rng.normal(size=R-1))])
+mu_far  = np.concatenate([[1.0], 0.0096*(1+0.03*rng.normal(size=R-1))])
+m_near, m_far = mu_near[1:].mean(), mu_far[1:].mean()
+b_near, b_far = 1/m_near, 1/m_far
+FAC = m_near/m_far                      # the one number the panel is about
+
+CN, CF = "tab:purple", "0.45"
+for mu, col, lw, lab in [(mu_far, CF, 3.0, "fringe far below threshold"),
+                         (mu_near, CN, 1.8, "fringe just below threshold")]:
+    bg, Ng = counting_curve(mu); axB.plot(bg, Ng, lw=lw, color=col, label=lab, solid_joinstyle="miter")
+
+axB.set_xscale("log"); axB.set_xlim(0.62, 300); axB.set_ylim(-0.02, 1.06)
+axB.set_xlabel("ramp\n" r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$")
 axB.set_ylabel(r"$N(t)/R$")
-axB.axvspan(0, 3, color="0.92", zorder=0)
-axB.text(1.5, 0.995, "early window:\nclasses nearly\nindistinguishable", ha="center", va="top", fontsize=10, color="0.35")
-axB.annotate("avalanche of pinned fringe", xy=(12.6, 0.50), xytext=(7.9, 0.30), fontsize=10, color="tab:purple",
-             arrowprops=dict(arrowstyle="-|>", color="tab:purple", lw=0.9))
-axB.annotate(r"quiescent gap", xy=(6.5, 0.045), xytext=(5.3, 0.20), fontsize=10, color="tab:purple",
-             arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.8))
-axB.annotate(r"$N \propto (\beta-\beta_c)^{3/2}$", xy=(2.1, 0.075), xytext=(2.9, 0.33), fontsize=10, color="tab:orange",
-             arrowprops=dict(arrowstyle="-", color="tab:orange", lw=0.8))
-axB.legend(loc="upper left", bbox_to_anchor=(0.40, 0.99), frameon=True, framealpha=0.92, edgecolor="0.85")
-axB.set_title("(b) the monitor's view under a deployment sweep", loc="left")
+axB.axvspan(0.62, BOBS, color="0.90", zorder=0)
+axB.text(0.78, 0.53, "observed here", rotation=90, ha="center", va="center",
+         fontsize=8.5, color="0.35")
+
+# the separation between the two rises, in beta
+YA = 0.60
+axB.annotate("", xy=(b_near, YA), xytext=(b_far, YA),
+             arrowprops=dict(arrowstyle="<->", color="k", lw=1.3, shrinkA=0, shrinkB=0))
+axB.text(np.sqrt(b_near*b_far), YA + 0.035, r"$\times%.0f$" % FAC, ha="center",
+         va="bottom", fontsize=12)
+axB.legend(loc="upper left", bbox_to_anchor=(0.015, 0.99), frameon=True,
+           framealpha=0.92, edgecolor="0.85", fontsize=9.5)
+axB.set_title("(b) identical rate data, different spectra", loc="left")
+
+# inset: the gain spectrum recovered from the subcritical covariance at BOBS, before
+# either repertoire has bifurcated. The same factor separates the two bulks.
+axI = axB.inset_axes([0.085, 0.115, 0.325, 0.295])   # between the two rises, clear of both
+bins = np.logspace(np.log10(4e-3), np.log10(2.6), 46)
+for mu, col in [(mu_far, CF), (mu_near, CN)]:
+    lam = S2/(GAMMA - BOBS*np.sort(mu)[::-1])      # C = (sdyn^2/2)(gamma I - beta G)^{-1}
+    mu_rec = (GAMMA - S2/lam)/BOBS                 # the inversion returns the gain spectrum
+    axI.hist(mu_rec, bins=bins, color=col, alpha=0.85, edgecolor=col, lw=0.6)
+axI.set_xscale("log"); axI.set_yscale("log")
+axI.set_xlim(4e-3, 2.6); axI.set_ylim(0.6, 320)
+axI.set_xlabel(r"recovered $\mu_k$", fontsize=7.5, labelpad=1)
+axI.set_ylabel("count", fontsize=7.5, labelpad=1)
+axI.tick_params(labelsize=6.5, length=2.2, pad=1.2)
+axI.set_title(r"gain spectrum from $\mathbf{C}$ at $\beta=0.95\,\beta_c^{(1)}$", fontsize=7.5, pad=3)
+YI = 90
+axI.annotate("", xy=(m_near, YI), xytext=(m_far, YI),
+             arrowprops=dict(arrowstyle="<->", color="k", lw=1.1, shrinkA=0, shrinkB=0))
+axI.text(np.sqrt(m_near*m_far), YI*1.35, r"$\times%.0f$" % FAC, ha="center", va="bottom", fontsize=9)
+for sp in ("top", "right"): axI.spines[sp].set_visible(False)
+axI.patch.set_alpha(0.94)
 
 fig.tight_layout()
 fig.savefig("fig4_monitoring.pdf"); fig.savefig("fig4_monitoring.png", dpi=190)
