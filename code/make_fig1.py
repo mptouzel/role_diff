@@ -172,7 +172,7 @@ axM.set_xlim(betas[0], XMAX); axM.set_ylim(-YLIM, YLIM)
 axM.set_xlabel(r'feedback strength $\beta$  (equilibrated at each $\beta$; $\Lambda\propto\beta$)')
 axM.set_ylabel(r'order parameter  $\pm\sqrt{\lambda_k}$')
 axM.text(-0.13, 1.01, 'b', transform=axM.transAxes, fontsize=12, fontweight='bold')
-for k, lb in enumerate(['axis 1', 'axis 2', 'axis 3']):
+for k, lb in enumerate([r'$k=1$', r'$k=2$', r'$k=3$']):
     axM.plot([], [], 'o', color=cols[k], ms=4, label=lb)
 axM.text(0.015, 0.02, 'solid: sim\ndotted: linear theory', transform=axM.transAxes,
          va='bottom', ha='left', fontsize=6.8, color='0.3', linespacing=1.35, zorder=6)
@@ -196,7 +196,7 @@ for _sp in ('top', 'bottom', 'right'):
 axH.tick_params(axis='y', which='both', left=False, right=False,
                 labelleft=False, labelright=False)
 axH.yaxis.set_label_position('right')
-axH.set_ylabel(r'agent status  $\boldsymbol{\omega}_i\cdot\hat{\mathbf{g}}_m$'
+axH.set_ylabel(r'agent status  $\boldsymbol{\omega}_i\cdot\hat{\mathbf{g}}_{m(k)}$'
                '\n' r'(individual agents shown as dots at left)', fontsize=8)
 axH.set_title(rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 
