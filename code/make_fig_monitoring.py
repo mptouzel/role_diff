@@ -1,6 +1,6 @@
 """Figure 4 (monitoring), two panels:
    (a) monitorability over the replicator-control plane (bifurcation clustering);
-   (b) the monitor's view under linear ramping of the loop gain (why early windows
+   (b) the monitor's view under a linear sweep of the loop gain (why early windows
        are non-identifying, and the covariance early-warning remedy)."""
 import numpy as np
 import matplotlib as mpl
@@ -75,7 +75,7 @@ axA.text(1.12, b_lo * 2.4, r"$a=1$", fontsize=10, ha="left",
          bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
 axA.set_xlim(rs[0], rs[-1]); axA.set_ylim(ymin, ymax)
-axA.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/g$"); axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
+axA.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$"); axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
 axA.set_title("(a) monitorability over the regime plane", loc="left")
 
 # ================= panel (b): the measurement term =================
@@ -102,7 +102,7 @@ for key, mu, col, lw in [("B", mu_far, CF, 3.0), ("A", mu_near, CN, 1.8)]:
     hand[key], = axB.plot(bg, Ng, lw=lw, color=col, solid_joinstyle="miter")
 
 axB.set_xscale("log"); axB.set_xlim(0.62, 300); axB.set_ylim(-0.02, 1.06)
-axB.set_xlabel("ramp\n" r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$")
+axB.set_xlabel("sweep\n" r"loop gain  $\Lambda(t)$")
 axB.set_ylabel(r"$N(t)/R$")
 axB.axvspan(0.62, BOBS, color="0.90", zorder=0)
 axB.text(0.78, 0.53, "observed here", rotation=90, ha="center", va="center",

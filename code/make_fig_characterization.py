@@ -62,7 +62,7 @@ def frame(ax):
     ax.axhline(b_hi, color="k", lw=1.1, ls="--")
     ax.axhline(b_lo, color="k", lw=1.1, ls="--")
     ax.plot([1, 1], [b_lo, b_hi], color="k", lw=1.0, ls=":")
-    ax.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/g$")
+    ax.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$")
 
 # ---- panel (a): capacity bands + glyphs ----
 axA.axhspan(b_hi, ymax, color="#e7efe9", zorder=0)

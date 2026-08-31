@@ -2,14 +2,15 @@
 Figures for Sec. 'The functional form of the bifurcation cascade'.
 
 Fig 1 (fig:cascade-classes): (a) counting function N(beta)/R for the six
-spectral classes; (b) bifurcation rate dN/dbeta on log-log axes with slope refs.
+spectral classes; (b) bifurcation rate dN/dbeta on log-log axes with slope
+refs; (c) the rank-ordered gain spectra those two transform.
 Fig 2 (fig:regime-diagram): schematic phase diagram of endogenous regimes
 E1-E4 in the (nu/g, condensation-regulation) plane, with miniature cascade
 glyphs in each region.
 Fig 3 (fig:monitor-view): the monitor's view -- N(t) under a linear Lambda
 ramping of the loop gain, showing why early observation windows are non-identifying.
 
-All beta in units of beta_c^(1) (i.e., spectra normalized to mu_1 = 1,
+All sweeps in the loop gain Lambda (spectra normalized to mu_1 = 1, so
 bifurcation points b_k = 1/mu_k).
 """
 
@@ -36,7 +37,7 @@ rng = np.random.default_rng(7)
 # ----------------------------------------------------------------------
 # Spectra (normalized: mu_1 = 1). R modes each.
 # ----------------------------------------------------------------------
-R = 48
+R = 50   # modes plotted per class; M >= R, and M = 2R for the q=2 Marchenko-Pastur case
 k = np.arange(1, R + 1)
 
 k0 = 8.0
@@ -90,43 +91,40 @@ def counting_curve(mu):
 
 
 # ----------------------------------------------------------------------
-# Figure 1: counting functions + log-log rates
+# Figure 1: gain spectra + counting functions + log-log rates
 # ----------------------------------------------------------------------
-fig, (axA, axB) = plt.subplots(1, 2, figsize=(9.4, 3.6))
+fig, (axA, axB, axS) = plt.subplots(1, 3, figsize=(8.8, 2.9))
 
+ORDER = ["degenerate", "geometric", "zipf_steep", "zipf_shallow", "mp", "spiked"]
 BMAX = 400
-for name in ["degenerate", "geometric", "zipf_steep", "zipf_shallow", "mp", "spiked"]:
+
+# ---- panel (a): the rank-ordered spectra the other two panels transform
+for name in ORDER:
+    mu = np.sort(spec[name])[::-1]
+    axS.plot(k, mu / mu[0], lw=1.6, **styles[name])
+
+axS.set_xscale("log")
+axS.set_yscale("log")
+axS.set_xlim(0.9, R * 1.15)
+axS.set_ylim(3e-4, 2.2)
+axS.set_xlabel(r"mode index $k$")
+axS.set_ylabel(r"$\mu_k/\mu_1$")
+axS.set_title(r"(c)  gain spectrum")
+
+for name in ORDER:
     bg, Ng = counting_curve(spec[name])
     axA.plot(bg, Ng, lw=1.8, **styles[name])
 
 axA.set_xscale("log")
 axA.set_xlim(0.7, BMAX)
 axA.set_ylim(-0.02, 1.05)
-axA.set_xlabel(r"$\beta/\beta_c^{(1)}$   (equivalently $\Lambda/\Lambda_c$)")
+axA.set_xlabel(r"loop gain  $\Lambda$")
 axA.set_ylabel(r"activated fraction  $N(\beta)/R$")
 axA.axvline(1.0, color="0.8", lw=0.8, zorder=0)
-axA.set_title(r"(a)  cascade counting function", loc="left")
+axA.set_title(r"(a)  bifurcation count")
 
-# annotate the deceptive features
-axA.annotate("single avalanche", xy=(1.02, 0.97), xytext=(1.7, 0.86),
-             color="0.35", fontsize=8,
-             arrowprops=dict(arrowstyle="-", color="0.35", lw=0.7))
-axA.annotate("quiescent interval", xy=(3.4, 0.06), xytext=(3.2, 0.42),
-             color="tab:purple", fontsize=8, ha="center",
-             arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.7))
-# identify the three curves that carry no feature callout
-axA.annotate("accelerating", xy=(4.6, 0.46), xytext=(1.12, 0.70),
-             color="tab:red", fontsize=8, ha="left",
-             arrowprops=dict(arrowstyle="-", color="tab:red", lw=0.7))
-axA.annotate("logarithmic", xy=(60, 0.69), xytext=(170, 0.46),
-             color="tab:blue", fontsize=8, ha="center",
-             arrowprops=dict(arrowstyle="-", color="tab:blue", lw=0.7))
-axA.annotate("decelerating", xy=(300, 0.36), xytext=(170, 0.12),
-             color="tab:green", fontsize=8, ha="center",
-             arrowprops=dict(arrowstyle="-", color="tab:green", lw=0.7))
-axA.annotate("quiet start", xy=(1.35, 0.035), xytext=(0.85, 0.15),
-             color="tab:orange", fontsize=8,
-             arrowprops=dict(arrowstyle="-", color="tab:orange", lw=0.7))
+# no in-panel callouts: at this width they collide with the curves, and the legend
+# plus the caption already name every class and its signature feature.
 
 # ---- panel (b): rates dN/dbeta (per mode), log-log, analytic where possible
 b = np.logspace(np.log10(0.75), np.log10(BMAX), 800)
@@ -160,7 +158,7 @@ axB.plot(b, rate_sp, color="tab:purple", lw=1.8)
 for x0, c, dy in [(1.0, "0.35", 1.0)]:
     axB.annotate("", xy=(x0, 2.0), xytext=(x0, 0.15),
                  arrowprops=dict(arrowstyle="-|>", color=c, lw=1.6))
-axB.text(1.06, 1.1, r"$\delta$ (avalanche;" "\n" r"also the early onset of (v))", fontsize=8, color="0.35")
+axB.text(1.12, 1.05, r"$\delta$ (avalanche)", fontsize=8, color="0.35")
 
 # slope guides
 def slope_guide(x0, x1, y0, p, txt, dx=1.0, dy=1.4):
@@ -176,11 +174,15 @@ axB.set_xscale("log")
 axB.set_yscale("log")
 axB.set_xlim(0.75, BMAX)
 axB.set_ylim(3e-4, 3)
-axB.set_xlabel(r"$\beta/\beta_c^{(1)}$")
+axB.set_xlabel(r"loop gain  $\Lambda$")
 axB.set_ylabel(r"bifurcation rate  $R^{-1}\,dN/d\beta$")
-axB.set_title(r"(b)  rate: slope $=(1{-}a)/a$;  accel. iff slope $>0$ iff $\zeta>2$", loc="left")
-axB.legend(*axA.get_legend_handles_labels(), loc="upper right", frameon=False, handlelength=1.6)
+axB.set_title(r"(b)  bifurcation rate")
 
+for ax in (axA, axB, axS):
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+# no legend: the class table in the manuscript float carries the colour key
 fig.tight_layout()
 fig.savefig("./fig_cascade_classes.pdf")
 fig.savefig("./fig_cascade_classes.png", dpi=300)
@@ -305,7 +307,7 @@ bg, Ng = counting_curve(spec["spiked"]); ax.plot(bg, Ng, lw=1.8, color="tab:purp
 
 ax.set_xlim(0, BLIN)
 ax.set_ylim(-0.02, 1.05)
-ax.set_xlabel(r"$\beta/\beta_c^{(1)} \;\propto\; \Lambda(t)$   (linear ramp, $\dot\Lambda$ const.)")
+ax.set_xlabel(r"loop gain  $\Lambda(t)$   (linear sweep, $\dot\Lambda$ const.)")
 ax.set_ylabel(r"$N(t)/R$")
 
 # early observation window
@@ -319,7 +321,7 @@ ax.annotate("avalanche of pinned fringe", xy=(12.6, 0.50), xytext=(8.3, 0.30),
 ax.annotate(r"quiescent interval $\simeq \frac{1+(M{-}1)\chi}{1-\chi}$",
             xy=(6.5, 0.045), xytext=(5.1, 0.20), fontsize=8.5, color="tab:purple",
             arrowprops=dict(arrowstyle="-", color="tab:purple", lw=0.8))
-ax.annotate(r"$N \propto (\beta-\beta_c)^{3/2}$", xy=(2.1, 0.075), xytext=(2.8, 0.33),
+ax.annotate(r"$N \propto (\Lambda-1)^{3/2}$", xy=(2.1, 0.075), xytext=(2.8, 0.33),
             fontsize=8.5, color="tab:orange",
             arrowprops=dict(arrowstyle="-", color="tab:orange", lw=0.8))
 ax.legend(loc="upper left", bbox_to_anchor=(0.42, 0.99), frameon=True, framealpha=0.92, edgecolor="0.85", fontsize=8.5)

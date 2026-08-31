@@ -85,7 +85,7 @@ SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
      r"$\Delta_{im}=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
      r"$s_{im}=\Delta_{im}+\sigma_{\rm obs}\xi$", w=3.4, h=1.55)
-fbox(SX, 5.0, 'Action', r"$a_{im}=\mathrm{sign}(s_{im})$", w=3.1, h=1.15)
+fbox(SX, 5.0, 'Action', r"$a_{im}=\pi(s_{im})$", w=3.1, h=1.15)
 fbox(SX, 1.5, 'Reward',
      r"$W_{im}=w_0(1{-}2P_{e,im})^2$" "\n"
      r"$P_{e,im}=\Phi(-|\Delta_{im}|/\sigma_{\rm obs})$", w=3.4, h=1.55)
@@ -145,7 +145,7 @@ for k in range(3):
         axM.scatter(bx, zz, s=4, alpha=0.18, color=cols[k], edgecolors='none',
                     rasterized=True, zorder=2)
 
-# order-parameter branches: solid +/- sqrt(lambda_k) (simulation), dotted linear theory
+# order-parameter branches: solid +/- sqrt(v_k) (simulation), dotted linear theory
 for k in range(3):
     amp = np.sqrt(eigs[:, k])
     axM.plot(betas,  amp, color=cols[k], lw=1.7, zorder=4)
@@ -162,15 +162,32 @@ axM.text(13.5, 0.0, r'noise floor $\pm\sqrt{\sigma_{\rm dyn}^2/2\gamma}$',
          fontsize=6.4, va='center', ha='center', color='k', zorder=5)
 
 # beta_c guides + labels (same annotations as the original panel)
+_trx = axM.get_xaxis_transform()          # x in data coords, y in axes coords
 for k in range(3):
     axM.axvline(beta_c[k], color=cols[k], lw=0.9, ls='--', alpha=0.5, zorder=1)
-    axM.text(beta_c[k], YLIM * 0.965, rf'$\beta_c^{{({k+1})}}$', color=cols[k],
-             ha='center', va='top', fontsize=8.5,
-             bbox=dict(fc='white', ec='none', alpha=0.7, pad=0.5), zorder=6)
+    axM.text(beta_c[k], -0.022, rf'$\beta_c^{{({k+1})}}$', color=cols[k],
+             ha='center', va='top', fontsize=8.5, transform=_trx,
+             clip_on=False, zorder=6)
+
+# cascade: hopping arrows along the top spine, beta_c^(1) -> (2) -> (3).
+# rad is scaled by 1/span so both hops rise to the same height.
+_span = np.diff(beta_c[:3])
+_apex = 0.20 * _span[1]
+for k in (0, 1):
+    axM.add_patch(FancyArrowPatch(
+        (beta_c[k], 1.0), (beta_c[k+1], 1.0), transform=_trx,
+        connectionstyle=f'arc3,rad={-_apex/_span[k]:.3f}', arrowstyle='-|>',
+        mutation_scale=7, lw=0.9, color='0.35',
+        shrinkA=0.5, shrinkB=0.5, clip_on=False, zorder=7))
+axM.text(0.5*(beta_c[0]+beta_c[2]), 1.060, 'cascade', transform=_trx,
+         ha='center', va='bottom', fontsize=7.5, color='0.35',
+         clip_on=False, zorder=7)
 
 axM.set_xlim(betas[0], XMAX); axM.set_ylim(-YLIM, YLIM)
+axM.set_xticks([5, 10, 15, 20])           # keep the tick at 5, drop its label:
+axM.set_xticklabels(['', '10', '15', '20'])   # beta_c^(2)=3.99 sits where '5' would print
 axM.set_xlabel(r'feedback strength $\beta$  (equilibrated at each $\beta$; $\Lambda\propto\beta$)')
-axM.set_ylabel(r'order parameter  $\pm\sqrt{\lambda_k}$')
+axM.set_ylabel(r'differentiation order parameter  $\pm\sqrt{v_k}$')
 axM.text(-0.13, 1.01, 'b', transform=axM.transAxes, fontsize=12, fontweight='bold')
 for k, lb in enumerate([r'$k=1$', r'$k=2$', r'$k=3$']):
     axM.plot([], [], 'o', color=cols[k], ms=4, label=lb)
