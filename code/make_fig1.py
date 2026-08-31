@@ -83,12 +83,21 @@ sbox(2.45, 1.5, r"agent wealth $r_i$" "\n"
      r"$\dot r_i=\sum_m f_m W_{im}-c\,r_i$", '#fdeede', 'Resources', w=3.2)
 SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
-     r"$\Delta_{im}=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
-     r"$s_{im}=\Delta_{im}+\sigma_{\rm obs}\xi$", w=3.4, h=1.55)
+     r"$\Delta_{im}(j)=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
+     r"$s_{im}=\Delta_{im}(j)+\sigma_{\rm obs}\xi$", w=3.4, h=1.55)
 fbox(SX, 5.0, 'Action', r"$a_{im}=\pi(s_{im})$", w=3.1, h=1.15)
 fbox(SX, 1.5, 'Reward',
      r"$W_{im}=w_0(1{-}2P_{e,im})^2$" "\n"
      r"$P_{e,im}=\Phi(-|\Delta_{im}|/\sigma_{\rm obs})$", w=3.4, h=1.55)
+
+# band behind Role Signal + Action: both are averages over the drawn partner
+axA.add_patch(FancyBboxPatch((6.45, 3.70), 3.90, 5.70, boxstyle="round,pad=0.05",
+             fc='#f0f0f0', ec='none', zorder=1))
+axA.text(10.62, 6.55, r'average over encounters with many $j$', rotation=90,
+         ha='center', va='center', fontsize=5.9, color='0.35',
+         zorder=6, clip_on=False)
+axA.text(10.22, 3.86, 'encounter', ha='right', va='bottom',
+         fontsize=6.5, color='0.35', zorder=6)
 
 # SOLID feed-forward read-out: (Schema,Identity)->Signal->Action->Reward->Resources
 smerge((3.25, 8.4), (1, 0), (3.35, 5.75), (0.55, 1), (5.75, 8.4), (SX-1.5, 8.4),
