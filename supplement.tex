@@ -52,6 +52,14 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 
+% run-in \paragraph headings flush left: REVTeX's definition with the
+% third \@startsection argument (the indent) changed from \parindent to \z@
+\makeatletter
+\def\paragraph{%
+  \@startsection{paragraph}{4}{\z@}{\z@}{-1em}{\normalfont\normalsize\itshape}%
+}
+\makeatother
+
 \begin{document}
 
 \title{Supplemental Material for\\
@@ -116,7 +124,7 @@ The symmetric mixed equilibrium has each player Go with probability $p^\ast$ fix
 \begin{equation}\label{SM-eq:sm-work}
 W = \bar U - U_{\mathrm{Nash}} = w_0\,(1-2P_e)^2, \qquad w_0 = \mathrm{CE}-\mathrm{Nash} = 1.5 .
 \end{equation}
-The quadratic form is specific to two-role anti-coordination: a double error swaps the roles and leaves the pair coordinated (the fourth outcome has the same payoff as the first), so the work depends only on $(1-2P_e)^2$. Because $W$ is quadratic in $P_e$, the resource income of Sec.~II\,B of the main text is quadratic in agent position, which allows the Gaussian fixed-point calculation to close.
+The quadratic form is specific to two-role anti-coordination: a double error swaps the roles and leaves the pair coordinated (the fourth outcome has the same payoff as the first), so the work depends only on $(1-2P_e)^2$. Because $W$ is quadratic in $P_e$, the resource income of Sec.~II\,B of the main text is quadratic in identity, which allows the Gaussian fixed-point calculation to close.
 
 \subsection{Role-following as a self-enforcing correlated equilibrium}\label{sm:ce}
 
@@ -149,7 +157,7 @@ For a fixed context $m$, let $x_i=\w_i\cdot\g_m$ and, at a given encounter, let 
 \begin{equation}\label{SM-eq:sm-rho-gap}
 \mathbb E[\Delta\mid x_i] = x_i-\mathbb E[x_j\mid x_i] = (1-\rho_{\mathrm{pair}})\,x_i .
 \end{equation}
-Since the linear response of the mean action is $\gain\,\mathbb E[\Delta\mid x_i]$, the pairing scheme enters the gain only through the factor $(1-\rho_{\mathrm{pair}})$, and the social loop gain of Eq.~(5) of the main text and the thresholds it sets are
+Since the linear response of the mean action is $\gain\,\mathbb E[\Delta\mid x_i]$, the pairing scheme enters the gain only through the factor $(1-\rho_{\mathrm{pair}})$, and the social loop gain of Eq.~(5) of the main text and its thresholds are
 \begin{equation}\label{SM-eq:sm-phi-rho}
 \Lam\propto(1-\rho_{\mathrm{pair}}),\qquad \Lambda_k=\Lambda\,\mu_k,\qquad \text{ignition at }\Lambda_k=1 .
 \end{equation}
@@ -296,6 +304,16 @@ Because $v=O(\sdyn^2)$ while $\beta_c$ is independent of $\sdyn$, the cloud shri
 The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sdyn^2)$ and negligible except in a critical window where $v$ grows to $O(\sobs^2)$, i.e.\ $|\gamma-\beta(1-\rho_{\mathrm{pair}})\mu|\lesssim\sdyn^2/\sobs^2$, whose width vanishes as $\sdyn\to0$. Within that window the divergence of the bare theory is rounded by the self-consistent feedback of \cref{SM-eq:sm-vselfcon}. The main text reports the $\sdyn\to0$ value, and the finite-noise shift and rounding are among the quantities a full-loop simulation could measure.
 
 \bigskip
+% ======================================================================
+\section{Scope of the regime map}\label{sm:mapscope}
+
+These qualify the regime map of Sec.~IV\,B of the main text.
+
+\paragraph{Near-orthogonal repertoires.} The counting statements hold in that limit: orthogonal axes make $\mu_k=u_k$, so eigenvalues and strengths coincide and $M_{\mathrm{cap}}$ counts saturated schemas directly. Overlap breaks the identification. Schemas then couple through $\Cr$ as well as through the shared budget, which can be reached before the per-schema ceiling and leave survivors equalized below $u_{\mathrm{cap}}$, so the boundaries degrade into crossovers as the repertoire becomes coherent. The width of that window is not fixed here. 
+\paragraph{Two classes are not endogenous fixed points.} The Marchenko--Pastur bulk (iv) is the signature of a repertoire not yet organized by resource feedback (the natural initial condition for freshly seeded schemas, and transient under the loop), and its persistence in data would itself indicate the loop has not closed. The exact degeneracy of the saturated-cluster regime holds only within the Gaussian pinning argument. Generic cross-axis resource coupling and residual coherence broaden it into a narrow cluster.
+\paragraph{Parametrizing the map.} Since only the dimensionless ratio $\Theta=Mu_{\mathrm{cap}}/U_{\mathrm{cap}}$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in Fig.~4 of the main text as the capacity $M_{\mathrm{cap}}/M=1/\Theta$, and never fix an absolute $u_{\mathrm{cap}}$. The only absolute scale retained is the seed-to-budget ratio $u_0/U_{\mathrm{cap}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{cap}}/u_0)$ entering the saturated-cluster/geometric boundary. This is the seed \emph{scale}, independent of the seed \emph{dispersion} $\sigma_u$ that fixes the horizontal axis. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\Lambda_1$, aspect ratio $M/d$) set a fixed backdrop, as does the repertoire geometry $\{\hat\g_m\cdot\hat\g_n\}$, which the map takes near-orthogonal.
+\paragraph{Sustaining a hierarchy.} Holding one indefinitely requires continual injection of new schemas, an open-repertoire process outside the closed loop that we do not treat. Within the closed loop, the endogenous source of novelty during the sort is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
+
 \noindent\textbf{Note on scope.} The derivations of Secs.~II\,B and IV\,A of the main text are carried out in the Gaussian, near-threshold, mean-field regime, where the Wick reduction closes. Their extension into the thick phase (bimodal partner distributions, saturated policies, quartic-capped amplitudes), the verification of the regime crossovers of Sec.~IV\,B of the main text in the microscopic parameters, and the conjecture that resource weighting widens spectral gaps are targets for the simulation program accompanying this work.
 
 \ifdefined\CEcombined\else\bibliography{references}\fi
