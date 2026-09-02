@@ -2,6 +2,11 @@
    (a) monitorability over the replicator-control plane (bifurcation clustering);
    (b) the monitor's view under a linear sweep of the loop gain (why early windows
        are non-identifying, and the covariance early-warning remedy)."""
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_FIG_DIR = os.path.join(os.path.dirname(_HERE), "figures")
+def _out(name):
+    return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -85,7 +90,7 @@ axA.set_title("(a) monitorability over the regime plane", loc="left")
 # separate them, because the two spectra differ only below gamma/beta. On a log axis
 # the gap between the two rises equals the gap between the two recovered bulks: the
 # same factor of 8, read off the subcritical covariance before either bifurcates.
-GAMMA, S2 = 1.0, 1.0                    # gamma, sigma_dyn^2/2 (the scale drops out)
+GAMMA, S2 = 1.0, 1.0                    # gamma, sigma_omega^2/2 (the scale drops out)
 BOBS = 0.95                             # observation coupling, below beta_c^(1)=1
 
 chi_s = 0.20
@@ -140,6 +145,6 @@ for sp in ("top", "right"): axI.spines[sp].set_visible(False)
 axI.patch.set_alpha(0.94)
 
 fig.tight_layout()
-fig.savefig("fig4_monitoring.pdf", dpi=600)   # the rasterized colour field needs print dpi
-fig.savefig("fig4_monitoring.png", dpi=300)
+fig.savefig(_out("fig4_monitoring.pdf"), dpi=600)   # the rasterized colour field needs print dpi
+fig.savefig(_out("fig4_monitoring.png"), dpi=300)
 print("done")

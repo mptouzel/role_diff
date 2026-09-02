@@ -3,6 +3,11 @@ sharing one (u1,u2) frame in units of the per-schema ceiling u_sat=1: the
 budget U_cap grows left to right (condensate -> saturated cluster -> Theta=1),
 so the pinned (saddle) point U_cap/2 climbs the u1=u2 diagonal panel to panel,
 reaching exactly the u_sat corner (1,1) when Theta=1 (U_cap=M*u_sat)."""
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_FIG_DIR = os.path.join(os.path.dirname(_HERE), "figures")
+def _out(name):
+    return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -126,6 +131,6 @@ axes[0].set_ylabel(r"$u_2$ (units of $u_{\mathrm{cap}}$)", fontsize=9*_CORR)
 fig.supxlabel(r"$u_1$ (units of $u_{\mathrm{cap}}$)", fontsize=9*_CORR)
 fig.tight_layout()
 fig.subplots_adjust(wspace=0.03)
-fig.savefig("saddle.png", dpi=600, bbox_inches="tight")
-fig.savefig("saddle.pdf", bbox_inches="tight")
+fig.savefig(_out("fig_pinning_saddle.png"), dpi=600, bbox_inches="tight")
+fig.savefig(_out("fig_pinning_saddle.pdf"), bbox_inches="tight")
 print("done")

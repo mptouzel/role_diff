@@ -14,6 +14,11 @@ All sweeps in the loop gain Lambda (spectra normalized to mu_1 = 1, so
 bifurcation points b_k = 1/mu_k).
 """
 
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_FIG_DIR = os.path.join(os.path.dirname(_HERE), "figures")
+def _out(name):
+    return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -184,8 +189,8 @@ for ax in (axA, axB, axS):
 
 # no legend: the class table in the manuscript float carries the colour key
 fig.tight_layout()
-fig.savefig("./fig_cascade_classes.pdf")
-fig.savefig("./fig_cascade_classes.png", dpi=300)
+fig.savefig(_out("fig_cascade_classes.pdf"))
+fig.savefig(_out("fig_cascade_classes.png"), dpi=300)
 plt.close(fig)
 
 # ----------------------------------------------------------------------
@@ -286,8 +291,8 @@ ax.set_title("Endogenous cascade classes selected by the schema--resource dynami
              fontsize=10.5)
 
 fig.tight_layout()
-fig.savefig("./fig_regime_diagram.pdf")
-fig.savefig("./fig_regime_diagram.png", dpi=300)
+fig.savefig(_out("fig_regime_diagram.pdf"))
+fig.savefig(_out("fig_regime_diagram.png"), dpi=300)
 plt.close(fig)
 
 # ----------------------------------------------------------------------
@@ -328,8 +333,8 @@ ax.legend(loc="upper left", bbox_to_anchor=(0.42, 0.99), frameon=True, framealph
 ax.set_title("The monitor's view under linear ramping of loop gain", fontsize=10.5)
 
 fig.tight_layout()
-fig.savefig("./fig_monitor_view.pdf")
-fig.savefig("./fig_monitor_view.png", dpi=300)
+fig.savefig(_out("fig_monitor_view.pdf"))
+fig.savefig(_out("fig_monitor_view.png"), dpi=300)
 plt.close(fig)
 
 print("done")

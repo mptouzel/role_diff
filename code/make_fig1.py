@@ -84,11 +84,11 @@ sbox(2.45, 1.5, r"agent wealth $r_i$" "\n"
 SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
      r"$\Delta_{im}(j)=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
-     r"$s_{im}=\Delta_{im}(j)+\sigma_{\rm obs}\xi$", w=3.4, h=1.55)
+     r"$s_{im}=\Delta_{im}(j)+\sigma_{\rm read}\xi$", w=3.4, h=1.55)
 fbox(SX, 5.0, 'Action', r"$a_{im}=\pi(s_{im})$", w=3.1, h=1.15)
 fbox(SX, 1.5, 'Reward',
      r"$W_{im}=w_0(1{-}2P_{e,im})^2$" "\n"
-     r"$P_{e,im}=\Phi(-|\Delta_{im}|/\sigma_{\rm obs})$", w=3.4, h=1.55)
+     r"$P_{e,im}=\Phi(-|\Delta_{im}|/\sigma_{\rm read})$", w=3.4, h=1.55)
 
 # band behind Role Signal + Action: both are averages over the drawn partner
 axA.add_patch(FancyBboxPatch((6.45, 3.70), 3.90, 5.70, boxstyle="round,pad=0.05",
@@ -123,7 +123,7 @@ axA.text(5.5, 1.86, "accumulate", fontsize=6.5, ha='center', color='0.3', zorder
 axA.text(-0.02, 1.01, 'a', transform=axA.transAxes, fontsize=12, fontweight='bold')
 axA.text(4.9, 10.90, 'ignition at', ha='center', va='center', fontsize=9.5, zorder=6)
 axA.text(4.9, 10.22,
-         r'critical loop gain  $\Lambda=\dfrac{2\beta}{\gamma}\,\dfrac{\eta_{\rm agent}(1-\rho_{\rm pair})}{\sigma_{\rm obs}}=1$',
+         r'critical loop gain  $\Lambda=\dfrac{2\beta}{\gamma}\,\dfrac{\eta_{\rm agent}(1-\rho_{\rm pair})}{\sigma_{\rm read}}=1$',
          ha='center', va='center', fontsize=9.5, zorder=6)
 
 # ------- (b) merged: agent-status swarm + order-parameter branches + histogram -------
@@ -167,7 +167,7 @@ for k in range(3):
 # noise band with vertically centred label
 axM.axhspan(-famp, famp, color='0.86', zorder=0)
 axM.axhline(0.0, color='0.6', lw=0.5, ls=':', zorder=1)
-axM.text(13.5, 0.0, r'noise floor $\pm\sqrt{\sigma_{\rm dyn}^2/2\gamma}$',
+axM.text(13.5, 0.0, r'noise floor $\pm\sqrt{\sigma_{\omega}^2/2\gamma}$',
          fontsize=6.4, va='center', ha='center', color='k', zorder=5)
 
 # beta_c guides + labels (same annotations as the original panel)

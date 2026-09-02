@@ -3,6 +3,11 @@
        CAN sustain (Theta-only, three equal bands);
    (b) observed participation ratio D_obs/M -- what the spectrum REALIZES.
 The gap between (a)'s band and (b)'s field is the distance from stationarity."""
+import os
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_FIG_DIR = os.path.join(os.path.dirname(_HERE), "figures")
+def _out(name):
+    return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -142,16 +147,16 @@ axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
 axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
-axA.set_title("(a) effective phase diagram: capacity the society can sustain", loc="left", fontsize=13)
+axA.set_title("(a) phase diagram: cascade type over capacity and speed", loc="left", fontsize=13)
 
 # ---- panel (b): observed participation ratio field ----
 pc = axB.pcolormesh(rs, ys, PRn, cmap="viridis", vmin=0, vmax=1,
                     shading="auto", rasterized=True)
 frame(axB)
 fig.colorbar(pc, ax=axB, pad=0.02).set_label(r"fraction of contexts effectively active  $D_{\mathrm{eff}}/M$")
-axB.set_title("(b) realization: contexts effectively active", loc="left", fontsize=13)
+axB.set_title("(b) continuous check on the capacity axis", loc="left", fontsize=13)
 
 fig.tight_layout()
-fig.savefig("fig_characterization_2panel.pdf", dpi=600)   # rasterized colour field
-fig.savefig("fig_characterization_2panel.png", dpi=300)
+fig.savefig(_out("fig_characterization_2panel.pdf"), dpi=600)   # rasterized colour field
+fig.savefig(_out("fig_characterization_2panel.png"), dpi=300)
 print("done")
