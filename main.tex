@@ -15,14 +15,6 @@
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 
-% run-in \paragraph headings flush left: REVTeX's definition with the
-% third \@startsection argument (the indent) changed from \parindent to \z@
-\makeatletter
-\def\paragraph{%
-  \@startsection{paragraph}{4}{\z@}{\z@}{-1em}{\normalfont\normalsize\itshape}%
-}
-\makeatother
-
 % run-in paragraph headings unnumbered (no auto 'a.' prefix)
 \setcounter{secnumdepth}{3}
 

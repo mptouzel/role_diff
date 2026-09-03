@@ -52,14 +52,6 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 
-% run-in \paragraph headings flush left: REVTeX's definition with the
-% third \@startsection argument (the indent) changed from \parindent to \z@
-\makeatletter
-\def\paragraph{%
-  \@startsection{paragraph}{4}{\z@}{\z@}{-1em}{\normalfont\normalsize\itshape}%
-}
-\makeatother
-
 \begin{document}
 
 \title{Supplemental Material for\\
