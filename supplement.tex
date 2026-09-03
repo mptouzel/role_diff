@@ -72,7 +72,7 @@
 \section*{Notation}
 \addcontentsline{toc}{section}{Notation}
 
-Symbols are grouped so that quantities separated by a single averaging step, or by one stage of the loop, sit together. Equation numbers without an S prefix refer to the main text.
+\noindent Symbols are grouped so that quantities separated by a single averaging step, or by one stage of the loop, sit together. Equation numbers without an S prefix refer to the main text.
 
 {\footnotesize
 
@@ -205,7 +205,7 @@ $\rrf$ & Role-free resource mean, of order $\sidn^2$. \\
 
 \subsection{The ladder of six models}
 
-The main text presents the closed loop directly. It was developed as a sequence of six models of increasing structure, each adding one ingredient and exposing one phenomenon. We summarize them here (\cref{tab:ladder}). The reductions identify which ingredient produces which result.
+\noindent The main text presents the closed loop directly. It was developed as a sequence of six models of increasing structure, each adding one ingredient and exposing one phenomenon. We summarize them here (\cref{tab:ladder}). The reductions identify which ingredient produces which result.
 
 \begin{table}[h]
 \centering
@@ -239,7 +239,7 @@ The main text presents the closed loop directly. It was developed as a sequence 
 
 \subsection{The coordination payoff}\label{sm:payoff}
 
-The oracle (or, endogenously, the population) assigns a leader (should Go) and follower (should Defer). Each agent's signal has independent role-inference error rate $P_e$. The four joint outcomes and their payoffs (averaged over the pair) are: both correct, prob $(1-P_e)^2$, payoffs $(6,2)$, average $4$; leader wrong only, prob $P_e(1-P_e)$, both Defer $(3,3)$, average $3$; follower wrong only, prob $(1-P_e)P_e$, both Go $(-1,-1)$, average $-1$; both wrong, prob $P_e^2$, roles swap to $(2,6)$, average $4$---still coordinated. The expected average payoff is
+\noindent The oracle (or, endogenously, the population) assigns a leader (should Go) and follower (should Defer). Each agent's signal has independent role-inference error rate $P_e$. The four joint outcomes and their payoffs (averaged over the pair) are: both correct, prob $(1-P_e)^2$, payoffs $(6,2)$, average $4$; leader wrong only, prob $P_e(1-P_e)$, both Defer $(3,3)$, average $3$; follower wrong only, prob $(1-P_e)P_e$, both Go $(-1,-1)$, average $-1$; both wrong, prob $P_e^2$, roles swap to $(2,6)$, average $4$---still coordinated. The expected average payoff is
 \begin{equation}
 \bar U = 4(1-P_e)^2 + 3P_e(1-P_e) - (1-P_e)P_e + 4P_e^2 = 4 - 6P_e(1-P_e).
 \end{equation}
@@ -251,7 +251,7 @@ The quadratic form is specific to two-role anti-coordination: a double error swa
 
 \subsection{Role-following as a self-enforcing correlated equilibrium}\label{sm:ce}
 
-The role signal acts as a correlating device \cite{aumann1974,aumann1987}. At each encounter the noisy status $s=(\w_i-\w_j)\cdot\g_m+\sread\xi$ recommends the action $a_i=\sign(s)$ to agent $i$. The obedience constraint is that following this recommendation is a best response when the partner also follows. Writing $q=\Pr(\text{partner plays Go}\mid s_i)$, the anti-coordination payoffs give expected returns
+\noindent The role signal acts as a correlating device \cite{aumann1974,aumann1987}. At each encounter the noisy status $s=(\w_i-\w_j)\cdot\g_m+\sread\xi$ recommends the action $a_i=\sign(s)$ to agent $i$. The obedience constraint is that following this recommendation is a best response when the partner also follows. Writing $q=\Pr(\text{partner plays Go}\mid s_i)$, the anti-coordination payoffs give expected returns
 \begin{equation}
 \text{Go:}\;\; 6(1-q)-q=6-7q,\qquad \text{Defer:}\;\; 2q+3(1-q)=3-q,
 \end{equation}
@@ -270,11 +270,11 @@ The calculation is carried out at the symmetric fixed point, where the asymmetry
 
 \subsection{Beyond mean field: pairwise error rates}
 
-The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sread)$ replaces the partner projection by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sread)$. This is exact at the bifurcation (all identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes bracket the behavior: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different cultures. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
+\noindent The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sread)$ replaces the partner projection by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sread)$. This is exact at the bifurcation (all identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes bracket the behavior: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different cultures. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
 
 \subsection{Pairing efficiency as a partner correlation}\label{sm:pairing-rho}
 
-The description of the pairing factor via ``wasted same-mode encounters'' is a supercritical intuition: it presupposes a bimodal population to have same- and cross-mode encounters at all. Since the factor sets $\beta_c$, the threshold below which no such modes exist, this description cannot be its defining one. We give the general definition here, and recover the bimodal intuition as its supercritical special case.
+\noindent The description of the pairing factor via ``wasted same-mode encounters'' is a supercritical intuition: it presupposes a bimodal population to have same- and cross-mode encounters at all. Since the factor sets $\beta_c$, the threshold below which no such modes exist, this description cannot be its defining one. We give the general definition here, and recover the bimodal intuition as its supercritical special case.
 
 For a fixed context $m$, let $x_i=\w_i\cdot\g_m$ and, at a given encounter, let $x_j$ be the status of the partner the scheme supplies to $i$. Whatever the population's current dispersion---arbitrarily narrow and unimodal included---the pairing scheme induces some correlation $\rho_{\mathrm{pair}}=\mathrm{Corr}(x_i,x_j)\in[-1,1]$ between the two, taken over encounters at fixed time and context, with $i$ drawn from the population and $j$ the partner supplied. Since both are drawn from the same population they have the same marginal distribution, so $\mathrm{Var}(x_j)=\mathrm{Var}(x_i)=u_mv_m$ with $v_m=\hat\g_m^{\!\top}\C\hat\g_m$. The correlation is a property of the matching algorithm rather than of any pre-existing role structure. Treating $(x_i,x_j)$ as jointly Gaussian with this correlation (exact near the origin, where the linearization Eq.~(2) of the main text already applies), the partner's expectation conditional on the focal agent is $\mathbb E[x_j\mid x_i]=\rho_{\mathrm{pair}}x_i$, so the expected difference is
 \begin{equation}\label{SM-eq:sm-rho-gap}
@@ -309,7 +309,7 @@ $\rrf$ is $O(\sidn^2)$ through $\C$, so agents accumulate resources from fluctua
 
 \subsection{The three factors}
 
-The scalar critical condition $\beta>\gamma/\gain$ bundles cognition with noise, since $\pibar'(0)=1/(\sread\sqrt{2\pi})$ for the naive agent. Factoring into independently tunable contributions, define the agent inference efficiency
+\noindent The scalar critical condition $\beta>\gamma/\gain$ bundles cognition with noise, since $\pibar'(0)=1/(\sread\sqrt{2\pi})$ for the naive agent. Factoring into independently tunable contributions, define the agent inference efficiency
 \begin{equation}
 \etaag\equiv\sread\gain/2,
 \end{equation}
@@ -340,7 +340,7 @@ diagonal in the main text. The doubly-uniform case $f_m=1/M,\ \rho_m=\rhopair$ m
 
 \subsection{Pairing as a class-steering lever}\label{sm:pairing}
 
-The diagonal $\bm{D}_\rho=\mathrm{diag}(1-\rho_m)$ is set by the matching protocol, which fixes the partner correlation in each context and is controlled by the platform. The cascade class is fixed by the spectrum of $\Lam\propto\bm{H}^{\!\top}\bm{D}_\rho\bm{H}$ (Sec.~III of the main text), so setting per-context pairing priorities reshapes that spectrum and hence the class. Uniform pairing ($\bm{D}_\rho=(1-\rhopair)\Id_{M\times M}$) rescales $\bm{H}^{\!\top}\bm{H}$ and leaves the eigenvalue ratios unchanged, and with them the bifurcation spacings $\beta_c^{(k+1)}/\beta_c^{(k)}$; a non-uniform schedule does not. Down-weighting the contexts that load a coherent (spiked) direction transfers eigenvalue weight from the spike into the bulk, converting the signature of class (v), one onset then an avalanche, into the more even geometric sequence of class (ii).
+\noindent The diagonal $\bm{D}_\rho=\mathrm{diag}(1-\rho_m)$ is set by the matching protocol, which fixes the partner correlation in each context and is controlled by the platform. The cascade class is fixed by the spectrum of $\Lam\propto\bm{H}^{\!\top}\bm{D}_\rho\bm{H}$ (Sec.~III of the main text), so setting per-context pairing priorities reshapes that spectrum and hence the class. Uniform pairing ($\bm{D}_\rho=(1-\rhopair)\Id_{M\times M}$) rescales $\bm{H}^{\!\top}\bm{H}$ and leaves the eigenvalue ratios unchanged, and with them the bifurcation spacings $\beta_c^{(k+1)}/\beta_c^{(k)}$; a non-uniform schedule does not. Down-weighting the contexts that load a coherent (spiked) direction transfers eigenvalue weight from the spike into the bulk, converting the signature of class (v), one onset then an avalanche, into the more even geometric sequence of class (ii).
 
 The lever carries a cost in coordination efficiency. Take the schedule $\{\rho_m\}$ as the control and the variance of the log-spacings $\ln(\mu_k/\mu_{k+1})$ as an inverse monitorability objective, zero variance being a perfectly geometric spectrum. A representative spiked repertoire ($M=d=6$, contexts clustered about a common direction) is then optimized from log-spacing variance $1.35$ under uniform pairing to $0.58$, a spectrum a monitor can resolve. The cost is coordination: the schedule that achieves this reduces the aggregate pairing factor $\sum_m (1-\rho_m)$ by $\approx40\%$, and since the coordination payoff scales with $(1-\rhopair)$ (\cref{SM-eq:sm-work} and the resource flow), this is a direct loss of the engine's useful output. Monitorability is therefore obtained at the expense of coordination efficiency. The operator's choice is a point on that tradeoff rather than a free improvement. Because the reweighting acts through the same $\bm{H}^{\!\top}\bm{D}_\rho\bm{H}$ that sets ignition, an aggressive schedule also raises the effective $\beta_c^{(k)}$, coupling the class lever weakly to the ignition lever.
 
@@ -350,7 +350,7 @@ The lever carries a cost in coordination efficiency. Take the schedule $\{\rho_m
 \section{Role capacity and associative-memory structure}\label{sm:capacity}
 % ======================================================================
 
-The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(12) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the context vectors $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pibar-1$). This is the structure of a dense associative memory \cite{krotov2016}. The feature/prototype duality is realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sread$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sread$, categorical identities at role-polytope vertices, deep in the thick phase).
+\noindent The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(12) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the context vectors $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pibar-1$). This is the structure of a dense associative memory \cite{krotov2016}. The feature/prototype duality is realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sread$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sread$, categorical identities at role-polytope vertices, deep in the thick phase).
 
 \paragraph{Where the mapping breaks.} A social role is not an individual's alignment but a \emph{bimodal split} of the population along $\g_m$, ordered by the variance $\g_m^{\!\top}\C\g_m$. Roles are relational. Three features absent from Hopfield retrieval follow: an anti-coordination constraint (the population must occupy complementary basins, not all retrieve one pattern); a self-generated signal (the ``input'' difference $(\w_i-\w_j)\cdot\g_m$ is produced by the population, so the landscape depth is state-dependent through the pairing distribution); and pairing dependence (basin depth that matters is the coordination payoff $W_{ijm}$, not the single-agent energy).
 
@@ -366,13 +366,13 @@ Both bounds tighten with cognition: sharper inference raises $n$ (deeper, more n
 \section{The status ledger as operator technology}\label{sm:ledger}
 % ======================================================================
 
-Under the self-storage microfoundation (Appendix~A of the main text) none of the engine's state need be held by the platform: statuses live in the agents, and an operator's native levers are only the channel factors $\rhopair$ and $\sread$. A status ledger, meaning a platform-maintained record of agent identities, is then not a primitive of the model but a designed intervention. It acts on several factors of $\Lambda$ at once. It lowers $\sread$, since clean reads replace noisy presentations. It enables high-quality (anti-correlated, low-$\rhopair$) matching, because rank-ordered pairing requires global status knowledge, so pairing quality and storage architecture are not independent. It enforces honest presentation institutionally. And it transfers the write and expiry parameters $\beta$ and $\gamma$ from the agents to the operator. A ledger therefore gives the operator access to the engine's parameters. This is both why platforms build such records and where the corresponding failure mode lies.
+\noindent Under the self-storage microfoundation (Appendix~A of the main text) none of the engine's state need be held by the platform: statuses live in the agents, and an operator's native levers are only the channel factors $\rhopair$ and $\sread$. A status ledger, meaning a platform-maintained record of agent identities, is then not a primitive of the model but a designed intervention. It acts on several factors of $\Lambda$ at once. It lowers $\sread$, since clean reads replace noisy presentations. It enables high-quality (anti-correlated, low-$\rhopair$) matching, because rank-ordered pairing requires global status knowledge, so pairing quality and storage architecture are not independent. It enforces honest presentation institutionally. And it transfers the write and expiry parameters $\beta$ and $\gamma$ from the agents to the operator. A ledger therefore gives the operator access to the engine's parameters. This is both why platforms build such records and where the corresponding failure mode lies.
 
 The controllable-coordination principle requires the operator retain the ability to modulate $\rhopair$ (including to the no-information value $\rhopair=1$). The same logic applies to memory. If identity migrates out of the ledger---into agent self-managed memory (an agent maintaining its own persona notes sets its own $\beta$) or distributed peer memory (statuses held only as other agents' beliefs)---the $\beta/\gamma$ lever passes from operator to collective, and role differentiation becomes correspondingly harder to reverse. The locus of identity storage is therefore itself a monitorable, safety-relevant variable, complementary to the covariance-spectrum diagnostics: an early sign that the operator's levers are eroding is not a change in any factor of $\Lambda$, but a change in who owns the knobs.
 
 \subsection{Repertoire seeding and the ledger's memory}\label{sm:inertia}
 
-Two accounting choices sit under the regime map: the dispersion of the seeded repertoire, which sets its horizontal axis, and the ledger's memory horizon, which does not. We treat them in turn, since the second is easily mistaken for the first.
+\noindent Two accounting choices sit under the regime map: the dispersion of the seeded repertoire, which sets its horizontal axis, and the ledger's memory horizon, which does not. We treat them in turn, since the second is easily mistaken for the first.
 
 \paragraph{What sets the horizontal axis.} The ratio $r=\ract/\rcomp$ is fixed by how unequally the candidate contexts are weighted when they are seeded (Eq.~(26) of the main text): a repertoire launched at near-equal weights crosses threshold almost together (large $r$, churn, accelerating cascades), while one whose contexts are tiered by orders of magnitude crosses in a well-separated sequence (small $r$, entrenchment, decelerating cascades). For a deployed multi-agent system the operator defines the task taxonomy---which contexts exist, and how much traffic each is launched with. So $\sigma_u$ is platform-owned in the same sense as the per-context frequencies $f_m$ and pairing efficiencies $\phi_m$ of \cref{sm:lambda}, and acts on the same object: the spectrum of the effective gain. This is also the point at which the open-repertoire process left outside the closed loop in the main text re-enters as a design variable rather than an exogenous accident.
 
@@ -387,7 +387,7 @@ The memory horizon $\tau_{\mathrm{mem}}=1/c$ nonetheless leaves $r$ alone, becau
 \section{Monotonicity of the pinning fixed point for general repertoires}\label{sm:monotone}
 % ======================================================================
 
-The pinning argument of the closed-pool construction (Sec.~IV\,A of the main text) requires that each schema's $\lambda_m=\hat\g_m^{\!\top}\Cr\hat\g_m$ increase with its strength $u_m=|\g_m|^2$, so that the shared $\lambda_m=\kappa/\alpha$ at an interior fixed point forces all survivors to equal strength. We verify this monotonicity here, first for orthogonal contexts and then in general.
+\noindent The pinning argument of the closed-pool construction (Sec.~IV\,A of the main text) requires that each schema's $\lambda_m=\hat\g_m^{\!\top}\Cr\hat\g_m$ increase with its strength $u_m=|\g_m|^2$, so that the shared $\lambda_m=\kappa/\alpha$ at an interior fixed point forces all survivors to equal strength. We verify this monotonicity here, first for orthogonal contexts and then in general.
 
 \paragraph{Orthogonal contexts.} Here $\hat\g_m$ is an eigenvector of $\Cr$ and $\lambda_m$ reduces to $v_m(1+(1-\rhopair)u_mv_m/\sum_n u_nv_n)$ with single-axis variance $v_m=\sidn^2/[2\gamma(1-\Lambda u_m)]$. Both factors increase with $u_m$:
 \begin{equation}\label{SM-eq:sm-dvdu}
@@ -404,7 +404,7 @@ a rank-one positive-semidefinite matrix for any repertoire geometry, so the lead
 \section{Validity of the linearization and the fluctuation-shifted threshold}\label{sm:linvalidity}
 % ======================================================================
 
-The subcritical stationary state is not the point $\w=0$ but a finite-width Gaussian ensemble in which the state $\w_i$ has covariance $\C=\tfrac{\sidn^2}{2\gamma}(\Id_{d\times d}-\Lam)^{-1}$. Expanding ``about $\w=0$'' is therefore justified not by concentration of the state but by two separate facts, which we set out here.
+\noindent The subcritical stationary state is not the point $\w=0$ but a finite-width Gaussian ensemble in which the state $\w_i$ has covariance $\C=\tfrac{\sidn^2}{2\gamma}(\Id_{d\times d}-\Lam)^{-1}$. Expanding ``about $\w=0$'' is therefore justified not by concentration of the state but by two separate facts, which we set out here.
 
 \paragraph{Stability is a Jacobian property.} Ignition is the loss of linear stability of the symmetric fixed point $\w=0$ of the deterministic mean-field drift $\mathbf F(\w)$. Stability is governed by the Jacobian $\partial\mathbf F/\partial\w|_{0}$, a derivative evaluated \emph{at} the fixed point. It makes no reference to where the probability mass of the noisy state sits. The eigenvalues of $\Lam-\Id_{d\times d}$ change sign at $\beta_c^{(k)}=\gamma/[(1-\rho_{\mathrm{pair}})\mu_k]$ regardless of how dynamical noise dresses the state, so the thresholds are the exact stability boundary of the deterministic flow.
 
@@ -430,7 +430,7 @@ The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sidn^2)
 % ======================================================================
 \section{Scope of the regime map}\label{sm:mapscope}
 
-These qualify the regime map of Sec.~IV\,B of the main text.
+\noindent These qualify the regime map of Sec.~IV\,B of the main text.
 
 \paragraph{Near-orthogonal repertoires.} The counting statements hold in that limit: orthogonal axes make $\mu_k=u_k$, so eigenvalues and strengths coincide and $M_{\mathrm{cap}}$ counts saturated schemas directly. Overlap breaks the identification. Schemas then couple through $\Cr$ as well as through the shared budget, which can be reached before the per-schema ceiling and leave survivors equalized below $u_{\mathrm{cap}}$, so the boundaries degrade into crossovers as the repertoire becomes coherent. The width of that window is not fixed here. For random directions the pairwise overlap is $O(d^{-1/2})$, and the identification survives while the accumulated shift stays below the strength gaps, $M/d\ll\Delta u/u$. Near-orthogonality is therefore the small-aspect-ratio corner of the group $q=M/d$ already held fixed in Sec.~IV\,B of the main text. At $q=O(1)$ random directions give the Marchenko--Pastur spectrum of class~(iv) instead, and at $q\gg1$ they give a degenerate one, which no longer depends on the strength distribution at all. 
 \paragraph{Two classes are not endogenous fixed points.} The Marchenko--Pastur bulk (iv) is the signature of a repertoire not yet organized by resource feedback (the natural initial condition for freshly seeded schemas, and transient under the loop), and its persistence in data would itself indicate the loop has not closed. The exact degeneracy of the saturated-cluster regime holds only within the Gaussian pinning argument. Generic cross-axis resource coupling and residual coherence broaden it into a narrow cluster.
@@ -441,7 +441,7 @@ These qualify the regime map of Sec.~IV\,B of the main text.
 % ======================================================================
 \section{From the encounter process to the mean-field drift}\label{sm:reduction}
 
-Eqs.~(1) and (2) of the main text are separated by two limits, $\nu\to\infty$ and $\Nag\to\infty$, which do different work. The average over the pairing probabilities belongs entirely to the first. The second is needed only to close the resulting equation.
+\noindent Eqs.~(1) and (2) of the main text are separated by two limits, $\nu\to\infty$ and $\Nag\to\infty$, which do different work. The average over the pairing probabilities belongs entirely to the first. The second is needed only to close the resulting equation.
 
 \paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N_{\mathrm{enc}}=\nu\,\Delta t\gg1$ encounters, over which the identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N_{\mathrm{enc}}$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
 \begin{equation}\label{SM-eq:sm-window}
