@@ -69,6 +69,137 @@
 
 \bigskip
 
+\section*{Notation}
+\addcontentsline{toc}{section}{Notation}
+
+Symbols are grouped so that quantities separated by a single averaging step, or by one stage of the loop, sit together. Equation numbers without an S prefix refer to the main text.
+
+{\footnotesize
+
+\smallskip\noindent\textbf{Status and its differences.} Distinguished by which partner information has been averaged away.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$x_i$ & Status of agent $i$ in context $m$, the projection $\w_i\cdot\g_m$. \\
+$\Delta_{im}(j)$ & Difference to a named partner, $(\w_i-\w_j)\cdot\g_m$; what one encounter presents. \\
+$\Delta_{im}$ & After the partner average, $(1-\rhopair)x_i$; what enters Eq.~(2). \\
+$\Delta$ & Pairwise difference at fixed context and partner (Appendix~A, \cref{sm:reduction}). \\
+$s_{im}$ & Observed signal, $\Delta_{im}(j)+\sread\xi$; the only status an agent sees. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Action and policy.} Distinguished by which noise has been averaged away.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$a$ & Action, $-1$ (Defer) or $+1$ (Go). \\
+$T$ & Evidence samples per decision; the read memory. \\
+$\pi$ & Action policy, $p(a\mid\{s_{im,t}\}_{t=1}^{T})$. \\
+$\pibar(\Delta)$ & Go-probability at true difference $\Delta$; the policy averaged over read noise. \\
+$\bar a(\Delta)$ & Noise-averaged action at a \emph{given} partner, $2\pibar(\Delta)-1$; odd in $\Delta$. \\
+$\langle a\rangle_m(\w_i)$ & Noise- \emph{and} partner-averaged action; the response in Eq.~(2). \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Gains.} One per stage, one for the closed loop.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$\gain$ & Read gain, $2\pibar'(0)=\sqrt{2T/\pi}/\sread$; slope of $\bar a$ at zero difference. \\
+$\etaag$ & Inference efficiency, $\sread\gain/2$; equals $\sqrt{T/2\pi}$ for $T$ samples. \\
+$\mu_{\mathrm{eff}}(v)$ & Read gain softened by partner variance $v$; $\to\gain$ as $v\to0$. \\
+$\gain u_m$ & Axis $m$'s share of the loop gain: read times write, each $\propto\sqrt{u_m}$. \\
+$\Lam$ & Social loop gain matrix, Eq.~(5). \\
+$\Lambda_k$ & Its $k$-th eigenvalue; axis $k$ ignites at $\Lambda_k=1$. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Noise.} Two independent sources, and what the reduction discards.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$\sread$ & Observation (read) noise; the finest status difference resolved. \\
+$\sidn$ & Identity noise; variation in $\w_i$ from outside the modeled encounters. \\
+$\xi$, $\bm\eta_i$ & Standard Gaussian sources for the two noises above. \\
+$v$ & Partner-projection variance $\C_{mm}$, of order $\sidn^2$ subcritically. \\
+$\beta b_0=\beta^2/\nu$ & Shot-noise intensity discarded by the dense-encounter limit. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{State and its spectra.}\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$\w_i$ & Identity of agent $i$, a vector in $\mathbb R^d$. \\
+$\bm\Omega$ & The $\Nag$ identities stacked. \\
+$r_i$ & Accumulated coordination income (wealth) of agent $i$. \\
+$\g_m$, $\hat\g_m$ & Schema vector and its direction, $\g_m=\sqrt{u_m}\,\hat\g_m$. \\
+$u_m$ & Schema strength $|\g_m|^2$; the power axis $m$ puts on the channel. \\
+$\bm H$ & The $M\times d$ matrix of stacked schema vectors. \\
+$\C$ & Population covariance $\Nag^{-1}\sum_i\w_i\w_i^{\!\top}$; the order parameter. \\
+$\Cr$ & Resource-weighted covariance, $\sum_i r_i\w_i\w_i^{\!\top}/\sum_i r_i$. \\
+$v_k$ & $k$-th eigenvalue of $\C$; leaves the floor $\sidn^2/2\gamma$ when $k$ ignites. \\
+$\mu_k$ & $k$-th eigenvalue of $\bm H^{\!\top}\bm H$; equals $u_k$ for orthogonal contexts. \\
+$\lambda_m$ & Resource-weighted variance along $\hat\g_m$, $\hat\g_m^{\!\top}\Cr\,\hat\g_m$. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Rates.}\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$\gamma$ & Identity decay rate; $1/\gamma$ is the write memory. \\
+$\nu$ & Encounter rate per agent, a fixed budget independent of $\Nag$. \\
+$b_0$ & Per-encounter kick to the identity. \\
+$\beta=\nu b_0$ & Feedback strength; the rate decisions are written into identity. \\
+$c$ & Resource decay rate; $1/c$ the income horizon. \\
+$\alpha$, $\kappa$ & Schema reinforcement and decay rates. \\
+$\varphi(U)$ & Budget pressure of the shared channel, common to every schema. \\
+$\rcomp$, $\ract$ & Compounding and activation rates of the sort; $r=\ract/\rcomp$. \\
+$\tau_k$ & Relaxation time of mode $k$, $1/\gamma|1-\Lambda_k|$. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Population and pairing.} Three different counts of agents.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$\Nag$ & Number of agents. \\
+$N_{\mathrm{enc}}$ & Encounters in one coarse-graining window, $\nu\Delta t$ (\cref{sm:reduction}). \\
+$N_{\mathrm{eff}}$ & Participation ratio of the pairing kernel; $\Nag-1$ if uniform. \\
+$f_m$ & Play frequency of context $m$, with $\sum_m f_m=1$. \\
+$p^{(m)}_{ij}$, $\bm P^{(m)}$ & Pairing probabilities set by the matching rule, and their kernel. \\
+$\rhopair$ & Correlation of a partner's status with one's own, set by that rule. \\
+$\bm L^{(m)}$ & Graph Laplacian $\Id-\bm P^{(m)}$; how a persistent network would enter. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Repertoire and capacity.} Four counts of schemas, by what limits each.\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$M$, $d$ & Number of contexts and embedding dimension. \\
+$q=M/d$ & Aspect ratio of the repertoire. \\
+$R$ & $\mathrm{rank}(\bm H)\le\min(M,d)$. \\
+$u_0$, $\sigma_u$ & Seed scale and log-dispersion, $u_m(0)=u_0e^{\sigma_u z_m}$. \\
+$u_{\mathrm{cap}}$ & Per-axis range ceiling of the channel. \\
+$U=\sum_m u_m$ & Total channel power, limited by the capacity $U_{\mathrm{cap}}$. \\
+$M_{\mathrm{cap}}$ & $U_{\mathrm{cap}}/u_{\mathrm{cap}}$; axes drivable to full range at once. \\
+$\Theta$ & $M/M_{\mathrm{cap}}$; schemas competing per capacity slot. \\
+$M_{\mathrm{eff}}$ & Schemas viable at the fixed point, $\lambda_k(\Cr)\ge\kappa/\alpha$. \\
+$K$ & Realized survivor count at the end of the sort; need not saturate. \\
+$N(\beta)$ & Cultural thickness; active role axes at feedback strength $\beta$. \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent\textbf{Payoff and information.}\\[3pt]
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+\toprule
+$w_0$ & Maximal coordination gain per encounter. \\
+$W_{ijm}$, $W_{im}$ & Pairwise payoff above Nash and its partner average. \\
+$P_{e,ijm}$, $P_{e,im}$ & Pairwise and partner-averaged role-inference error rates. \\
+$I$ & Role information $1-H_{\mathrm{bin}}(P_e)$, which bounds the payoff. \\
+$\rrf$ & Role-free resource mean, of order $\sidn^2$. \\
+\bottomrule
+\end{tabular}
+
+}
+
+\bigskip
+% ======================================================================
+
 \section{The model ladder and the coordination payoff}\label{sm:ladder}
 % ======================================================================
 
@@ -312,11 +443,11 @@ These qualify the regime map of Sec.~IV\,B of the main text.
 
 Eqs.~(1) and (2) of the main text are separated by two limits, $\nu\to\infty$ and $\Nag\to\infty$, which do different work. The average over the pairing probabilities belongs entirely to the first. The second is needed only to close the resulting equation.
 
-\paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N=\nu\,\Delta t\gg1$ encounters, over which the identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
+\paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N_{\mathrm{enc}}=\nu\,\Delta t\gg1$ encounters, over which the identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N_{\mathrm{enc}}$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
 \begin{equation}\label{SM-eq:sm-window}
-b_0\sum_{e}a_e\,\g_{m_e}=b_0N\Bigl(\frac1N\sum_e X_e\Bigr)=\beta\,\Delta t\,\bigl(\mathbb E[X]+O(N^{-1/2})\bigr),
+b_0\sum_{e}a_e\,\g_{m_e}=b_0N_{\mathrm{enc}}\Bigl(\frac1{N_{\mathrm{enc}}}\sum_e X_e\Bigr)=\beta\,\Delta t\,\bigl(\mathbb E[X]+O(N_{\mathrm{enc}}^{-1/2})\bigr),
 \end{equation}
-with $\beta=\nu b_0$. The $X_e$ are bounded by $\max_m|\g_m|$, so the fluctuation is the $O(N^{-1/2})$ of the central limit theorem. It is the shot noise of Appendix~A of the main text.
+with $\beta=\nu b_0$. The $X_e$ are bounded by $\max_m|\g_m|$, so the fluctuation is the $O(N_{\mathrm{enc}}^{-1/2})$ of the central limit theorem. It is the shot noise of Appendix~A of the main text.
 
 \paragraph{The noise average of a single decision.} Fix the context $m$ and the partner $j$, so the status difference $\Delta=(\w_i-\w_j)\cdot\g_m$ is a number. The agent draws $T$ samples $s_t=\Delta+\sread\xi_t$ with $\xi_t$ independent standard Gaussians, and their mean is Gaussian about the true difference,
 \begin{equation}\label{SM-eq:sm-sbar}
@@ -332,7 +463,7 @@ with $\pibar(\Delta)=\Pr(a{=}{+}1\mid\Delta)$ the Go-probability of the policy a
 \begin{equation}\label{SM-eq:sm-tower}
 \mathbb E[X]=\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl((\w_i-\w_j)\cdot\g_m\bigr),\qquad \bar a(\Delta)\equiv2\pibar(\Delta)-1 .
 \end{equation}
-The innermost average is \cref{SM-eq:sm-twopoint}, taken at fixed context and partner. The partner and context averages follow. One can instead group the window's encounters by partner, in which case the count $Nf_mp^{(m)}_{ij}$ of encounters with $j$ in context $m$ supplies the weight. That route requires every cell to be well populated, $Nf_mp^{(m)}_{ij}\gg1$, which under uniform matching means $\nu/\gamma\gg\Nag$. The route through \cref{SM-eq:sm-tower} requires only $N\gg1$ and gives the same weights.
+The innermost average is \cref{SM-eq:sm-twopoint}, taken at fixed context and partner. The partner and context averages follow. One can instead group the window's encounters by partner, in which case the count $N_{\mathrm{enc}}f_mp^{(m)}_{ij}$ of encounters with $j$ in context $m$ supplies the weight. That route requires every cell to be well populated, $N_{\mathrm{enc}}f_mp^{(m)}_{ij}\gg1$, which under uniform matching means $\nu/\gamma\gg\Nag$. The route through \cref{SM-eq:sm-tower} requires only $N_{\mathrm{enc}}\gg1$ and gives the same weights.
 
 \paragraph{The drift at finite $\Nag$.} Substituting \cref{SM-eq:sm-tower} into \cref{SM-eq:sm-window} gives the dense-encounter limit at fixed population size,
 \begin{equation}\label{SM-eq:sm-drift-finiteN}
