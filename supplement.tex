@@ -314,6 +314,64 @@ These qualify the regime map of Sec.~IV\,B of the main text.
 \paragraph{Parametrizing the map.} Since only the dimensionless ratio $\Theta=Mu_{\mathrm{cap}}/U_{\mathrm{cap}}$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in Fig.~4 of the main text as the capacity $M_{\mathrm{cap}}/M=1/\Theta$, and never fix an absolute $u_{\mathrm{cap}}$. The only absolute scale retained is the seed-to-budget ratio $u_0/U_{\mathrm{cap}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{cap}}/u_0)$ entering the saturated-cluster/geometric boundary. This is the seed \emph{scale}, independent of the seed \emph{dispersion} $\sigma_u$ that fixes the horizontal axis. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\Lambda_1$, aspect ratio $M/d$) set a fixed backdrop, as does the repertoire geometry $\{\hat\g_m\cdot\hat\g_n\}$, which the map takes near-orthogonal.
 \paragraph{Sustaining a hierarchy.} Holding one indefinitely requires continual injection of new schemas, an open-repertoire process outside the closed loop that we do not treat. Within the closed loop, the endogenous source of novelty during the sort is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
 
+\bigskip
+% ======================================================================
+\section{From the encounter process to the mean-field drift}\label{sm:reduction}
+
+Eqs.~(1) and (2) of the main text are separated by two limits, $\nu\to\infty$ and $\Nag\to\infty$, which do different work. The average over the pairing probabilities belongs entirely to the first. The second is needed only to close the resulting equation.
+
+\paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N=\nu\,\Delta t\gg1$ encounters, over which the identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
+\begin{equation}\label{SM-eq:sm-window}
+b_0\sum_{e}a_e\,\g_{m_e}=b_0N\Bigl(\frac1N\sum_e X_e\Bigr)=\beta\,\Delta t\,\bigl(\mathbb E[X]+O(N^{-1/2})\bigr),
+\end{equation}
+with $\beta=\nu b_0$. The $X_e$ are bounded by $\max_m|\g_m|$, so the fluctuation is the $O(N^{-1/2})$ of the central limit theorem. It is the shot noise of Appendix~A of the main text.
+
+\paragraph{The noise average of a single decision.} Fix the context $m$ and the partner $j$, so the status difference $\Delta=(\w_i-\w_j)\cdot\g_m$ is a number. The agent draws $T$ samples $s_t=\Delta+\sread\xi_t$ with $\xi_t$ independent standard Gaussians, and their mean is Gaussian about the true difference,
+\begin{equation}\label{SM-eq:sm-sbar}
+\bar s_T=\frac1T\sum_{t=1}^{T}s_t\ \sim\ \mathcal N\Bigl(\Delta,\ \frac{\sread^2}{T}\Bigr).
+\end{equation}
+The action takes only two values, so its average over the observation noise is fixed by a single probability,
+\begin{equation}\label{SM-eq:sm-twopoint}
+\bar a(\Delta)\equiv\mathbb E_\xi[a]=(+1)\Pr(a{=}{+}1\mid\Delta)+(-1)\Pr(a{=}{-}1\mid\Delta)=2\pibar(\Delta)-1 ,
+\end{equation}
+with $\pibar(\Delta)=\Pr(a{=}{+}1\mid\Delta)$ the Go-probability of the policy at true difference $\Delta$. \Cref{SM-eq:sm-twopoint} is an identity for any policy, deterministic or not. Only $\pibar$ carries the policy. For the rule $a=\sign(\bar s_T)$, \cref{SM-eq:sm-sbar} gives $\pibar(\Delta)=\Phi(\sqrt T\,\Delta/\sread)$ and so $\bar a(\Delta)=\operatorname{erf}\bigl(\sqrt T\,\Delta/(\sqrt2\,\sread)\bigr)$, the form used in Appendix~A of the main text. The $T$ samples enter only through the variance of $\bar s_T$, which is why the response sharpens as $\sqrt T$. Policy symmetry gives $\pibar(-\Delta)=1-\pibar(\Delta)$, so $\bar a$ is odd, and the drift of Sec.~II of the main text inherits that oddness.
+
+\paragraph{Evaluating the expectation.} Conditioning outward from the observation noise, the expectation factorizes,
+\begin{equation}\label{SM-eq:sm-tower}
+\mathbb E[X]=\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl((\w_i-\w_j)\cdot\g_m\bigr),\qquad \bar a(\Delta)\equiv2\pibar(\Delta)-1 .
+\end{equation}
+The innermost average is \cref{SM-eq:sm-twopoint}, taken at fixed context and partner. The partner and context averages follow. One can instead group the window's encounters by partner, in which case the count $Nf_mp^{(m)}_{ij}$ of encounters with $j$ in context $m$ supplies the weight. That route requires every cell to be well populated, $Nf_mp^{(m)}_{ij}\gg1$, which under uniform matching means $\nu/\gamma\gg\Nag$. The route through \cref{SM-eq:sm-tower} requires only $N\gg1$ and gives the same weights.
+
+\paragraph{The drift at finite $\Nag$.} Substituting \cref{SM-eq:sm-tower} into \cref{SM-eq:sm-window} gives the dense-encounter limit at fixed population size,
+\begin{equation}\label{SM-eq:sm-drift-finiteN}
+\dot\w_i=-\gamma\,\w_i(1+|\w_i|^2)+\beta\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl((\w_i-\w_j)\cdot\g_m\bigr)+\sidn\bm{\eta}_i .
+\end{equation}
+No randomness remains over which partners were drawn. The pairing probabilities already enter as weights, exactly as they do in Eq.~(2) of the main text.
+
+\paragraph{What remains at finite $\Nag$.} \Cref{SM-eq:sm-drift-finiteN} is not a closed equation for $\w_i$. Its right-hand side carries the other $\Nag-1$ identities, each solving the same equation, and two obstructions survive.
+
+First, $\w_j$ is not independent of $\w_i$. The two have met, and in an anti-coordination game their kicks are anti-correlated---when $i$ goes, $j$ defers---so $\w_j$ retains an imprint of the focal agent's own history. Encounters between the pair occur at rate $\nu p^{(m)}_{ij}$, and since $\nu$ is a fixed per-agent budget with $\sum_j p^{(m)}_{ij}=1$, that rate is $O(\nu/\Nag)$. The imprint is therefore $O(1/\Nag)$ relative to $\w_j$'s own drive. An interaction budget growing with $\Nag$ would not have this property.
+
+Second, the sum runs over the realized identities, each a solution of a noisy equation. Since $|\bar a|\le1$, the sum has standard deviation $O(N_{\mathrm{eff}}^{-1/2})$ about its population value, where
+\begin{equation}\label{SM-eq:sm-neff}
+N_{\mathrm{eff}}=\Bigl(\sum_j \bigl(p^{(m)}_{ij}\bigr)^2\Bigr)^{-1}
+\end{equation}
+is the participation ratio of the pairing kernel, equal to $\Nag-1$ under uniform matching. The drift therefore fluctuates between agents and between runs.
+
+\paragraph{The limit.} Both obstructions vanish as $N_{\mathrm{eff}}\to\infty$, which is what the mean-field limit supplies: the empirical distribution of the other identities converges to a fixed law, the partner decouples from the focal agent's history, and the sum over $j$ becomes an expectation against that law. Where the matching rule correlates the partner's status with the focal agent's, the relevant law is the conditional one, and near the symmetric state it contributes the factor $(1-\rhopair)$ of \cref{sm:pairing-rho}. Writing that expectation as $\langle a\rangle_m(\w_i)$ gives Eq.~(2) of the main text.
+
+\paragraph{Averaging the difference and averaging the action.} What the limit delivers is $\mathbb E_j[\bar a(\Delta_{im}(j))]$, an average of the \emph{action} over the partner. Eq.~(2) of the main text instead evaluates $\bar a$ at the averaged \emph{status difference}. The two operations are not the same, and only the second carries an error.
+
+Averaging the status difference is exact. $\Delta_{im}(j)=(\w_i-\w_j)\cdot\g_m$ is linear in $\w_j$, so the average is $(\w_i-\mathbb E[\w_j\mid\w_i])\cdot\g_m$ with no approximation. What it needs is that the conditional mean be linear, and near the symmetric state the joint Gaussianity of $(x_i,x_j)$ supplies $\mathbb E[x_j\mid x_i]=\rhopair x_i$, hence the expected difference $(1-\rhopair)x_i$ of \cref{sm:pairing-rho}.
+
+Averaging the action is not the same, because $\bar a$ is nonlinear. For this policy the exact partner average is available in closed form, through the same identity that produced the erf in the first place: for $z$ Gaussian with variance $s^2$,
+\begin{equation}\label{SM-eq:sm-erfconv}
+\mathbb E_z\bigl[\operatorname{erf}(\kappa(u+z))\bigr]=\operatorname{erf}\!\Bigl(\frac{\kappa\,u}{\sqrt{1+2\kappa^2s^2}}\Bigr).
+\end{equation}
+Smoothing an erf by a Gaussian returns an erf, with the two variances added in quadrature inside the argument. Applied to the observation noise it gives the noise average itself: the hard sign is the $\kappa\to\infty$ limit of $\operatorname{erf}(\kappa\,\cdot)$, and \cref{SM-eq:sm-erfconv} then returns $\bar a(\Delta)=\operatorname{erf}\bigl(\sqrt T\Delta/(\sqrt2\,\sread)\bigr)$, which is \cref{SM-eq:sm-twopoint} and Appendix~A of the main text. Applied a second time, now to the partner projection, it softens the slope at the origin by $(1+2\kappa^2v)^{-1/2}$ with $v$ the partner variance. For a single evidence sample that factor is the $\mu_{\mathrm{eff}}(v)$ of \cref{SM-eq:sm-mueff}.
+
+The substitution made in Eq.~(2) of the main text is the $s\to0$ case of \cref{SM-eq:sm-erfconv}. It is controlled where the partner variance is small against $\sread^2$, and $v=O(\sidn^2)$ subcritically by \cref{SM-eq:sm-vselfcon}, so the substitution is exact as $\sidn\to0$ and costs an $O(\sidn^2)$ shift of onset at finite noise (\cref{SM-eq:sm-shift}). Above threshold the partner distribution on that axis is bimodal, and neither the Gaussian conditional mean nor the small-$v$ expansion is controlled there.
+
 \noindent\textbf{Note on scope.} The derivations of Secs.~II\,B and IV\,A of the main text are carried out in the Gaussian, near-threshold, mean-field regime, where the Wick reduction closes. That regime is the noise-dominated one: the identity noise, not the drift, sets the dispersion along an axis below its threshold, and the population stays unimodal there. An axis above threshold is instead held at $\pm m$ by the drift and splits, so the closure fails axis by axis as the cascade proceeds. Their extension into the thick phase (bimodal partner distributions, saturated policies, quartic-capped amplitudes), the verification of the regime crossovers of Sec.~IV\,B of the main text in the microscopic parameters, and the conjecture that resource weighting widens spectral gaps are targets for the simulation program accompanying this work.
 
 \ifdefined\CEcombined\else\bibliography{references}\fi
