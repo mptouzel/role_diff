@@ -146,7 +146,7 @@ where $\langle a\rangle_m(\w_i)
 =2\pibar(\Delta_{im})-1$ with $\Delta_{im}=\mathbb{E}_{\w_j}\left[(\w_i-\w_j) \cdot\g_m\right]$. Its slope at zero difference defines the \emph{read gain} $\gain\equiv2\pibar'(0)$, which sets how strongly actions are written into memory: thresholding the mean of $T$ Gaussian samples gives $\gain=\sqrt{2T/\pi}/\sread$.
 The rate $\beta$ sets how strongly the social signal drives the identity, and is referred to below as the \emph{feedback strength}.
 
-We assume the pairing probabilities $p^{(m)}_{ij}$ are set by a \emph{matching rule} that has access to identity information. The matching rule is unrestricted, and enters the linearized dynamics through one number, the correlation $\rhopair\in[-1,1]$ between a partner's status and one's own at fixed context $m$ (\cref{sm:gain}). Near the symmetric state the pair is jointly Gaussian, so $\Delta_{im}=(1-\rhopair)\,\w_i\cdot\g_m$. Uniform matching draws the partner independently of agent $i$, so $\rhopair=0$ and the partner projection sits at its population mean, which vanishes in the symmetric state, the undifferentiated population before any role structure exists. The coefficient is then one, and the partner contributes nothing. Rank-ordered (status-mirrored) matching drives $\rhopair\to-1$ and assortative (homophilic) matching drives it to $1$, the two ends of the range (\smref{S2\,B}). Both act on whatever status spread exists, so neither needs role structure to be defined.
+We assume the pairing probabilities $p^{(m)}_{ij}$ are set by a \emph{matching rule} that has access to identity information. The matching rule is unrestricted, and enters the linearized dynamics through one number, the correlation $\rhopair\in[-1,1]$ between a partner's status and one's own at fixed context $m$ (\cref{sm:gain}). Near the symmetric fixed point the pair is jointly Gaussian, so $\Delta_{im}=(1-\rhopair)\,\w_i\cdot\g_m$. Uniform matching draws the partner independently of agent $i$, so $\rhopair=0$ and the partner projection sits at its population mean, which vanishes in the role-free population. The coefficient is then one, and the partner contributes nothing. Rank-ordered (status-mirrored) matching drives $\rhopair\to-1$ and assortative (homophilic) matching drives it to $1$, the two ends of the range (\smref{S2\,B}). Both act on whatever status spread exists, so neither needs role structure to be defined.
 
 
 \subsection{Resources}
@@ -207,7 +207,7 @@ The linearization gives that feedback as $\gamma\,\Lam\,\w_i$, with the social l
 \underbrace{\bm{H}^{\!\top}\!\bm{H}}_{\text{repertoire}} ,
 \label{eq:lambda}
 \end{equation}
-where $\bm{H}$ stacks the schema vectors $\g_m$, $\etaag\equiv\sread\gain/2$ is the agent's dimensionless inference efficiency, and $(1-\rhopair)$ is the pairing gain factor set by the matching rule's partner correlation of \cref{sec:model}. The first three factors are scalars, so they scale every eigenvalue of $\Lam$ alike and set the overall gain without distinguishing axes. Only the repertoire factor $\bm{H}^{\!\top}\bm{H}$ separates them: the symmetric state destabilizes along eigenvector $k$ of $\Lam$ when the corresponding eigenvalue reaches one,
+where $\bm{H}$ stacks the schema vectors $\g_m$, $\etaag\equiv\sread\gain/2$ is the agent's dimensionless inference efficiency, and $(1-\rhopair)$ is the pairing gain factor set by the matching rule's partner correlation of \cref{sec:model}. The first three factors are scalars, so they scale every eigenvalue of $\Lam$ alike and set the overall gain without distinguishing axes. Only the repertoire factor $\bm{H}^{\!\top}\bm{H}$ separates them: the symmetric fixed point destabilizes along eigenvector $k$ of $\Lam$ when the corresponding eigenvalue reaches one,
 \begin{equation}
 \Lambda_k > 1 ,\qquad \Lambda_1\ge\Lambda_2\ge\cdots\ge\Lambda_R ,
 \label{eq:cascade}
@@ -222,9 +222,9 @@ The engine runs on two integrators---a write path ($\beta/\gamma$: decisions acc
 
 \subsection{The social loop gain and the cascade of thresholds}\label{sm:gain}
 
-We now linearize the mean-field drift \cref{eq:agent-mf} about the symmetric state, showing how $\Lam$ arises. Its feedback term is $\beta\sum_m f_m\langle a\rangle_m(\w_i)\g_m$, with the expected signed action in context $m$ averaged over the observation noise and the drawn partner (\cref{sec:model}).
+\noindent We linearize the mean-field drift \cref{eq:agent-mf} about the symmetric fixed point, showing how $\Lam$ arises. Its feedback term is $\beta\sum_m f_m\langle a\rangle_m(\w_i)\g_m$, with the expected signed action in context $m$ averaged over the observation noise and the drawn partner (\cref{sec:model}).
 
-\paragraph{Mean field.} As $\Nag\to\infty$ the empirical distribution of the other agents converges to a fixed law, so the drawn partner is independent of the focal agent's own history. The matching rule fixes the partner correlation $\rhopair=\mathrm{Corr}(x_i,x_j)$ between the projections $x_i=\w_i\cdot\g_m$ and $x_j=\w_j\cdot\g_m$, and near the symmetric state the pair is jointly Gaussian, so $\mathbb E[x_j\mid x_i]=\rhopair\,x_i$ and the expected status difference is $(1-\rhopair)x_i$ (\smref{S2\,B}). Random matching leaves the unconditional population mean, which vanishes at the symmetric fixed point, and is the case $\rhopair=0$. That difference is the $\Delta_{im}$ of \cref{sec:model}, $\Delta_{im}=(1-\rhopair)x_i$, so the observed signal is $s_{im}\approx\Delta_{im}+\sread\xi_{im}$, and, averaging the decision over the observation noise,
+\paragraph{Mean field.} As $\Nag\to\infty$ the empirical distribution of the other agents converges to a fixed law, so the drawn partner is independent of the focal agent's own history. The matching rule fixes the partner correlation $\rhopair=\mathrm{Corr}(x_i,x_j)$ between the projections $x_i=\w_i\cdot\g_m$ and $x_j=\w_j\cdot\g_m$, and near the symmetric fixed point the pair is jointly Gaussian, so $\mathbb E[x_j\mid x_i]=\rhopair\,x_i$ and the expected status difference is $(1-\rhopair)x_i$ (\smref{S2\,B}). Random matching leaves the unconditional population mean, which vanishes at the symmetric fixed point, and is the case $\rhopair=0$. That difference is the $\Delta_{im}$ of \cref{sec:model}, $\Delta_{im}=(1-\rhopair)x_i$, so the observed signal is $s_{im}\approx\Delta_{im}+\sread\xi_{im}$, and, averaging the decision over the observation noise,
 \begin{equation}\label{SM-eq:sm-abar}
 \langle a\rangle_m(\w_i)=2\pibar(\Delta_{im})-1,
 \end{equation}
@@ -247,7 +247,7 @@ with $\mathbf{f}=(f_1,\ldots,f_M)$, $\bm{H}$ the $M\times d$ matrix of stacked c
 \begin{equation}\label{SM-eq:sm-linear}
 \dot{\w}_i\approx-\gamma\,(\Id_{d\times d}-\Lam)\,\w_i+\sidn\bm\eta_i.
 \end{equation}
-The matching rule enters only through the factor $(1-\rhopair)$, which multiplies every axis alike and vanishes at $\rhopair=1$. The symmetric state thus loses stability along eigenvector $k$ of $\Lam$ when its eigenvalue reaches one (\cref{eq:cascade}), so the thresholds are
+The matching rule enters only through the factor $(1-\rhopair)$, which multiplies every axis alike and vanishes at $\rhopair=1$. The symmetric fixed point thus loses stability along eigenvector $k$ of $\Lam$ when its eigenvalue reaches one (\cref{eq:cascade}), so the thresholds are
 \begin{equation}\label{SM-eq:sm-cascade}
 \Lambda_k=\Lambda_1\frac{\mu_k}{\mu_1}=1,\qquad \mu_1\ge\mu_2\ge\cdots\ge\mu_d,
 \end{equation}
@@ -553,7 +553,7 @@ The decision rule is a function of the observation $s$. The mean-field response 
 
 \paragraph{Context normalization.} One context is drawn per encounter, with frequencies normalized so that $\sum_m f_m=1$. The feedback term $\beta\sum_m f_m\langle a\rangle_m(\w_i)\g_m$ is then an expectation over which context is played rather than a sum that grows with $M$, and the gain operator $A=\sum_m f_m\,\g_m\g_m^{\!\top}$ has $\operatorname{tr}A=\sum_m f_m u_m$, which stays $O(1)$ as contexts are added provided the capacity grows with the repertoire ($U_{\mathrm{cap}}\propto M$, i.e.\ fixed $\Theta$ of \cref{sm:regimes}) rather than being held fixed: adding contexts at fixed budget divides the same write rate more finely rather than driving identity harder. This read budget $\sum_m f_m=1$ is the counterpart on the read side of the capacity budget $\sum_m u_m\le U_{\mathrm{cap}}$ on the write side (\cref{sm:closedpool}). The dependence on how many contexts probe a $d$-dimensional space enters through the aspect ratio $M/d$ (\cref{sm:cascade}), not through an overall scale.
 
-\paragraph{Pairing kernel and the well-mixed reduction.} Partners are drawn with probabilities $p_{ij}^{(m)}$ ($\sum_j p_{ij}^{(m)}=1$), collected in the pairing kernel $\bm{P}^{(m)}$. Linearizing the partner-averaged response near the symmetric state,
+\paragraph{Pairing kernel and the well-mixed reduction.} Partners are drawn with probabilities $p_{ij}^{(m)}$ ($\sum_j p_{ij}^{(m)}=1$), collected in the pairing kernel $\bm{P}^{(m)}$. Linearizing the partner-averaged response near the symmetric fixed point,
 \begin{equation}\label{SM-eq:sm-micro-lap}
 \sum_j p_{ij}^{(m)}\,\bar a\big((\w_i-\w_j)\cdot\g_m\big)\approx \gain\,\g_m^{\!\top}\big((\Id_{\Nag\times\Nag}-\bm{P}^{(m)})\bm{\Omega}\big)_i,
 \end{equation}
