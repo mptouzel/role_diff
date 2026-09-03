@@ -149,7 +149,7 @@ $\beta=\nu b_0$ & Feedback strength; the rate decisions are written into identit
 $c$ & Resource decay rate; $1/c$ the income horizon. \\
 $\alpha$, $\kappa$ & Schema reinforcement and decay rates. \\
 $\varphi(U)$ & Budget pressure of the shared channel, common to every schema. \\
-$\rcomp$, $\ract$ & Compounding and activation rates of the sort; $r=\ract/\rcomp$. \\
+$\rcomp$, $\ract$ & Compounding and activation rates of the $u$-transient; $r=\ract/\rcomp$. \\
 $\tau_k$ & Relaxation time of mode $k$, $1/\gamma|1-\Lambda_k|$. \\
 \bottomrule
 \end{tabular}
@@ -179,7 +179,7 @@ $U=\sum_m u_m$ & Total channel power, limited by the capacity $U_{\mathrm{cap}}$
 $M_{\mathrm{cap}}$ & $U_{\mathrm{cap}}/u_{\mathrm{cap}}$; axes drivable to full range at once. \\
 $\Theta$ & $M/M_{\mathrm{cap}}$; schemas competing per capacity slot. \\
 $M_{\mathrm{eff}}$ & Schemas viable at the fixed point, $\lambda_k(\Cr)\ge\kappa/\alpha$. \\
-$K$ & Realized survivor count at the end of the sort; need not saturate. \\
+$K$ & Realized survivor count at the end of the $u$-transient; need not saturate. \\
 $N(\beta)$ & Cultural thickness; active role axes at feedback strength $\beta$. \\
 \bottomrule
 \end{tabular}
@@ -435,7 +435,7 @@ The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sidn^2)
 \paragraph{Near-orthogonal repertoires.} The counting statements hold in that limit: orthogonal axes make $\mu_k=u_k$, so eigenvalues and strengths coincide and $M_{\mathrm{cap}}$ counts saturated schemas directly. Overlap breaks the identification. Schemas then couple through $\Cr$ as well as through the shared budget, which can be reached before the per-schema ceiling and leave survivors equalized below $u_{\mathrm{cap}}$, so the boundaries degrade into crossovers as the repertoire becomes coherent. The width of that window is not fixed here. For random directions the pairwise overlap is $O(d^{-1/2})$, and the identification survives while the accumulated shift stays below the strength gaps, $M/d\ll\Delta u/u$. Near-orthogonality is therefore the small-aspect-ratio corner of the group $q=M/d$ already held fixed in Sec.~IV\,B of the main text. At $q=O(1)$ random directions give the Marchenko--Pastur spectrum of class~(iv) instead, and at $q\gg1$ they give a degenerate one, which no longer depends on the strength distribution at all. 
 \paragraph{Two classes are not endogenous fixed points.} The Marchenko--Pastur bulk (iv) is the signature of a repertoire not yet organized by resource feedback (the natural initial condition for freshly seeded schemas, and transient under the loop), and its persistence in data would itself indicate the loop has not closed. The exact degeneracy of the saturated-cluster regime holds only within the Gaussian pinning argument. Generic cross-axis resource coupling and residual coherence broaden it into a narrow cluster.
 \paragraph{Parametrizing the map.} Since only the dimensionless ratio $\Theta=Mu_{\mathrm{cap}}/U_{\mathrm{cap}}$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in Fig.~4 of the main text as the capacity $M_{\mathrm{cap}}/M=1/\Theta$, and never fix an absolute $u_{\mathrm{cap}}$. The only absolute scale retained is the seed-to-budget ratio $u_0/U_{\mathrm{cap}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{cap}}/u_0)$ entering the saturated-cluster/geometric boundary. This is the seed \emph{scale}, independent of the seed \emph{dispersion} $\sigma_u$ that fixes the horizontal axis. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\Lambda_1$, aspect ratio $M/d$) set a fixed backdrop, as does the repertoire geometry $\{\hat\g_m\cdot\hat\g_n\}$, which the map takes near-orthogonal.
-\paragraph{Sustaining a hierarchy.} Holding one indefinitely requires continual injection of new schemas, an open-repertoire process outside the closed loop that we do not treat. Within the closed loop, the endogenous source of novelty during the sort is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
+\paragraph{Sustaining a hierarchy.} Holding one indefinitely requires continual injection of new schemas, an open-repertoire process outside the closed loop that we do not treat. Within the closed loop, the endogenous source of novelty during the $u$-transient is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
 
 \bigskip
 % ======================================================================
