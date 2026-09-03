@@ -6,7 +6,7 @@ parameter -- a stationary/adiabatic object, so the x-axis is unambiguously beta
 (Model 4), so the covariance eigenvalues lambda_k(beta) rise from the noise
 floor one at a time at the critical couplings beta_c^(k) = gamma/((1-rho_pair) mu_k),
 giving a clean three-step cascade over beta in [0, 21] with
-beta_c^(k) ~ [5.3, 8.0, 16.5]. The quartic restoring term saturates each mode
+beta_c^(k) ~ [2.6, 4.0, 8.2]. The quartic restoring term saturates each mode
 above threshold. Model 6 (dynamic schemas) selects this same ordering
 endogenously via resource feedback (main-text Fig. 3); here we fix the schemas
 to display the cascade cleanly.
