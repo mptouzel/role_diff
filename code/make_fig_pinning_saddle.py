@@ -69,7 +69,7 @@ def trajectory(S, u0=U0, dt=0.002, nmax=400000):
 
 panels = [
     dict(S=0.5, kind="condensate", title=r"(a) $\Theta=4$", sub="low saturation,\ncondensed state"),
-    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$", sub="moderate saturation,\nmixed state"),
+    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$", sub="moderate saturation,\ncapped state"),
     dict(S=2.0, kind="theta1",     title=r"(c) $\Theta=1$", sub="high saturation,\nnear pinned state"),
 ]
 

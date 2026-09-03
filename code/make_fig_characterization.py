@@ -71,7 +71,7 @@ def frame(ax):
     ax.axhline(b_hi, color="k", lw=1.1, ls="--")
     ax.axhline(b_lo, color="k", lw=1.1, ls="--")
     ax.plot([1, 1], [b_lo, b_hi], color="k", lw=1.0, ls=":")
-    ax.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$")
+    ax.set_xlabel("cascade speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$")
 
 # ---- panel (a): capacity bands + glyphs ----
 axA.axhspan(b_hi, ymax, color="#e7efe9", zorder=0)
@@ -150,7 +150,7 @@ axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
              arrowprops=dict(arrowstyle="-|>", color="0.25", lw=1.4,
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
-axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
+axA.set_ylabel("available capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
 axA.set_title("(a) phase diagram: cascade type over capacity and speed", loc="left", fontsize=13)
 
 # ---- panel (b): observed participation ratio field ----

@@ -84,7 +84,7 @@ axA.text(1.12, b_lo * 2.4, r"$a=1$", fontsize=10, ha="left",
          bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
 axA.set_xlim(rs[0], rs[-1]); axA.set_ylim(ymin, ymax)
-axA.set_xlabel("speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$"); axA.set_ylabel("capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
+axA.set_xlabel("cascade speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$"); axA.set_ylabel("available capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
 axA.set_title("(a) monitorability over the regime plane", loc="left")
 
 # ================= panel (b): the measurement term =================

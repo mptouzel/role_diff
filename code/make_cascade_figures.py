@@ -127,8 +127,8 @@ for name in ORDER:
 axA.set_xscale("log")
 axA.set_xlim(0.7, BMAX)
 axA.set_ylim(-0.02, 1.05)
-axA.set_xlabel(r"loop gain  $\Lambda$")
-axA.set_ylabel(r"activated fraction  $N(\beta)/R$")
+axA.set_xlabel(r"loop gain  $\Lambda(t)$")
+axA.set_ylabel(r"activated fraction  $N(t)/R$")
 axA.axvline(1.0, color="0.8", lw=0.8, zorder=0)
 axA.set_title(r"(a)  bifurcation count")
 
@@ -183,8 +183,8 @@ axB.set_xscale("log")
 axB.set_yscale("log")
 axB.set_xlim(0.75, BMAX)
 axB.set_ylim(3e-4, 3)
-axB.set_xlabel(r"loop gain  $\Lambda$")
-axB.set_ylabel(r"bifurcation rate  $R^{-1}\,dN/d\beta$")
+axB.set_xlabel(r"loop gain  $\Lambda(t)$")
+axB.set_ylabel(r"bifurcation rate  $R^{-1}\,dN/d\Lambda$")
 axB.set_title(r"(b)  bifurcation rate")
 
 for ax in (axA, axB, axS):
