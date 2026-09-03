@@ -10,6 +10,10 @@ def _out(name):
     return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
+_MPL_PINNED = "3.8.4"          # produced the committed figures (see requirements.txt)
+if mpl.__version__ != _MPL_PINNED:
+    print(f"warning: matplotlib {mpl.__version__} != {_MPL_PINNED}; text rendering will differ")
+
 import matplotlib.pyplot as plt
 
 mpl.rcParams.update({"font.family": "serif", "mathtext.fontset": "cm",
@@ -130,7 +134,7 @@ r_boundary = np.array([r_star(Th) for Th in Th_thick])
 axA.fill_betweenx(y_thick, rs[0], r_boundary, facecolor="none", edgecolor="0.45",
                    hatch="////", linewidth=0.0, alpha=0.55, zorder=1)
 axA.plot(r_boundary, y_thick, color="0.3", lw=1.3, ls="-", zorder=2)
-axA.text(0.30, 0.955, "mixed: avalanche + logarithmic tail",
+axA.text(0.4725, 0.955, "mixed: avalanche + logarithmic tail",   # centred on the mixed inset
          transform=axA.transAxes, fontsize=9.5, ha="center", va="top", style="italic",
          color="0.25", bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
 

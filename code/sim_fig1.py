@@ -22,7 +22,8 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PKG_ROOT = os.path.dirname(HERE)                  # .../culture_engine_PRX
-DATA_PATH = os.path.join(PKG_ROOT, "fig1_data.npz")
+DATA_PATH = os.path.join(PKG_ROOT, "data", "fig1_data.npz")
+os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
 
 rng = np.random.default_rng(5)
 

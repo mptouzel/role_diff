@@ -1,0 +1,7 @@
+# Pinned to the environment that produced the committed figures in figures/.
+# matplotlib governs text and glyph rendering, so an unpinned version silently
+# restyles every label: verified by the Creator metadata of figures/*.pdf,
+# all of which read "Matplotlib v3.8.4".
+matplotlib==3.8.4
+numpy>=1.24,<2
+scipy>=1.11

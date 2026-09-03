@@ -1,6 +1,10 @@
 import os
 import numpy as np
 import matplotlib
+_MPL_PINNED = "3.8.4"          # produced the committed figures (see requirements.txt)
+if matplotlib.__version__ != _MPL_PINNED:
+    print(f"warning: matplotlib {matplotlib.__version__} != {_MPL_PINNED}; text rendering will differ")
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, PathPatch
@@ -11,7 +15,7 @@ from scipy.stats import gaussian_kde
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PKG_ROOT = os.path.dirname(HERE)                  # .../culture_engine_PRX
-DATA_PATH = os.path.join(PKG_ROOT, "fig1_data.npz")
+DATA_PATH = os.path.join(PKG_ROOT, "data", "fig1_data.npz")
 FIG_DIR = os.path.join(PKG_ROOT, "figures")
 
 plt.rcParams.update({'font.size': 8.5, 'axes.linewidth': 0.8,

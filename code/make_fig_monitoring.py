@@ -9,6 +9,10 @@ def _out(name):
     return os.path.join(_FIG_DIR, name)
 import numpy as np
 import matplotlib as mpl
+_MPL_PINNED = "3.8.4"          # produced the committed figures (see requirements.txt)
+if mpl.__version__ != _MPL_PINNED:
+    print(f"warning: matplotlib {mpl.__version__} != {_MPL_PINNED}; text rendering will differ")
+
 import matplotlib.pyplot as plt
 
 mpl.rcParams.update({"font.family": "serif", "mathtext.fontset": "cm",

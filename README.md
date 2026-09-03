@@ -4,12 +4,18 @@ Manuscript package (REVTeX 4.2).
 
 ## Files
 
-- `main.tex`        — the article. Sections I–VII plus Appendices A–D.
-- `supplement.tex`  — Supplemental Material (Secs. S1–S4), deposited separately.
+- `main.tex`        — the article. Sections I–VI plus Appendices A–E.
+- `supplement.tex`  — Supplemental Material (Notation plus Secs. S1–S8),
+                      deposited separately.
 - `references.bib`  — shared bibliography. Contains the `SM` entry that the
                       article cites for the Supplemental Material.
 - `popular_summary.txt` — non-technical summary, 147 words.
 - `figures/`, `code/` — figures and the scripts that generate them.
+- `data/`           — `fig1_data.npz`, written by `code/sim_fig1.py` and read
+                      by `code/make_fig1.py`.
+- `code/scratch/`   — working notes and exploratory scripts. Not part of the
+                      submission and not used to build any figure.
+- `requirements.txt`, `Makefile` — pinned figure environment and build targets.
 
 ## Compiling
 
@@ -75,10 +81,42 @@ monotonicity of the pinning fixed point · S6 validity of the linearization.
 |---|---|
 | Fig. 1 (loop and ignition) | `code/sim_fig1.py`, `code/make_fig1.py` |
 | Fig. 2 (cascade classes)   | `code/make_cascade_figures.py` |
-| Fig. 3 (characterization)  | `code/make_fig_characterization.py` |
-| Fig. 4 (pinning saddle)    | `code/make_fig_pinning_saddle.py` |
+| Fig. 3 (pinning saddle)    | `code/make_fig_pinning_saddle.py` |
+| Fig. 4 (characterization)  | `code/make_fig_characterization.py` |
 | Fig. 5 (monitoring)        | `code/make_fig_monitoring.py` |
 | Pairing-steering numbers (Appendix C) | `code/pairing_steering.py` |
 
 Note: `figures/fig4_monitoring.pdf` is now Figure 5 (the saddle figure moved
 into the body ahead of it). The filename is unchanged.
+
+## Reproducing the figures
+
+The committed figures were produced with **matplotlib 3.8.4** (recorded in the
+`Creator` metadata of every file in `figures/`). matplotlib governs text and
+glyph rendering, so a different version reproduces the same data with every
+label subtly restyled. Each figure script prints a warning when the installed
+version differs.
+
+```bash
+# Use an interpreter that ships ensurepip. On Debian/Ubuntu the default
+# python3 may not: check with  python3 -c "import ensurepip"  and fall
+# back to a version that does, e.g. /usr/bin/python3.10.
+/usr/bin/python3 -m venv .venv
+.venv/bin/python -m pip install -U pip
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -c "import numpy, matplotlib; print(numpy.__version__, matplotlib.__version__)"
+make figures PY=.venv/bin/python     # make pdf builds both documents
+```
+
+Two failure modes are worth naming, both seen on WSL:
+
+- **No `pip` inside the venv.** If `.venv/bin/pip` is absent, the interpreter
+  lacked `ensurepip`. Delete `.venv` and rebuild with one that has it. Do not
+  fall back to a bare `pip`, which resolves elsewhere on `PATH` (a conda
+  install, say) and puts the packages outside the venv. Always use
+  `.venv/bin/python -m pip`.
+- **Rebuilding over an existing `.venv`.** Remove it first. Layering a second
+  interpreter on top leaves two `lib/pythonX.Y` trees, and NumPy's bundled
+  OpenBLAS can end up in the tree its package is not in, giving
+  `libopenblas...so: cannot open shared object file` on import.
+
