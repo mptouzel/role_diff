@@ -87,6 +87,27 @@ mpl.rcParams.update({"font.family": "serif", "mathtext.fontset": "cm", "font.siz
 DENS, _XE, _YE = density_stack(zlim, jit)
 # Contrast has to adapt: early on the whole population sits in a few bins, later
 # it spreads over many. A per-frame scale would flicker, so smooth it in time too.
+MX = DENS.sum(axis=2)          # marginal on axis 1, already smoothed in space and time
+MY = DENS.sum(axis=1)          # marginal on axis 2
+
+def _ema(v, a=0.06):
+    out = np.empty_like(v); e = v[0]
+    for i, x in enumerate(v):
+        e = (1 - a) * e + a * x; out[i] = e
+    return out
+
+MXMAX = _ema(MX.max(axis=1)) * 1.15
+MYMAX = _ema(MY.max(axis=1)) * 1.15
+
+# Has an axis actually split? Variance above the floor is not the same thing:
+# just past threshold the two lobes are closer than they are wide. Read the dip
+# at the centre of each marginal instead.
+def _dip(Marg):
+    mid = Marg.shape[1] // 2
+    centre = Marg[:, mid - 1:mid + 2].mean(axis=1)
+    return centre / np.maximum(Marg.max(axis=1), 1e-12)
+
+SPLIT = (_dip(MX) < 0.75).astype(int) + (_dip(MY) < 0.75).astype(int)
 _pk = np.array([np.percentile(D, 99.5) for D in DENS])
 VMAX = np.empty_like(_pk)
 _e = _pk[0]
@@ -96,8 +117,26 @@ for _i, _v in enumerate(_pk):
 
 
 def render(scale, outname):
-    fig, (axP, axS, axC) = plt.subplots(1, 3, figsize=(15.2, 4.3),
-                                        width_ratios=[1.05, 1, 1])
+    fig = plt.figure(figsize=(15.6, 4.6))
+    outer = fig.add_gridspec(1, 3, width_ratios=[1.15, 1, 1], wspace=0.30,
+                             left=0.045, right=0.99, bottom=0.13, top=0.90)
+    inner = outer[0].subgridspec(2, 2, width_ratios=[4, 1], height_ratios=[1, 3.4],
+                                 wspace=0.05, hspace=0.05)
+    axP = fig.add_subplot(inner[1, 0])
+    axT = fig.add_subplot(inner[0, 0], sharex=axP)   # marginal on axis 1
+    axR = fig.add_subplot(inner[1, 1], sharey=axP)   # marginal on axis 2
+    axS = fig.add_subplot(outer[1])
+    axC = fig.add_subplot(outer[2])
+    xc = 0.5 * (_XE[1:] + _XE[:-1])
+    yc = 0.5 * (_YE[1:] + _YE[:-1])
+    mtop, = axT.plot(xc, MX[0], color="tab:blue", lw=1.8)
+    mrig, = axR.plot(MY[0], yc, color="tab:blue", lw=1.8)
+    for ax_, lim in ((axT, MXMAX), (axR, MYMAX)):
+        for sp in ("top", "right", "left" if ax_ is axT else "bottom"):
+            ax_.spines[sp].set_visible(False)
+    axT.set_ylim(0, MXMAX[0]); axT.set_yticks([]); axT.tick_params(labelbottom=False)
+    axR.set_xlim(0, MYMAX[0]); axR.set_xticks([]); axR.tick_params(labelleft=False)
+    axT.set_title("(a)  who takes which role", loc="left", fontsize=12)
 
     # ---- (a) the population ----------------------------------------------
     im = axP.imshow(DENS[0].T, origin="lower", cmap="Blues", aspect="auto",
@@ -109,9 +148,8 @@ def render(scale, outname):
     axP.set_ylim(-zlim[1], zlim[1])
     axP.set_xlabel(r"status on axis 1   $\omega_i \cdot \hat{g}_1$")
     axP.set_ylabel(r"status on axis 2   $\omega_i \cdot \hat{g}_2$")
-    axP.set_title("(a)  who takes which role", loc="left", fontsize=12)
-    note = axP.text(0.03, 0.965, "", transform=axP.transAxes, fontsize=9.5,
-                    va="top", ha="left", color="0.3")
+    note = axP.text(0.03, 0.045, "", transform=axP.transAxes, fontsize=9.5,
+                    va="bottom", ha="left", color="0.3")
     for s in ("top", "right"):
         axP.spines[s].set_visible(False)
 
@@ -145,19 +183,17 @@ def render(scale, outname):
         axC.spines[s].set_visible(False)
     readout = axC.text(0.03, 0.94, "", transform=axC.transAxes, fontsize=10,
                        va="top", ha="left", color="0.25")
-    fig.tight_layout()
 
     def update(i):
         # (a) how far the second dimension has opened, and whether axis 3 colours
         w = np.clip((i - lift[1]) / OPEN, 0.0, 1.0) if n_show > 1 else 0.0
         im.set_data(DENS[i].T)
         im.set_clim(0, VMAX[i])
-        if i < lift[1]:
-            note.set_text("one role axis:  two roles")
-        elif n_show > 2 and i >= lift[2]:
-            note.set_text("three role axes split;  two of them shown")
-        else:
-            note.set_text("two role axes:  four role combinations")
+        mtop.set_ydata(MX[i]); axT.set_ylim(0, MXMAX[i])
+        mrig.set_xdata(MY[i]); axR.set_xlim(0, MYMAX[i])
+        note.set_text({0: "no roles yet:  one cloud",
+                       1: "axis 1 has split:  two roles",
+                       2: "both axes split:  four role combinations"}[SPLIT[i]])
         # (b), (c)
         pts.set_offsets(np.c_[k, eigs[i]])
         on = eigs[i] > ACTIVE
@@ -166,7 +202,7 @@ def render(scale, outname):
         trail.set_data(betas[: i + 1], N_of_t[: i + 1])
         dot.set_data([betas[i]], [N_of_t[i]])
         readout.set_text(rf"$\beta={betas[i]:.1f}$,   $N={N_of_t[i]}$ of {M}")
-        return im, pts, trail, dot, readout, note
+        return im, mtop, mrig, pts, trail, dot, readout, note
 
     ani = animation.FuncAnimation(fig, update, frames=len(betas), interval=33, blit=False)
     ani.save(os.path.join(HERE, outname), writer=animation.FFMpegWriter(fps=30, bitrate=3000))
