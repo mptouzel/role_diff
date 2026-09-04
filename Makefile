@@ -4,7 +4,7 @@
 
 PY ?= python3
 
-.PHONY: all figures pdf clean
+.PHONY: all figures pdf promo clean
 
 all: figures pdf
 
@@ -16,6 +16,11 @@ figures:
 	$(PY) code/make_fig_pinning_saddle.py
 	$(PY) code/make_fig_characterization.py
 	$(PY) code/make_fig_monitoring.py
+
+## promotional animation (not part of the submission)
+promo:
+	$(PY) promo/sim_ramp.py
+	$(PY) promo/make_ramp_animation.py
 
 ## build both documents
 pdf:

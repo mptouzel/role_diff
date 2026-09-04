@@ -15,6 +15,10 @@ Manuscript package (REVTeX 4.2).
                       by `code/make_fig1.py`.
 - `code/scratch/`   — working notes and exploratory scripts. Not part of the
                       submission and not used to build any figure.
+- `promo/`          — a two-panel animation of the cascade for talks and
+                      outreach. Not part of the submission. `make promo`
+                      regenerates it; the intermediate `ramp_data.npz` is
+                      git-ignored and rebuilt from a fixed seed in ~2 min.
 - `requirements.txt`, `Makefile` — pinned figure environment and build targets.
 
 ## Compiling
