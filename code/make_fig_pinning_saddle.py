@@ -1,6 +1,7 @@
 """Saddle phase portrait of the two-schema replicator, as three small multiples
 sharing one (u1,u2) frame in units of the per-schema ceiling u_sat=1: the
-budget U_cap grows left to right (condensate -> saturated cluster -> Theta=1),
+budget U_cap grows left to right (condensate -> saturated cluster -> Theta=1);
+Theta = M_cap/M = U_cap/(M*u_cap) is the capacity ratio, so it RISES to the right,
 so the pinned (saddle) point U_cap/2 climbs the u1=u2 diagonal panel to panel,
 reaching exactly the u_sat corner (1,1) when Theta=1 (U_cap=M*u_sat)."""
 import os
@@ -68,9 +69,9 @@ def trajectory(S, u0=U0, dt=0.002, nmax=400000):
     return np.array(pts)
 
 panels = [
-    dict(S=0.5, kind="condensate", title=r"(a) $\Theta=4$", sub="low saturation,\ncondensed state"),
-    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=4/3$", sub="moderate saturation,\ncapped state"),
-    dict(S=2.0, kind="theta1",     title=r"(c) $\Theta=1$", sub="high saturation,\nnear pinned state"),
+    dict(S=0.5, kind="condensate", title=r"(a) $\Theta=1/4$", sub="none at the ceiling,\ncondensed state"),
+    dict(S=1.5, kind="saturated",  title=r"(b) $\Theta=3/4$", sub="one at the ceiling,\ncapped state"),
+    dict(S=2.0, kind="theta1",     title=r"(c) $\Theta=1$", sub="both at the ceiling,\nnear pinned state"),
 ]
 
 g = np.linspace(0.02, XP, 80)
@@ -108,6 +109,13 @@ for ax, p in zip(axes, panels):
 
     sad = S/2
     ax.plot(sad, sad, "o", mfc="white", mec="k", mew=1.9*_SCALE, ms=10*_SCALE, zorder=6)
+
+    if p["kind"] == "theta1":
+        # name the rate of the growth phase along u1=u2: the common compounding rate.
+        # placed in (c), whose saddle sits at the corner, so the approach is longest.
+        ax.text(0.40, 0.64, r"$\dot{u}/u=r_{\mathrm{comp}}$", color="k", rotation=45,
+                rotation_mode="anchor", ha="center", va="center",
+                fontsize=7.0*_CORR, zorder=8, path_effects=HALO)
 
     if p["kind"] == "condensate":
         ax.plot([S, 0], [0, S], "o", color="tab:red", ms=8.5*_SCALE, zorder=6, clip_on=False)

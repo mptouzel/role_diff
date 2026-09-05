@@ -115,7 +115,7 @@ $\Lambda_k$ & Its $k$-th eigenvalue; axis $k$ ignites at $\Lambda_k=1$. \\
 \begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
 \toprule
 $\sread$ & Observation (read) noise; the finest status difference resolved. \\
-$\sidn$ & Identity noise; variation in $\w_i$ from outside the modeled encounters. \\
+$\sidn$ & $\omega$-identity noise; variation in $\w_i$ from outside the modeled encounters. \\
 $\xi$, $\bm\eta_i$ & Standard Gaussian sources for the two noises above. \\
 $v$ & Partner-projection variance $\C_{mm}$, of order $\sidn^2$ subcritically. \\
 $\beta b_0=\beta^2/\nu$ & Shot-noise intensity discarded by the dense-encounter limit. \\
@@ -125,8 +125,8 @@ $\beta b_0=\beta^2/\nu$ & Shot-noise intensity discarded by the dense-encounter 
 \smallskip\noindent\textbf{State and its spectra.}\\[3pt]
 \begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
 \toprule
-$\w_i$ & Identity of agent $i$, a vector in $\mathbb R^d$. \\
-$\bm\Omega$ & The $\Nag$ identities stacked. \\
+$\w_i$ & $\omega$-identity of agent $i$, a vector in $\mathbb R^d$. \\
+$\bm\Omega$ & The $\Nag$ $\omega$-identities stacked. \\
 $r_i$ & Accumulated coordination income (wealth) of agent $i$. \\
 $\g_m$, $\hat\g_m$ & Schema vector and its direction, $\g_m=\sqrt{u_m}\,\hat\g_m$. \\
 $u_m$ & Schema strength $|\g_m|^2$; the power axis $m$ puts on the channel. \\
@@ -134,6 +134,7 @@ $\bm H$ & The $M\times d$ matrix of stacked schema vectors. \\
 $\C$ & Population covariance $\Nag^{-1}\sum_i\w_i\w_i^{\!\top}$; the order parameter. \\
 $\Cr$ & Resource-weighted covariance, $\sum_i r_i\w_i\w_i^{\!\top}/\sum_i r_i$. \\
 $v_k$ & $k$-th eigenvalue of $\C$; leaves the floor $\sidn^2/2\gamma$ when $k$ ignites. \\
+$v_m$ & Variance of $\C$ along $\hat\g_m$, $\hat\g_m^{\!\top}\C\hat\g_m$; equals $v_k$ for orthogonal contexts. \\
 $\mu_k$ & $k$-th eigenvalue of $\bm H^{\!\top}\bm H$; equals $u_k$ for orthogonal contexts. \\
 $\lambda_m$ & Resource-weighted variance along $\hat\g_m$, $\hat\g_m^{\!\top}\Cr\,\hat\g_m$. \\
 \bottomrule
@@ -142,10 +143,10 @@ $\lambda_m$ & Resource-weighted variance along $\hat\g_m$, $\hat\g_m^{\!\top}\Cr
 \smallskip\noindent\textbf{Rates.}\\[3pt]
 \begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
 \toprule
-$\gamma$ & Identity decay rate; $1/\gamma$ is the write memory. \\
+$\gamma$ & $\omega$-identity decay rate; $1/\gamma$ is the write memory. \\
 $\nu$ & Encounter rate per agent, a fixed budget independent of $\Nag$. \\
-$b_0$ & Per-encounter kick to the identity. \\
-$\beta=\nu b_0$ & Feedback strength; the rate decisions are written into identity. \\
+$b_0$ & Per-encounter kick to the $\omega$-identity. \\
+$\beta=\nu b_0$ & Feedback strength; the rate decisions are written into $\omega$-identity. \\
 $c$ & Resource decay rate; $1/c$ the income horizon. \\
 $\alpha$, $\kappa$ & Schema reinforcement and decay rates. \\
 $\varphi(U)$ & Budget pressure of the shared channel, common to every schema. \\
@@ -177,8 +178,8 @@ $u_0$, $\sigma_u$ & Seed scale and log-dispersion, $u_m(0)=u_0e^{\sigma_u z_m}$.
 $u_{\mathrm{cap}}$ & Per-axis range ceiling of the channel. \\
 $U=\sum_m u_m$ & Total channel power, limited by the capacity $U_{\mathrm{cap}}$. \\
 $M_{\mathrm{cap}}$ & $U_{\mathrm{cap}}/u_{\mathrm{cap}}$; axes drivable to full range at once. \\
-$\Theta$ & $M/M_{\mathrm{cap}}$; schemas competing per capacity slot. \\
-$M_{\mathrm{eff}}$ & Schemas viable at the fixed point, $\lambda_k(\Cr)\ge\kappa/\alpha$. \\
+$\Theta$ & Capacity ratio $(U_{\mathrm{cap}}/M)/u_{\mathrm{cap}}=M_{\mathrm{cap}}/M$; share per schema in ceiling units. \\
+$M_{\mathrm{eff}}$ & Axes clearing the context decay rate at a self-consistent fixed point, $\lambda_k(\Cr)\ge\kappa/\alpha$. \\
 $K$ & Realized survivor count at the end of the $u$-transient; need not saturate. \\
 $N(\beta)$ & Cultural thickness; active role axes at feedback strength $\beta$. \\
 \bottomrule
@@ -234,7 +235,7 @@ $\rrf$ & Role-free resource mean, of order $\sidn^2$. \\
 \emph{$u$-transient} & Institutionalizes the repertoire: winnowing, then shaping. \\
 \emph{active set} & $\{m:u_m>u_0\}$, the schemas above the seed scale; its size is $K$. \\
 \emph{invasion threshold} & $\alpha\lambda_m=\kappa+\varphi$, above which a schema's strength grows. \\
-\emph{thick band} & $\Theta\le1$, where the per-schema ceiling binds first and all $M$ survive. \\
+\emph{thick band} & $\Theta\ge1$, where the per-schema ceiling binds first and all $M$ survive. \\
 \emph{saturated cluster} & Endpoint with the survivors together at the ceiling $u_{\mathrm{cap}}$. \\
 \emph{condensation} & Runaway of all strength onto one schema when the budget cannot hold it. \\
 \emph{pinning} & Arrest of that runaway at the ceiling, with a fringe at the threshold. \\
@@ -316,7 +317,7 @@ The symmetric mixed equilibrium has each player Go with probability $p^\ast$ fix
 \begin{equation}\label{SM-eq:sm-work}
 W = \bar U - U_{\mathrm{Nash}} = w_0\,(1-2P_e)^2, \qquad w_0 = \mathrm{CE}-\mathrm{Nash} = 1.5 .
 \end{equation}
-The quadratic form is specific to two-role anti-coordination: a double error swaps the roles and leaves the pair coordinated (the fourth outcome has the same payoff as the first), so the work depends only on $(1-2P_e)^2$. Because $W$ is quadratic in $P_e$, the resource income of Sec.~II\,B of the main text is quadratic in identity, which allows the Gaussian fixed-point calculation to close.
+The quadratic form is specific to two-role anti-coordination: a double error swaps the roles and leaves the pair coordinated (the fourth outcome has the same payoff as the first), so the work depends only on $(1-2P_e)^2$. Because $W$ is quadratic in $P_e$, the resource income of Sec.~II\,B of the main text is quadratic in $\omega$-identity, which allows the Gaussian fixed-point calculation to close.
 
 \subsection{Role-following as a self-enforcing correlated equilibrium}\label{sm:ce}
 
@@ -339,7 +340,7 @@ The calculation is carried out at the symmetric fixed point, where the asymmetry
 
 \subsection{Beyond mean field: pairwise error rates}
 
-\noindent The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sread)$ replaces the partner projection by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sread)$. This is exact at the bifurcation (all identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes bracket the behavior: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different cultures. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
+\noindent The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sread)$ replaces the partner projection by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sread)$. This is exact at the bifurcation (all $\omega$-identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes bracket the behavior: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different cultures. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
 
 \subsection{Pairing efficiency as a partner correlation}\label{sm:pairing-rho}
 
@@ -361,20 +362,20 @@ Because $\rho_{\mathrm{pair}}$ is a property of the matching rule applied to wha
 \begin{equation}\label{SM-eq:sm-gap2}
 \mathbb E\bigl[(x_i-x_j)^2\mid x_i\bigr]=(1-\rhopair)^2x_i^2+(1-\rhopair^2)\,u_mv_m .
 \end{equation}
-The agent-specific and population-baseline terms of the resource income, Eq.~(14) of the main text, therefore acquire \emph{different} factors. Writing $\bm A=\sum_m f_m\g_m\g_m^{\!\top}$ and evaluating the fourth moment for Gaussian $p^*$ by Wick's theorem,
+The agent-specific and population-baseline terms of the resource income, Eq.~(15) of the main text, therefore acquire \emph{different} factors. Writing $\bm A=\sum_m f_m\g_m\g_m^{\!\top}$ and evaluating the fourth moment for Gaussian $p^*$ by Wick's theorem,
 \begin{equation}\label{SM-eq:sm-Cr-rho}
 \begin{gathered}
 \mathbb E[r^*\w\w^{\!\top}]\propto(1-\rhopair)^2\bigl[\operatorname{tr}(\C\bm A)\,\C+2\,\C\bm A\C\bigr]+(1-\rhopair^2)\operatorname{tr}(\C\bm A)\,\C,\\[2pt]
 \mathbb E[r^*]\propto2(1-\rhopair)\operatorname{tr}(\C\bm A),
 \end{gathered}
 \end{equation}
-and the ratio of the two leaves the single factor $(1-\rhopair)$ of Eq.~(16) of the main text, since $(1-\rhopair)^2$ and $(1-\rhopair^2)$ sum to $2(1-\rhopair)$. Two limits follow. Assortative matching ($\rhopair\to1$) returns $\Cr=\C$: the resource weighting disappears along with the coordination it rewards, and $\lambda_m$ reduces to the unweighted variance $v_m$. The main text reaches the same collapse by setting $r_i\equiv1$. Rank-ordered matching ($\rhopair\to-1$) doubles the anisotropy. The matching rule therefore sets both the threshold and the strength of the selection that runs above it.
+and the ratio of the two leaves the single factor $(1-\rhopair)$ of Eq.~(17) of the main text, since $(1-\rhopair)^2$ and $(1-\rhopair^2)$ sum to $2(1-\rhopair)$. Two limits follow. Assortative matching ($\rhopair\to1$) returns $\Cr=\C$: the resource weighting disappears along with the coordination it rewards, and $\lambda_m$ reduces to the unweighted variance $v_m$. The main text reaches the same collapse by setting $r_i\equiv1$. Rank-ordered matching ($\rhopair\to-1$) doubles the anisotropy. The matching rule therefore sets both the threshold and the strength of the selection that runs above it.
 
 \paragraph{The role-free resource baseline.} Averaging $r^*$ over the population fixes the scale that the normalization of $\Cr$ divides out. For Gaussian $p^*$ the agent-specific term of \cref{SM-eq:sm-gap2} averages to $\mathbb E[(\w\cdot\g_m)^2]=\g_m^{\!\top}\C\g_m=u_mv_m$, so the two factors again sum to $2(1-\rhopair)$ and
 \begin{equation*}
 \rrf\equiv\mathbb E[r^*]=\frac{2w_0\gain^2(1-\rhopair)}{c}\sum_m f_m\,u_mv_m=\frac{2w_0\gain^2(1-\rhopair)}{c}\operatorname{tr}(\C\bm A).
 \end{equation*}
-$\rrf$ is $O(\sidn^2)$ through $\C$, so agents accumulate resources from fluctuation status differences alone, before any role structure exists. It also appears as the denominator of $\Cr$. Since $\Lam=\Lambda\bm A$, the $\operatorname{tr}(\C\Lam)$ of Eq.~(16) of the main text is $\Lambda\operatorname{tr}(\C\bm A)$, which is $\rrf$ up to the constants above, and with the play frequencies uniform and absorbed as in the main text the sum $\sum_nu_nv_n$ of Eq.~(17) is $\operatorname{tr}(\C\bm A)$ itself.
+$\rrf$ is $O(\sidn^2)$ through $\C$, so agents accumulate resources from fluctuation status differences alone, before any role structure exists. It also appears as the denominator of $\Cr$. Since $\Lam=\Lambda\bm A$, the $\operatorname{tr}(\C\Lam)$ of Eq.~(17) of the main text is $\Lambda\operatorname{tr}(\C\bm A)$, which is $\rrf$ up to the constants above, and with the play frequencies uniform and absorbed as in the main text the sum $\sum_nu_nv_n$ of Eq.~(18) is $\operatorname{tr}(\C\bm A)$ itself.
 
 \subsection{The three factors}
 
@@ -386,7 +387,7 @@ so that $\etaag=1/\sqrt{2\pi}$ (single sample) or $\sqrt{T/2\pi}$ (memory $T$), 
 \begin{equation}\label{SM-eq:sm-Lambda}
 \Lambda\equiv\frac{2\beta}{\gamma}\cdot\frac{\etaag\,(1-\rhopair)}{\sread}>1,
 \end{equation}
-separating identity persistence $\beta/\gamma$ (write/retention path), cognitive capacity $\etaag$ (read path), and channel fidelity $(1-\rhopair)/\sread$.
+separating $\omega$-identity persistence $\beta/\gamma$ (write/retention path), cognitive capacity $\etaag$ (read path), and channel fidelity $(1-\rhopair)/\sread$.
 
 \paragraph{On the two appearances of $\sread$.} The observation noise appears twice in \cref{SM-eq:sm-Lambda}---inside $\etaag=\sread\gain/2$ and in the denominator $(1-\rhopair)/\sread$---but this is not double-counting. The physical noise enters exactly once, through $\pibar'(0)\propto1/\sread$. Multiplying by $\sread$ in the definition of $\etaag$ \emph{removes} that dependence, which leaves a purely cognitive quantity ($1/\sqrt{2\pi}$ for the naive agent, independent of $\sread$). The compensating $1/\sread$ in the information-supply factor restores it. The two factors are inverse bookkeeping partners introduced by the same definition: they cancel, and $\Lambda\propto\beta\pibar'(0)/\gamma$ contains $\sread$ to the first power in the denominator, as it must. The grouping is chosen so that $\etaag$ is a property of the agent alone (measurable from agent evaluations) and $\sread$ sits with $(1-\rhopair)$ as a property of the channel, set by the communication layer.
 
@@ -419,7 +420,7 @@ The lever carries a cost in coordination efficiency. Take the schedule $\{\rho_m
 \section{Role capacity and associative-memory structure}\label{sm:capacity}
 % ======================================================================
 
-\noindent The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(12) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the context vectors $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pibar-1$). This is the structure of a dense associative memory \cite{krotov2016}. The feature/prototype duality is realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sread$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sread$, categorical identities at role-polytope vertices, deep in the thick phase).
+\noindent The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(12) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the context vectors $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pibar-1$). This is the structure of a dense associative memory \cite{krotov2016}. The feature/prototype duality is realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sread$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sread$, categorical $\omega$-identities at role-polytope vertices, deep in the thick phase).
 
 \paragraph{Where the mapping breaks.} A social role is not an individual's alignment but a \emph{bimodal split} of the population along $\g_m$, ordered by the variance $\g_m^{\!\top}\C\g_m$. Roles are relational. Three features absent from Hopfield retrieval follow: an anti-coordination constraint (the population must occupy complementary basins, not all retrieve one pattern); a self-generated signal (the ``input'' difference $(\w_i-\w_j)\cdot\g_m$ is produced by the population, so the landscape depth is state-dependent through the pairing distribution); and pairing dependence (basin depth that matters is the coordination payoff $W_{ijm}$, not the single-agent energy).
 
@@ -427,7 +428,7 @@ The lever carries a cost in coordination efficiency. Take the schedule $\{\rho_m
 \begin{equation}\label{SM-eq:sm-capacity}
 M_{\mathrm{eff}}=\#\Bigl\{k:\ \beta>\beta_c^{(k)},\ F_k>(\kappa/\alpha)|\g_k|^2\Bigr\}\ \le\ M^{\mathrm{Hopfield}}_{\max}\sim d^{\,n-1}.
 \end{equation}
-Both bounds tighten with cognition: sharper inference raises $n$ (deeper, more numerous basins) and $\pibar'(0)$ (lower $\beta_c^{(k)}$, more axes bifurcating). A society of crude agents sustains few role dimensions. The ceiling rises exponentially in $n$, so modest capability gains (memoryless $\to$ short-memory) support qualitatively more role structure. The derivative $\partial M_{\mathrm{eff}}/\partial n$ is the sensitivity of collective complexity to individual capability---a quantity safety evaluations could track.
+On the fixed orthogonal axes of the main text this count is the eigendirection count of Eq.~(20) of the main text, bounded by $d$. The Hopfield ceiling exceeds that bound because stored patterns need not be orthogonal, so it binds only where schemas may overlap. Both bounds tighten with cognition: sharper inference raises $n$ (deeper, more numerous basins) and $\pibar'(0)$ (lower $\beta_c^{(k)}$, more axes bifurcating). A society of crude agents sustains few role dimensions. The ceiling rises exponentially in $n$, so modest capability gains (memoryless $\to$ short-memory) support qualitatively more role structure. The derivative $\partial M_{\mathrm{eff}}/\partial n$ is the sensitivity of collective complexity to individual capability---a quantity safety evaluations could track.
 
 % ======================================================================
 
@@ -435,9 +436,9 @@ Both bounds tighten with cognition: sharper inference raises $n$ (deeper, more n
 \section{The status ledger as operator technology}\label{sm:ledger}
 % ======================================================================
 
-\noindent Under the self-storage microfoundation (Appendix~A of the main text) none of the engine's state need be held by the platform: statuses live in the agents, and an operator's native levers are only the channel factors $\rhopair$ and $\sread$. A status ledger, meaning a platform-maintained record of agent identities, is then not a primitive of the model but a designed intervention. It acts on several factors of $\Lambda$ at once. It lowers $\sread$, since clean reads replace noisy presentations. It enables high-quality (anti-correlated, low-$\rhopair$) matching, because rank-ordered pairing requires global status knowledge, so pairing quality and storage architecture are not independent. It enforces honest presentation institutionally. And it transfers the write and expiry parameters $\beta$ and $\gamma$ from the agents to the operator. A ledger therefore gives the operator access to the engine's parameters. This is both why platforms build such records and where the corresponding failure mode lies.
+\noindent Under the self-storage microfoundation (Appendix~A of the main text) none of the engine's state need be held by the platform: statuses live in the agents, and an operator's native levers are only the channel factors $\rhopair$ and $\sread$. A status ledger, meaning a platform-maintained record of agent $\omega$-identities, is then not a primitive of the model but a designed intervention. It acts on several factors of $\Lambda$ at once. It lowers $\sread$, since clean reads replace noisy presentations. It enables high-quality (anti-correlated, low-$\rhopair$) matching, because rank-ordered pairing requires global status knowledge, so pairing quality and storage architecture are not independent. It enforces honest presentation institutionally. And it transfers the write and expiry parameters $\beta$ and $\gamma$ from the agents to the operator. A ledger therefore gives the operator access to the engine's parameters. This is both why platforms build such records and where the corresponding failure mode lies.
 
-The controllable-coordination principle requires the operator retain the ability to modulate $\rhopair$ (including to the no-information value $\rhopair=1$). The same logic applies to memory. If identity migrates out of the ledger---into agent self-managed memory (an agent maintaining its own persona notes sets its own $\beta$) or distributed peer memory (statuses held only as other agents' beliefs)---the $\beta/\gamma$ lever passes from operator to collective, and role differentiation becomes correspondingly harder to reverse. The locus of identity storage is therefore itself a monitorable, safety-relevant variable, complementary to the covariance-spectrum diagnostics: an early sign that the operator's levers are eroding is not a change in any factor of $\Lambda$, but a change in who owns the knobs.
+The controllable-coordination principle requires the operator retain the ability to modulate $\rhopair$ (including to the no-information value $\rhopair=1$). The same logic applies to memory. If $\omega$-identity migrates out of the ledger---into agent self-managed memory (an agent maintaining its own persona notes sets its own $\beta$) or distributed peer memory (statuses held only as other agents' beliefs)---the $\beta/\gamma$ lever passes from operator to collective, and role differentiation becomes correspondingly harder to reverse. The locus of $\omega$-identity storage is therefore itself a monitorable, safety-relevant variable, complementary to the covariance-spectrum diagnostics: an early sign that the operator's levers are eroding is not a change in any factor of $\Lambda$, but a change in who owns the knobs.
 
 \subsection{Repertoire seeding and the ledger's memory}\label{sm:inertia}
 
@@ -495,6 +496,14 @@ Because $v=O(\sidn^2)$ while $\beta_c$ is independent of $\sidn$, the cloud shri
 \end{equation}
 The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sidn^2)$ and negligible except in a critical window where $v$ grows to $O(\sread^2)$, i.e.\ $|\gamma-\beta(1-\rho_{\mathrm{pair}})\mu|\lesssim\sidn^2/\sread^2$, whose width vanishes as $\sidn\to0$. Within that window the divergence of the bare theory is rounded by the self-consistent feedback of \cref{SM-eq:sm-vselfcon}. The main text reports the $\sidn\to0$ value, and the finite-noise shift and rounding are among the quantities a full-loop simulation could measure.
 
+\paragraph{The invasion threshold and its fluctuation shift.} A schema becomes active where its replicator rate, Eq.~(4) of the main text, turns positive, $\alpha\lambda_m>\kappa+\varphi$. The correction term of Eq.~(18) of the main text is nonnegative for $\rhopair\le1$, so $\lambda_m\ge v_m$, and both grow with $u_m$. The invasion strength $u_m^\dagger$ therefore satisfies
+\begin{equation*}
+\Lambda u_m^\dagger\;\le\;1-\frac{\alpha\sidn^2}{2\gamma(\kappa+\varphi)}\;<\;1 ,
+\end{equation*}
+with equality as the invading schema's share of $\sum_nu_nv_n$ vanishes. Since $\lambda_m$ increases with $u_m$, $u_m^\dagger$ is unstable. Budget pressure raises it, so schemas already drawing on the channel lift the threshold a later entrant must clear. The two thresholds coincide only as $\sidn\to0$. Below every bifurcation the covariance sits at the noise floor of Eq.~(13) of the main text rather than at zero, so $\lambda_m>0$ and the strengths grow before any role structure exists. A positive $u_m^\dagger$ requires $\alpha\sidn^2/2\gamma<\kappa+\varphi$, and where that fails every seeded schema invades, so the sub-threshold state in which every schema decays holds only while the decay rate exceeds the fluctuation reinforcement.
+
+\paragraph{No intrinsic ceiling.} The bare reinforcement supplies no turnover of its own. Along a single active axis the thick-phase strength is $\lambda(u)=\Lambda u-1+\sidn^2/4\gamma(\Lambda u-1)$, the condensate amplitude plus its fluctuation correction, which grows without turning over: $d^2\lambda/du^2=\Lambda^2\sidn^2/2\gamma(\Lambda u-1)^3>0$ throughout the supercritical range, so no \emph{intrinsic} strength exists at which reinforcement saturates. The quartic confinement of Eq.~(2) of the main text caps the differentiation \emph{amplitude} ($m^2=\beta\mu/\gamma-1$) but not the schema \emph{strength}, which keeps rising as the two role modes separate. Both ceilings of the regime map are therefore imposed rather than emergent.
+
 \bigskip
 % ======================================================================
 \section{Scope of the regime map}\label{sm:mapscope}
@@ -503,7 +512,7 @@ The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sidn^2)
 
 \paragraph{Near-orthogonal repertoires.} The counting statements hold in that limit: orthogonal axes make $\mu_k=u_k$, so eigenvalues and strengths coincide and $M_{\mathrm{cap}}$ counts saturated schemas directly. Overlap breaks the identification. Schemas then couple through $\Cr$ as well as through the shared budget, which can be reached before the per-schema ceiling and leave survivors equalized below $u_{\mathrm{cap}}$, so the boundaries degrade into crossovers as the repertoire becomes coherent. The width of that window is not fixed here. For random directions the pairwise overlap is $O(d^{-1/2})$, and the identification survives while the accumulated shift stays below the strength gaps, $M/d\ll\Delta u/u$. Near-orthogonality is therefore the small-aspect-ratio corner of the group $q=M/d$ already held fixed in Sec.~IV\,B of the main text. At $q=O(1)$ random directions give the Marchenko--Pastur spectrum of class~(iv) instead, and at $q\gg1$ they give a degenerate one, which no longer depends on the strength distribution at all. 
 \paragraph{Two classes are not endogenous fixed points.} The Marchenko--Pastur bulk (iv) is the signature of a repertoire not yet organized by resource feedback (the natural initial condition for freshly seeded schemas, and transient under the loop), and its persistence in data would itself indicate the loop has not closed. The exact degeneracy of the saturated-cluster regime holds only within the Gaussian pinning argument. Generic cross-axis resource coupling and residual coherence broaden it into a narrow cluster.
-\paragraph{Parametrizing the map.} Since only the dimensionless ratio $\Theta=Mu_{\mathrm{cap}}/U_{\mathrm{cap}}$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in Fig.~4 of the main text as the capacity $M_{\mathrm{cap}}/M=1/\Theta$, and never fix an absolute $u_{\mathrm{cap}}$. The only absolute scale retained is the seed-to-budget ratio $u_0/U_{\mathrm{cap}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{cap}}/u_0)$ entering the saturated-cluster/geometric boundary. This is the seed \emph{scale}, independent of the seed \emph{dispersion} $\sigma_u$ that fixes the horizontal axis. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\Lambda_1$, aspect ratio $M/d$) set a fixed backdrop, as does the repertoire geometry $\{\hat\g_m\cdot\hat\g_n\}$, which the map takes near-orthogonal.
+\paragraph{Parametrizing the map.} Since only the dimensionless ratio $\Theta=U_{\mathrm{cap}}/(Mu_{\mathrm{cap}})$ enters the morphology, we parametrize the regime map by this ratio alone, rendered in Fig.~4 of the main text as the capacity $M_{\mathrm{cap}}/M=\Theta$, and never fix an absolute $u_{\mathrm{cap}}$. The only absolute scale retained is the seed-to-budget ratio $u_0/U_{\mathrm{cap}}$, which sets the log dynamic range $L=\ln(u_{\mathrm{cap}}/u_0)$ entering the saturated-cluster/geometric boundary. This is the seed \emph{scale}, independent of the seed \emph{dispersion} $\sigma_u$ that fixes the horizontal axis. The remaining groups ($\alpha\langle\lambda\rangle/\kappa$, supercriticality $\Lambda_1$, aspect ratio $M/d$) set a fixed backdrop, as does the repertoire geometry $\{\hat\g_m\cdot\hat\g_n\}$, which the map takes near-orthogonal.
 \paragraph{Sustaining a hierarchy.} Holding one indefinitely requires continual injection of new schemas, an open-repertoire process outside the closed loop that we do not treat. Within the closed loop, the endogenous source of novelty during the $u$-transient is transposability, the context overlap $\g_m\cdot\g_n$ through which the developing $\Cr$ raises successive axes to threshold.
 
 \bigskip
@@ -512,7 +521,7 @@ The correction is the mean-field analogue of a Ginzburg shift. It is $O(\sidn^2)
 
 \noindent Eqs.~(1) and (2) of the main text are separated by two limits, $\nu\to\infty$ and $\Nag\to\infty$, which do different work. The average over the pairing probabilities belongs entirely to the first. The second is needed only to close the resulting equation.
 
-\paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N_{\mathrm{enc}}=\nu\,\Delta t\gg1$ encounters, over which the identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N_{\mathrm{enc}}$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
+\paragraph{The window average.} Fix a window $\Delta t$ with $1/\nu\ll\Delta t\ll1/\gamma$. It holds $N_{\mathrm{enc}}=\nu\,\Delta t\gg1$ encounters, over which the $\omega$-identity moves by a fraction $O(\gamma\,\Delta t)\ll1$ of its own scale, so the encounters are draws from a fixed distribution. Each draws a context $m$ with probability $f_m$, a partner $j$ with probability $p^{(m)}_{ij}$, and $T$ observation noises, independently of the others. The kick term of Eq.~(1) of the main text is then $N_{\mathrm{enc}}$ times an empirical mean of the i.i.d.\ vectors $X_e=a_e\,\g_{m_e}$,
 \begin{equation}\label{SM-eq:sm-window}
 b_0\sum_{e}a_e\,\g_{m_e}=b_0N_{\mathrm{enc}}\Bigl(\frac1{N_{\mathrm{enc}}}\sum_e X_e\Bigr)=\beta\,\Delta t\,\bigl(\mathbb E[X]+O(N_{\mathrm{enc}}^{-1/2})\bigr),
 \end{equation}
@@ -540,23 +549,23 @@ The innermost average is \cref{SM-eq:sm-twopoint}, taken at fixed context and pa
 \end{equation}
 No randomness remains over which partners were drawn. The pairing probabilities already enter as weights, exactly as they do in Eq.~(2) of the main text.
 
-\paragraph{What remains at finite $\Nag$.} \Cref{SM-eq:sm-drift-finiteN} is not a closed equation for $\w_i$. Its right-hand side carries the other $\Nag-1$ identities, each solving the same equation, and two obstructions survive.
+\paragraph{What remains at finite $\Nag$.} \Cref{SM-eq:sm-drift-finiteN} is not a closed equation for $\w_i$. Its right-hand side carries the other $\Nag-1$ $\omega$-identities, each solving the same equation, and two obstructions survive.
 
 First, $\w_j$ is not independent of $\w_i$. The two have met, and in an anti-coordination game their kicks are anti-correlated---when $i$ goes, $j$ defers---so $\w_j$ retains an imprint of the focal agent's own history. Encounters between the pair occur at rate $\nu p^{(m)}_{ij}$, and since $\nu$ is a fixed per-agent budget with $\sum_j p^{(m)}_{ij}=1$, that rate is $O(\nu/\Nag)$. The imprint is therefore $O(1/\Nag)$ relative to $\w_j$'s own drive. An interaction budget growing with $\Nag$ would not have this property.
 
-Second, the sum runs over the realized identities, each a solution of a noisy equation. Since $|\bar a|\le1$, the sum has standard deviation $O(N_{\mathrm{eff}}^{-1/2})$ about its population value, where
+Second, the sum runs over the realized $\omega$-identities, each a solution of a noisy equation. Since $|\bar a|\le1$, the sum has standard deviation $O(N_{\mathrm{eff}}^{-1/2})$ about its population value, where
 \begin{equation}\label{SM-eq:sm-neff}
 N_{\mathrm{eff}}=\Bigl(\sum_j \bigl(p^{(m)}_{ij}\bigr)^2\Bigr)^{-1}
 \end{equation}
 is the participation ratio of the pairing kernel, equal to $\Nag-1$ under uniform matching. The drift therefore fluctuates between agents and between runs.
 
-\paragraph{The limit.} The mean-field limit supplies $N_{\mathrm{eff}}\to\infty$, where both obstructions vanish: the empirical distribution of the other identities converges to a fixed law, the partner decouples from the focal agent's history, and the sum over $j$ becomes an expectation against that law. Where the matching rule correlates the partner's status with the focal agent's, the relevant law is the conditional one, and near the symmetric fixed point it contributes the factor $(1-\rhopair)$ of \cref{sm:pairing-rho}. Writing that expectation as $\langle a\rangle_m(\w_i)$ gives Eq.~(2) of the main text.
+\paragraph{The limit.} The mean-field limit supplies $N_{\mathrm{eff}}\to\infty$, where both obstructions vanish: the empirical distribution of the other $\omega$-identities converges to a fixed law, the partner decouples from the focal agent's history, and the sum over $j$ becomes an expectation against that law. Where the matching rule correlates the partner's status with the focal agent's, the relevant law is the conditional one, and near the symmetric fixed point it contributes the factor $(1-\rhopair)$ of \cref{sm:pairing-rho}. Writing that expectation as $\langle a\rangle_m(\w_i)$ gives Eq.~(2) of the main text.
 
 \paragraph{Averaging the difference and averaging the action.} What the limit delivers is $\mathbb E_j[\bar a(\Delta_{im}(j))]$, an average of the \emph{action} over the partner. Eq.~(2) of the main text instead evaluates $\bar a$ at the averaged \emph{status difference}. The two operations are not the same, and only the second carries an error.
 
 Averaging the status difference is exact. $\Delta_{im}(j)=(\w_i-\w_j)\cdot\g_m$ is linear in $\w_j$, so the average is $(\w_i-\mathbb E[\w_j\mid\w_i])\cdot\g_m$ with no approximation. What it needs is that the conditional mean be linear, and near the symmetric fixed point the joint Gaussianity of $(x_i,x_j)$ supplies $\mathbb E[x_j\mid x_i]=\rhopair x_i$, hence the expected difference $(1-\rhopair)x_i$ of \cref{sm:pairing-rho}.
 
-Averaging the action is not the same, because $\bar a$ is nonlinear. For this policy the exact partner average is available in closed form, through the same identity that produced the erf in the first place: for $z$ Gaussian with variance $s^2$,
+Averaging the action is not the same, because $\bar a$ is nonlinear. For this policy the exact partner average is available in closed form, through the same $\omega$-identity that produced the erf in the first place: for $z$ Gaussian with variance $s^2$,
 \begin{equation}\label{SM-eq:sm-erfconv}
 \mathbb E_z\bigl[\operatorname{erf}(\kappa(u+z))\bigr]=\operatorname{erf}\!\Bigl(\frac{\kappa\,u}{\sqrt{1+2\kappa^2s^2}}\Bigr).
 \end{equation}
@@ -564,9 +573,9 @@ Smoothing an erf by a Gaussian returns an erf, with the two variances added in q
 
 The substitution made in Eq.~(2) of the main text is the $s\to0$ case of \cref{SM-eq:sm-erfconv}. It is controlled where the partner variance is small against $\sread^2$, and $v=O(\sidn^2)$ subcritically by \cref{SM-eq:sm-vselfcon}, so the substitution is exact as $\sidn\to0$ and costs an $O(\sidn^2)$ shift of onset at finite noise (\cref{SM-eq:sm-shift}). Above threshold the partner distribution on that axis is bimodal, and neither the Gaussian conditional mean nor the small-$v$ expansion is controlled there.
 
-\paragraph{Why only one average is exchanged.} The same $s\to0$ limit taken on the observation noise would send $\sread\to0$, returning the hard sign with a delta-function slope and no finite gain to set a threshold. The two averages are therefore not on the same footing. The observation noise is smoothed and kept, and that smoothing is the model's read stage rather than an approximation. The partner spread is smoothed and then discarded. What separates them is scale: $\sread$ is a parameter of the model, while $v=O(\sidn^2)$ follows from weak identity noise. A second asymmetry is that $\xi$ has a fixed distribution, known before the population is solved for, whereas the partner distribution is the unknown. Averaging over the latter exactly would leave the drift a functional of the population distribution rather than a closed equation in $\w_i$.
+\paragraph{Why only one average is exchanged.} The same $s\to0$ limit taken on the observation noise would send $\sread\to0$, returning the hard sign with a delta-function slope and no finite gain to set a threshold. The two averages are therefore not on the same footing. The observation noise is smoothed and kept, and that smoothing is the model's read stage rather than an approximation. The partner spread is smoothed and then discarded. What separates them is scale: $\sread$ is a parameter of the model, while $v=O(\sidn^2)$ follows from weak $\omega$-identity noise. A second asymmetry is that $\xi$ has a fixed distribution, known before the population is solved for, whereas the partner distribution is the unknown. Averaging over the latter exactly would leave the drift a functional of the population distribution rather than a closed equation in $\w_i$.
 
-\noindent\textbf{Note on scope.} The derivations of Secs.~II\,B and IV\,A of the main text are carried out in the Gaussian, near-threshold, mean-field regime, where the Wick reduction closes. That regime is the noise-dominated one: the identity noise, not the drift, sets the dispersion along an axis below its threshold, and the population stays unimodal there. An axis above threshold is instead held at $\pm m$ by the drift and splits, so the closure fails axis by axis as the cascade proceeds. Their extension into the thick phase (bimodal partner distributions, saturated policies, quartic-capped amplitudes), the verification of the regime crossovers of Sec.~IV\,B of the main text in the microscopic parameters, and the conjecture that resource weighting widens spectral gaps are targets for the simulation program accompanying this work.
+\noindent\textbf{Note on scope.} The derivations of Secs.~II\,B and IV\,A of the main text are carried out in the Gaussian, near-threshold, mean-field regime, where the Wick reduction closes. That regime is the noise-dominated one: the $\omega$-identity noise, not the drift, sets the dispersion along an axis below its threshold, and the population stays unimodal there. An axis above threshold is instead held at $\pm m$ by the drift and splits, so the closure fails axis by axis as the cascade proceeds. Their extension into the thick phase (bimodal partner distributions, saturated policies, quartic-capped amplitudes), the verification of the regime crossovers of Sec.~IV\,B of the main text in the microscopic parameters, and the conjecture that resource weighting widens spectral gaps are targets for the simulation program accompanying this work.
 
 \ifdefined\CEcombined\else\bibliography{references}\fi
 

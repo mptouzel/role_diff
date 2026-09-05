@@ -1,6 +1,6 @@
 """Characterization figure (2 panels), shared axes (c/gamma, M_cap/M):
    (a) normalized role capacity + cascade-morphology glyphs  -- what the endpoint
-       CAN sustain (Theta-only, three equal bands);
+       CAN sustain (load-only, three equal bands);
    (b) observed participation ratio D_obs/M -- what the spectrum REALIZES.
 The gap between (a)'s band and (b)'s field is the distance from stationarity."""
 import os
@@ -26,15 +26,16 @@ u0 = 1e-4 * S / M
 jit_sat = 1 + 0.01 * rng.normal(size=M)
 jit_fr = 1 + 0.02 * rng.normal(size=M)
 
-def spectrum(r, Theta):
-    u_sat = Theta * S / M
-    if Theta <= 1.0:
+def spectrum(r, load):
+    # load = M/M_cap = 1/Theta, the demand-per-slot ratio (Theta is its reciprocal)
+    u_sat = load * S / M
+    if load <= 1.0:
         L = max(np.log(u_sat / u0), 1e-6)
         n_sat = max(0.0, M - r * L)
         k = np.arange(1, M + 1, dtype=float)
         u = np.where(k <= n_sat, u_sat * jit_sat[:M], u_sat * np.exp(-(k - n_sat) / r))
         return np.maximum(u, u0)
-    elif Theta <= M:
+    elif load <= M:
         a = 1.0 / r
         k = np.arange(1, M + 1, dtype=float)
         lo, hi = 1e-12 * S, 1e4 * S
@@ -56,7 +57,7 @@ ymin, ymax = 10 ** (lo - gap), 10 ** (hi + gap)
 rs = np.logspace(np.log10(0.1), np.log10(10), 240)
 ys = np.logspace(np.log10(ymin), np.log10(ymax), 240)   # y = M_cap/M
 
-# panel (b) field: D_obs/M at each (c/gamma, M_cap/M);  Theta = 1/y
+# panel (b) field: D_obs/M at each (c/gamma, M_cap/M);  load = 1/y
 PRn = np.empty((len(ys), len(rs)))
 for iy, y in enumerate(ys):
     Th = 1.0 / y
@@ -104,9 +105,9 @@ glyph(axA, 0.09, 0.46, "concave", "tab:green", "decelerating")
 glyph(axA, 0.70, 0.46, "convex", "tab:red", "accelerating")
 glyph(axA, 0.38, 0.135, "spike", "tab:purple", "one, gap, then all")
 
-def mixed_glyph(ax, cx, cy, r_ex, Theta_ex, label):
+def mixed_glyph(ax, cx, cy, r_ex, load_ex, label):
     ia = ax.inset_axes([cx, cy, 0.145, 0.095], transform=ax.transAxes)
-    u = spectrum(r_ex, Theta_ex)          # already sorted descending by rank
+    u = spectrum(r_ex, load_ex)          # already sorted descending by rank
     beta_proxy = 1.0 / u                  # ascending: activation order matches rank order
     beta_proxy.sort()
     N = np.arange(1, M + 1)
@@ -118,19 +119,19 @@ def mixed_glyph(ax, cx, cy, r_ex, Theta_ex, label):
     ax.text(cx + 0.0725, cy - 0.028, label, transform=ax.transAxes, ha="center",
             va="top", fontsize=12, fontweight="bold", color="black")
 
-mixed_glyph(axA, 0.40, 0.80, r_ex=3.0, Theta_ex=0.5, label="mixed")
+mixed_glyph(axA, 0.40, 0.80, r_ex=3.0, load_ex=0.5, label="mixed")
 
-# ---- E1|E2 mixed region: saturated cluster + geometric tail coexist for r < r*(Theta) ----
-def r_star(Theta):
-    u_sat = Theta * S / M
+# ---- E1|E2 mixed region: saturated cluster + geometric tail coexist for r < r*(load) ----
+def r_star(load):
+    u_sat = load * S / M
     L = max(np.log(u_sat / u0), 1e-6)
     return M / L
 
-y_thick = np.logspace(np.log10(b_hi), np.log10(ymax), 200)   # thick band only: Theta<=1
-Th_thick = 1.0 / y_thick
-r_boundary = np.array([r_star(Th) for Th in Th_thick])
+y_thick = np.logspace(np.log10(b_hi), np.log10(ymax), 200)   # thick band only: load<=1
+load_thick = 1.0 / y_thick
+r_boundary = np.array([r_star(Th) for Th in load_thick])
 
-# shade the coexistence region (r < r*(Theta)) with a light hatch, left of the boundary curve
+# shade the coexistence region (r < r*(load)) with a light hatch, left of the boundary curve
 axA.fill_betweenx(y_thick, rs[0], r_boundary, facecolor="none", edgecolor="0.45",
                    hatch="////", linewidth=0.0, alpha=0.55, zorder=1)
 axA.plot(r_boundary, y_thick, color="0.3", lw=1.3, ls="-", zorder=2)
@@ -150,7 +151,7 @@ axA.annotate("", xy=(0.018, 0.8475), xycoords="axes fraction",
              arrowprops=dict(arrowstyle="-|>", color="0.25", lw=1.4,
                               shrinkA=2, shrinkB=2, mutation_scale=14), zorder=6)
 
-axA.set_ylabel("available capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
+axA.set_ylabel("capacity ratio\n" r"saturated slots per context  $\Theta=M_{\mathrm{cap}}/M$")
 axA.set_title("(a) phase diagram: cascade type over capacity and speed", loc="left", fontsize=13)
 
 # ---- panel (b): observed participation ratio field ----

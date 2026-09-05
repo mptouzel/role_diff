@@ -27,14 +27,15 @@ WIN = 0.15
 jit_sat = 1 + 0.01 * rng.normal(size=M)
 jit_fr = 1 + 0.02 * rng.normal(size=M)
 
-def spectrum(r, Theta):
-    u_sat = Theta * S / M
-    if Theta <= 1.0:
+def spectrum(r, load):
+    # load = M/M_cap = 1/Theta, the demand-per-slot ratio (Theta is its reciprocal)
+    u_sat = load * S / M
+    if load <= 1.0:
         L = max(np.log(u_sat / u0), 1e-6); n_sat = max(0.0, M - r * L)
         k = np.arange(1, M + 1, dtype=float)
         u = np.where(k <= n_sat, u_sat * jit_sat[:M], u_sat * np.exp(-(k - n_sat) / r))
         return np.maximum(u, u0)
-    elif Theta <= M:
+    elif load <= M:
         a = 1.0 / r; k = np.arange(1, M + 1, dtype=float); lo, hi = 1e-12 * S, 1e4 * S
         def total(C): return np.sum(np.minimum(u_sat, C * k ** (-a)))
         for _ in range(80):
@@ -84,7 +85,7 @@ axA.text(1.12, b_lo * 2.4, r"$a=1$", fontsize=10, ha="left",
          bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
 axA.set_xlim(rs[0], rs[-1]); axA.set_ylim(ymin, ymax)
-axA.set_xlabel("cascade speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$"); axA.set_ylabel("available capacity\n" r"saturated slots per context  $M_{\mathrm{cap}}/M=1/\Theta$")
+axA.set_xlabel("cascade speed\n" r"activations per compounding time  $r=r_{\mathrm{act}}/r_{\mathrm{comp}}$"); axA.set_ylabel("capacity ratio\n" r"saturated slots per context  $\Theta=M_{\mathrm{cap}}/M$")
 axA.set_title("(a) monitorability over the regime plane", loc="left")
 
 # ================= panel (b): the measurement term =================
