@@ -15,10 +15,11 @@ Manuscript package (REVTeX 4.2).
                       by `code/make_fig1.py`.
 - `code/scratch/`   — working notes and exploratory scripts. Not part of the
                       submission and not used to build any figure.
-- `promo/`          — a two-panel animation of the cascade for talks and
-                      outreach. Not part of the submission. `make promo`
-                      regenerates it; the intermediate `ramp_data.npz` is
-                      git-ignored and rebuilt from a fixed seed in ~2 min.
+- `promo/`          — two-panel animations of the cascade for talks and
+                      outreach, log and linear in $v_k$. Not part of the
+                      submission. `make promo` regenerates them; the
+                      intermediate `ramp_data.npz` is git-ignored and
+                      rebuilt from a fixed seed in ~2 min.
 - `requirements.txt`, `Makefile` — pinned figure environment and build targets.
 
 ## Compiling
@@ -63,6 +64,11 @@ The article refers to the Supplemental Material by citation, e.g.
 The Supplemental Material refers back by explicit section number ("Sec. V A of
 the main text"); if the article's section numbering changes, update those by
 hand — they are plain text, not references.
+
+The two files keep separate label namespaces, so a label never means one thing
+in one file and another in the other. `main.tex` uses `sec:`, `app:`, `eq:`,
+`fig:`; `supplement.tex` uses `sm:`, `SM-eq:`, `tab:`. Keep it that way when
+adding labels.
 
 ## Structure
 
