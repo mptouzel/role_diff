@@ -17,10 +17,17 @@ figures:
 	$(PY) code/make_fig_characterization.py
 	$(PY) code/make_fig_monitoring.py
 
-## promotional animation (not part of the submission)
+## promotional animations (not part of the submission)
+## cascade: the spectrum lifting off one mode at a time
+## ring:    the degenerate pair, which does not give two role axes
+## geometry: the 3D objects -- identity cloud, schema, the split into lobes
 promo:
 	$(PY) promo/sim_ramp.py
 	$(PY) promo/make_ramp_animation.py
+	$(PY) promo/sim_ring.py
+	$(PY) promo/make_ring_animation.py
+	$(PY) promo/sim_geometry.py
+	$(PY) promo/make_geometry_animation.py
 
 ## build both documents
 pdf:

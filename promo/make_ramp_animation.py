@@ -18,6 +18,9 @@ Rendered twice, since the two vertical scales in (b) say different things:
   cascade_linear.mp4  linear v_k -- the leading axes dominate; the tail is flat
 """
 import os
+import shutil
+import subprocess
+import tempfile
 import numpy as np
 import matplotlib as mpl
 mpl.use("Agg")
@@ -28,6 +31,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 d = np.load(os.path.join(HERE, "ramp_data.npz"))
 betas, eigs, z = d["betas"], d["eigs"], d["z_cloud"]
 floor, M, n_show = float(d["floor"]), eigs.shape[1], d["z_cloud"].shape[2]
+# M counts identity dimensions, so panel (b) shows every mode including the
+# ones pinned at the floor. The cascade can only ever reach the number of
+# schemas, which is what panel (c) and the readout are scaled to.
+n_sch = int(np.asarray(d["u"]).size)
+# Bits of role information and coordination payoff actually extracted per
+# encounter, summed over contexts (see sim_ramp.py). Each saturates at 1 per
+# sharply differentiated context, so both live on the same axis as N.
+bits = np.asarray(d["bits"]) if "bits" in d.files else None
+payoff = np.asarray(d["payoff"]) if "payoff" in d.files else None
 
 ACTIVE = 2.0 * floor
 N_of_t = (eigs > ACTIVE).sum(axis=1)
@@ -107,7 +119,23 @@ def _dip(Marg):
     centre = Marg[:, mid - 1:mid + 2].mean(axis=1)
     return centre / np.maximum(Marg.max(axis=1), 1e-12)
 
-SPLIT = (_dip(MX) < 0.75).astype(int) + (_dip(MY) < 0.75).astype(int)
+# Marginal dips alone cannot support a four-role claim. A ring gives a bimodal
+# marginal on BOTH axes with no four-group structure at all, which is what two
+# axes of similar strength produce here (sim_ramp.py). So the second level also
+# requires the joint to concentrate at four angles, not merely to be wide.
+def _four_angular_groups(zc, nb=24, thresh=1.3):
+    th = np.arctan2(zc[:, :, 1], zc[:, :, 0])
+    out = np.zeros(th.shape[0], dtype=bool)
+    for i in range(th.shape[0]):
+        h, _ = np.histogram(th[i], bins=nb, range=(-np.pi, np.pi))
+        h = h / max(h.mean(), 1e-12)
+        pk = sum(1 for j in range(nb)
+                 if h[j] >= h[j - 1] and h[j] > h[(j + 1) % nb] and h[j] > thresh)
+        out[i] = pk >= 4
+    return out
+
+_x, _y = _dip(MX) < 0.70, _dip(MY) < 0.70
+SPLIT = _x.astype(int) + (_x & _y & _four_angular_groups(z)).astype(int)
 _pk = np.array([np.percentile(D, 99.5) for D in DENS])
 VMAX = np.empty_like(_pk)
 _e = _pk[0]
@@ -172,13 +200,31 @@ def render(scale, outname):
 
     # ---- (c) the cascade ---------------------------------------------------
     axC.step(betas, N_of_t, where="post", color="0.88", lw=1.6, zorder=1)
-    trail, = axC.step([], [], where="post", color="tab:blue", lw=2.4, zorder=2)
-    dot, = axC.plot([], [], "o", ms=9, color="tab:blue", mec="white", mew=1.4, zorder=3)
+    if bits is not None:
+        axC.plot(betas, bits, color="0.90", lw=1.4, zorder=1)
+    trail, = axC.step([], [], where="post", color="tab:blue", lw=2.4, zorder=4,
+                      label=r"role axes above the floor  $N$")
+    btrail, = axC.plot([], [], color="tab:orange", lw=2.2, zorder=3,
+                       label="role information (bits)")
+    ptrail, = axC.plot([], [], color="tab:green", lw=1.8, ls="--", zorder=2,
+                       label=r"coordination payoff / $w_0$")
+    dot, = axC.plot([], [], "o", ms=9, color="tab:blue", mec="white", mew=1.4, zorder=5)
+    axC.set_xscale("log")
     axC.set_xlim(betas[0], betas[-1])
-    axC.set_ylim(-0.4, M + 0.6)
+    # Scale to what the run actually reaches, not to the repertoire size: only a
+    # fraction of the schemas clear the floor over this ramp, and the bits curve
+    # tops out well below that again, so a 0..M axis flattens it onto the frame.
+    _top = max(float(N_of_t.max()),
+               float(bits.max()) if bits is not None else 0.0,
+               float(payoff.max()) if payoff is not None else 0.0)
+    axC.set_ylim(-0.4, _top + 0.6)
     axC.set_xlabel(r"feedback strength  $\beta(t)$")
-    axC.set_ylabel(r"active role axes  $N(t)$")
-    axC.set_title("(c)  the cascade", loc="left", fontsize=12)
+    axC.set_ylabel("axes,  bits,  payoff")
+    # Under the readout, where the staircase is still low: the lower right is
+    # where the bits and payoff curves run.
+    axC.legend(loc="upper left", bbox_to_anchor=(0.0, 0.90), fontsize=8,
+               frameon=False, borderpad=0.1, labelspacing=0.25, handlelength=1.6)
+    axC.set_title("(c)  the cascade, and what it yields", loc="left", fontsize=12)
     for s in ("top", "right"):
         axC.spines[s].set_visible(False)
     readout = axC.text(0.03, 0.94, "", transform=axC.transAxes, fontsize=10,
@@ -192,7 +238,7 @@ def render(scale, outname):
         mtop.set_ydata(MX[i]); axT.set_ylim(0, MXMAX[i])
         mrig.set_xdata(MY[i]); axR.set_xlim(0, MYMAX[i])
         note.set_text({0: "no roles yet:  one cloud",
-                       1: "axis 1 has split:  two roles",
+                       1: "axis 1 has split:  two roles\n(axis 2 is broadening, not yet split)",
                        2: "both axes split:  four role combinations"}[SPLIT[i]])
         # (b), (c)
         pts.set_offsets(np.c_[k, eigs[i]])
@@ -201,11 +247,29 @@ def render(scale, outname):
         pts.set_color([c if o else "0.72" for c, o in zip(colors, on)])
         trail.set_data(betas[: i + 1], N_of_t[: i + 1])
         dot.set_data([betas[i]], [N_of_t[i]])
-        readout.set_text(rf"$\beta={betas[i]:.1f}$,   $N={N_of_t[i]}$ of {M}")
-        return im, mtop, mrig, pts, trail, dot, readout, note
+        if bits is not None:
+            btrail.set_data(betas[: i + 1], bits[: i + 1])
+            ptrail.set_data(betas[: i + 1], payoff[: i + 1])
+        extra = rf",   $I={bits[i]:.1f}$ bits" if bits is not None else ""
+        readout.set_text(rf"$\beta={betas[i]:.3g}$,   $N={N_of_t[i]}$ of {n_sch}" + extra)
+        return im, mtop, mrig, pts, trail, btrail, ptrail, dot, readout, note
 
     ani = animation.FuncAnimation(fig, update, frames=len(betas), interval=33, blit=False)
-    ani.save(os.path.join(HERE, outname), writer=animation.FFMpegWriter(fps=30, bitrate=3000))
+    # Render to scratch, then remux into place with the moov atom moved to the
+    # front. Two failure modes this avoids, both seen here: a cloud-sync client
+    # copying the file while ffmpeg is still finalising it, which leaves a
+    # truncated file or a conflicted copy; and a player reading a file that is
+    # still syncing, which reports a short duration because ffmpeg writes the
+    # moov atom last. The remux is a stream copy, so it re-encodes nothing.
+    tmp = tempfile.mkdtemp(prefix="ramp_render_")
+    try:
+        scratch = os.path.join(tmp, outname)
+        ani.save(scratch, writer=animation.FFMpegWriter(fps=30, bitrate=3000))
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", scratch, "-c", "copy",
+                        "-movflags", "+faststart", os.path.join(HERE, outname)],
+                       check=True)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
     plt.close(fig)
     print("done ->", outname)
 

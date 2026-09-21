@@ -9,8 +9,11 @@ __pycache__/
 .venv/
 venv/
 
-# promo: regenerable simulation output (see promo/sim_ramp.py, fixed seed)
+# promo: regenerable simulation output (fixed seeds; see each sim_*.py)
 promo/ramp_data.npz
+promo/ring_data.npz
+promo/geometry_data.npz
+promo/_frame_*.png
 
 # LaTeX build artifacts
 *.aux
