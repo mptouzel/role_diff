@@ -141,7 +141,7 @@ axI.set_xlim(4e-3, 2.6); axI.set_ylim(0.6, 320)
 axI.set_xlabel(r"recovered $\mu_k$", fontsize=8.5, labelpad=1.5)
 axI.set_ylabel("count", fontsize=8.5, labelpad=1.5)
 axI.tick_params(labelsize=8.5, length=2.4, pad=1.4)
-axI.set_title(r"from $\mathbf{C}$ at $\beta=0.95\,\beta_c^{(1)}$", fontsize=8.5, pad=3)
+axI.set_title(r"from $\mathbf{C}$ at $\Lambda=0.95$", fontsize=8.5, pad=3)
 YI = 90
 axI.annotate("", xy=(m_near, YI), xytext=(m_far, YI),
              arrowprops=dict(arrowstyle="<->", color="k", lw=1.1, shrinkA=0, shrinkB=0))

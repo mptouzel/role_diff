@@ -1,7 +1,7 @@
 """
 Figures for Sec. 'The functional form of the bifurcation cascade'.
 
-Fig 1 (fig:cascade-classes): (a) counting function N(beta)/R for the six
+Fig 1 (fig:cascade-classes): (a) counting function N(Lambda)/R for the six
 spectral classes; (b) bifurcation rate dN/dbeta on log-log axes with slope
 refs; (c) the rank-ordered gain spectra those two transform.
 Fig 2 (fig:regime-diagram): schematic phase diagram of endogenous regimes
@@ -85,7 +85,7 @@ styles = {
 
 
 def counting_curve(mu):
-    """Empirical N(beta)/R as a step function; returns (beta_grid, N/R)."""
+    """Empirical N(Lambda)/R as a step function; returns (beta_grid, N/R)."""
     b = np.sort(1.0 / mu)
     bg = np.concatenate([[0.7], np.repeat(b, 2), [1e4]])
     Ng = np.concatenate([[0.0], np.repeat(np.arange(1, len(b) + 1), 2)[:-1] / len(b), [1.0], [1.0]])

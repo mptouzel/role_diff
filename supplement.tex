@@ -181,7 +181,7 @@ $M_{\mathrm{cap}}$ & $U_{\mathrm{cap}}/u_{\mathrm{cap}}$; axes drivable to full 
 $\Theta$ & Capacity ratio $(U_{\mathrm{cap}}/M)/u_{\mathrm{cap}}=M_{\mathrm{cap}}/M$; share per schema in ceiling units. \\
 $M_{\mathrm{eff}}$ & Axes clearing the schema decay rate at a self-consistent fixed point, $\lambda_k(\Cr)\ge\kappa/\alpha$. \\
 $K$ & Realized survivor count at the end of the $u$-transient; need not saturate. \\
-$N(\beta)$ & Thickness; active role axes at feedback strength $\beta$. \\
+$N(\Lambda)$ & Thickness; active role axes at loop gain $\Lambda$. \\
 \bottomrule
 \end{tabular}
 
@@ -304,7 +304,7 @@ $\rrf$ & Role-free resource mean, of order $\sidn^2$. \\
 
 \emph{Model 3} takes $\Nag$ agents randomly paired, in the mean field. Only the focal agent's update contributes, halving the gain to $G_{\mathrm{MF}}=\gain$, so $\beta_c^{\mathrm{MF}}=\gamma/\gain=\gamma\sread\sqrt{2\pi}/2$. The mean $\langle x\rangle$ vanishes in the thick phase, so the order parameter is the population variance $C=\Nag^{-1}\sum_i x_i^2$, with $C-C_0\propto(\beta-\beta_c)$ near threshold.
 
-\emph{Model 4} gives agents vector positions $\w_i\in\mathbb{R}^d$ and $M$ schemas $\g_m\in\mathbb{R}^d$. The loop gain becomes a matrix on the schema second moment, $\Lam=\Lambda\sum_m\g_m\g_m^{\!\top}=\Lambda\bm{H}^{\!\top}\!\bm{H}$, with $\bm{H}$ the $M\times d$ matrix of stacked schemas (Sec.~II\,A of the main text). Its eigenvalues give the cascade $\beta_c^{(k)}=\gamma/\mu_k$. The order parameter generalizes to the covariance $\C=\Nag^{-1}\sum_i\w_i\w_i^{\!\top}$, with the number of supra-floor eigenvalues---the cascade height $N(\beta)$---the thickness.
+\emph{Model 4} gives agents vector positions $\w_i\in\mathbb{R}^d$ and $M$ schemas $\g_m\in\mathbb{R}^d$. The loop gain becomes a matrix on the schema second moment, $\Lam=\Lambda\sum_m\g_m\g_m^{\!\top}=\Lambda\bm{H}^{\!\top}\!\bm{H}$, with $\bm{H}$ the $M\times d$ matrix of stacked schemas (Sec.~II\,A of the main text). Its eigenvalues give the cascade $\beta_c^{(k)}=\gamma/\mu_k$. The order parameter generalizes to the covariance $\C=\Nag^{-1}\sum_i\w_i\w_i^{\!\top}$, with the number of supra-floor eigenvalues---the cascade height $N(\Lambda)$---the thickness.
 
 \emph{Model 5} lets the schema axes evolve, $\dot\g_m=-\kappa\g_m+\alpha\C\g_m$: a power iteration rotating $\g_m$ toward the leading eigenvector of $\C$. Schemas align with the role structure and the role structure reinforces the schemas, which is one half of Sewell's duality. All schemas converge on the same axis, so the stationary structure is one-dimensional. The same collapse occurs for the resource-weighted rotation of Model~6, and is analyzed with its two candidate remedies in Appendix~C of the main text.
 
