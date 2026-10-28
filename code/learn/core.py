@@ -83,8 +83,17 @@ def pairing(rng):
     return partner
 
 
-def step(omega, k, beta, rng, theta=None, mode="tanh", n=None):
+D0 = 0.5  # status-gap scale of the correlated asymmetry
+
+
+def tilt(Delta):
+    return np.tanh(Delta / D0)
+
+
+def step(omega, k, beta, rng, theta=None, mode="tanh", n=None, c=0.0):
     """One encounter round. k, theta: arrays of length M (shared policy).
+    c > 0: correlated asymmetry, (Go,Go) pays -1 + c*tanh(Delta/D0) to each side (antisymmetric,
+    so pair welfare is unchanged; the higher-status agent loses less in a collision).
     Returns new omega and info dict (s, a in {-1,+1}, t, r, Delta, partner)."""
     n = omega.shape[0]
     theta = np.zeros(M) if theta is None else theta
@@ -103,6 +112,8 @@ def step(omega, k, beta, rng, theta=None, mode="tanh", n=None):
     a = 2.0 * go - 1.0
     gi = go.astype(int)
     r = PAY[gi, gi[partner]]
+    if c:
+        r = r + c * tilt(Delta) * (go & go[partner])
     drift = -GAMMA * omega * (1.0 + np.sum(omega**2, axis=1, keepdims=True)) + beta * (a @ G)
     omega = omega + drift * DT + SIGMA_OM * np.sqrt(DT) * rng.standard_normal(omega.shape)
     return omega, dict(s=s, a=a, t=t, r=r, Delta=Delta, partner=partner)
@@ -117,7 +128,7 @@ def pg_grad(info, k, theta):
     return gk, gth
 
 
-def analytic_grad(info, k, theta):
+def analytic_grad(info, k, theta, c=0.0):
     """Exact expectation over read noise of d E[r_i]/dk_i (partner's k fixed), averaged over agents."""
     D = info["Delta"][..., None]                       # n x M x H
     x = SIGMA_READ * GH_X
@@ -126,7 +137,7 @@ def analytic_grad(info, k, theta):
     zj = -D - th + x
     q = 0.5 * (1 + (GH_W * np.tanh(kk * zj)).sum(-1))  # partner Go prob
     dp = 0.5 * (GH_W * zi / np.cosh(kk * zi) ** 2).sum(-1)
-    return (dp * (3 - 6 * q)).mean(0)
+    return (dp * (3 - 6 * q + c * tilt(info["Delta"]) * q)).mean(0)
 
 
 def proj_var(omega):

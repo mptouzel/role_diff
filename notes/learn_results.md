@@ -74,3 +74,43 @@ payoff 2.538 vs Nash 2.5 (ceiling at k=∞: 2.559). A sub-threshold signal still
 - Single repertoire geometry, random pairing, T=1, fixed schemas (no resources), 2–12 seeds per cell.
 - The "analytic" gradient uses Gauss–Hermite quadrature and was only used for |k| ≤ 0.5.
 - ES used a scalar k shared across contexts, δ=0.2, learning rate 2; other ES settings not explored.
+
+---
+
+## Follow-up: correlated asymmetry (status-dependent collision cost)
+
+Change: in a (Go, Go) collision each agent gets −1 + c·tanh(Δ/D₀), D₀ = 0.5, with Δ the true status gap
+along the context. This is antisymmetric within a pair, so pair welfare is exactly unchanged (sign-rule payoff
+2.7344 at c=0 and c=1, same seed). It only makes the higher-status agent lose less in a collision.
+Code: `core.step(..., c=)`, `code/learn/exp_tilt.py`, `make_tilt_fig.py`; data `data/learn/tilt_*`;
+figure `figures/learn/tilt_summary.{pdf,png}`. β = 6, myopic shared PG, ε = 1.
+
+**Gradient at k=0 is now nonzero and points to follow.** Exact gradient = (c/4)·E[Δ tanh(Δ/D₀)]
+(measured 0.0118 / 0.0065 / 0.0022 per context at c=0.5, prediction identical to 4 digits).
+
+**Anti-follow keeps a basin, but it shrinks with c.** The myopic gradient is negative only for k < k*(c), with
+|k*| ≈ c/(6D₀) — the tilt (c/4)E[Δf] balanced against the coordination term 1.5E[Δ²]k. Measured |k*|, context 1:
+0.071, 0.145, 0.301, 0.705 for c = 0.25, 0.5, 1, 2 (prediction 0.083, 0.167, 0.333, 0.667). Basin values beyond
+|k| ≈ 4 are unreliable (40-node quadrature under-resolves sech²; context 3 shows a small positive value there even at c=0).
+
+**From an unbiased start the convention is selected.**
+
+| c | contexts → follow (k₀=0, 10 seeds) | ctx 1 crosses k_c before ctx 2 | median crossing t (ctx 1, 2) |
+|---|---|---|---|
+| 0 | 13/30 (and 16/36 fresh) | — | — |
+| 0.1 | 29/30 (miss: weakest context) | 10/10 | 37, 101 |
+| 0.25 – 1 | 30/30 each | 10/10 | 26→14, 76→44 |
+
+Fresh-seed rerun, c = 0.1: contexts 1–2 follow in 20/20; context 3 (subcritical at β=6, smallest tilt) is
+still within |k| < 0.2 after 6000 steps, i.e. undecided. A tilt of c = 0.1 is a ~3% change in collision cost for a gap of D₀.
+
+**An established anti-follow convention mostly survives.** From k₀ = −0.5: escapes to follow only for c = 2
+(|k*| = 0.7 > 0.5), stays anti-follow for c = 0.5 and 1 (3/3 seeds each; confirmed on a fresh seed for c=1, 2).
+From k₀ = −3: stays anti-follow for every c tested, up to 2.
+
+**Verdict for the cascade story.** With a payoff-relevant asymmetry, learning alone — starting from the mixed
+Nash point with no bias — selects the follow convention and then carries the population through the cascade in
+strength order. The full story holds with one added assumption: status must matter, however slightly, to who
+wins a collision. What learning still cannot do is undo an entrenched anti-follow convention unless the tilt is
+large; the anti-follow basin edge scales as c/(6D₀). So: emergence from scratch — supported; reform of an
+established wrong convention by local learning — not, except for strong asymmetry.

@@ -11,14 +11,15 @@ OUT = os.path.join(ROOT, "data", "learn"); os.makedirs(OUT, exist_ok=True)
 REC = 50  # record every REC steps
 
 
-def learn_pg(k0, beta, eps, steps, seed, kmax=50.0):
+def learn_pg(k0, beta, eps, steps, seed, kmax=50.0, c_tilt=0.0):
+    cc = float(c_tilt)
     rng = np.random.default_rng(seed)
     om = 0.05 * rng.standard_normal((c.N, c.d))
     k = np.full(c.M, float(k0)); th = np.zeros(c.M)
     K, V, R, TH = [], [], [], []
     racc = 0.0
     for t in range(steps):
-        om, info = c.step(om, k, beta, rng, theta=th)
+        om, info = c.step(om, k, beta, rng, theta=th, c=cc)
         gk, gth = c.pg_grad(info, k, th)
         k = np.clip(k + eps * c.DT * gk, -kmax, kmax)
         th = th + eps * c.DT * gth
