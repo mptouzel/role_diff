@@ -95,6 +95,7 @@ monotonicity of the pinning fixed point · S6 validity of the linearization.
 | Fig. 4 (characterization)  | `code/make_fig_characterization.py` |
 | Fig. 5 (monitoring)        | `code/make_fig_monitoring.py` |
 | Pairing-steering numbers (Appendix C) | `code/pairing_steering.py` |
+| Fig. S1 (learned policy, Supplement S1 D) | `code/learn/exp_*.py` (data, `make learn-data`), `code/make_fig_learning.py`; quoted numbers: `code/learn/numbers_learning.py` |
 
 Note: `figures/fig4_monitoring.pdf` is now Figure 5 (the saddle figure moved
 into the body ahead of it). The filename is unchanged.

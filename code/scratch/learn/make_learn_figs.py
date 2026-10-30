@@ -2,9 +2,10 @@
 import os, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "learn"))
 import core as c
 
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 D = os.path.join(ROOT, "data", "learn"); F = os.path.join(ROOT, "figures", "learn"); os.makedirs(F, exist_ok=True)
 COL = ["#2a78d6", "#eb6834", "#1baf7a"]
 INK, MUTED = "#1f1f1e", "#8a8984"

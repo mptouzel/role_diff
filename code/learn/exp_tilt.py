@@ -46,3 +46,18 @@ elif sys.argv[1] == "learn":
                 print(f"k0={k0} c={ct} seed={s}: final k={K[-1].round(2)} v={V[-1].round(3)} "
                       f"payoff={R[-100:].mean():.3f}", flush=True)
     np.savez(os.path.join(OUT, f"tilt_learn_seed{seed0}.npz"), rec=50, dt=c.DT, steps=steps, beta=BETA, **out)
+
+elif sys.argv[1] == "fresh":
+    # fresh-seed replications of the orientation counts, seeds disjoint from learn_sign (200-209)
+    # and tilt_learn_seed300 (300-309): (k0, c, first seed, n seeds, steps)
+    plan = [(0.0, 0.0, 400, 12, 20000), (0.0, 0.1, 410, 10, 15000),
+            (-0.5, 1.0, 420, 1, 15000), (-0.5, 2.0, 420, 1, 15000)]
+    out = {}
+    for k0, ct, seed0, nseed, steps in plan:
+        for s in range(nseed):
+            K, TH, V, R = learn_pg(k0, BETA, 1.0, steps, seed0 + s, c_tilt=ct)
+            out[f"k0{k0:g}_c{ct:g}_s{s}"] = np.stack([K, TH, V], 1)
+            out[f"R_k0{k0:g}_c{ct:g}_s{s}"] = R
+            print(f"k0={k0} c={ct} seed={seed0 + s}: final k={K[-1].round(2)} payoff={R[-100:].mean():.3f}",
+                  flush=True)
+    np.savez(os.path.join(OUT, "tilt_fresh.npz"), rec=50, dt=c.DT, beta=BETA, **out)

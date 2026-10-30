@@ -2,9 +2,10 @@
 import os, sys, glob, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "learn"))
 import core as c
 
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 D = os.path.join(ROOT, "data", "learn"); F = os.path.join(ROOT, "figures", "learn")
 SEQ = ["#9ec5f4", "#5598e7", "#2a78d6", "#1c5cab", "#0d366b"]   # one hue, light -> dark = small -> large c
 INK, MUTED, ANTI = "#1f1f1e", "#8a8984", "#eb6834"

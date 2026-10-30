@@ -3,8 +3,10 @@
 # reported by each script rather than silently restyling every label.
 
 PY ?= python3
+# learn-data runs from code/learn (its scripts import core), so a relative PY is made absolute
+LPY = $(if $(findstring /,$(PY)),$(abspath $(PY)),$(PY))
 
-.PHONY: all figures pdf promo clean
+.PHONY: all figures learn-data pdf promo clean
 
 all: figures pdf
 
@@ -16,6 +18,17 @@ figures:
 	$(PY) code/make_fig_pinning_saddle.py
 	$(PY) code/make_fig_characterization.py
 	$(PY) code/make_fig_monitoring.py
+	$(PY) code/make_fig_learning.py
+
+## rerun the learned-policy simulations that make_fig_learning.py reads (~1.5 h)
+learn-data:
+	cd code/learn && "$(LPY)" exp_fixed_k.py
+	cd code/learn && "$(LPY)" exp_learn.py sweep
+	cd code/learn && "$(LPY)" exp_learn.py sign
+	cd code/learn && "$(LPY)" exp_learn.py es 0 20
+	cd code/learn && "$(LPY)" exp_tilt.py basin
+	cd code/learn && "$(LPY)" exp_tilt.py learn
+	cd code/learn && "$(LPY)" exp_tilt.py fresh
 
 ## promotional animations (not part of the submission)
 ## cascade: the spectrum lifting off one mode at a time
