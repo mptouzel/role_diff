@@ -80,8 +80,9 @@
 \begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
 \toprule
 $x_i$ & Status of agent $i$ in context $m$, the projection $\w_i\cdot\g_m$. \\
-$\Delta_{im}(j)$ & Difference to a named partner, $(\w_i-\w_j)\cdot\g_m$; what one encounter presents. \\
-$\Delta_{im}$ & After the partner average, $(1-\rhopair)x_i$; what enters Eq.~(2). \\
+$\tanh x_i$ & Score of agent $i$ in context $m$; what agent $i$ presents. \\
+$\Delta_{im}(j)$ & Difference to a named partner, $\tanh x_i-\tanh x_j$; what one encounter presents. \\
+$\Delta_{im}$ & After the partner average, $\tanh x_i-\mathbb E[\tanh x_j\mid x_i]$, near the fixed point $(1-\rhopair)x_i$; what enters Eq.~(2). \\
 $\Delta$ & Pairwise difference at fixed context and partner (Appendix~A, \cref{sm:reduction}). \\
 $s_{im}$ & Observed signal, $\Delta_{im}(j)+\sread\xi$; the only status an agent sees. \\
 \bottomrule
@@ -327,7 +328,7 @@ The quadratic form is specific to two-role anti-coordination: a double error swa
 
 \subsection{Role-following as a self-enforcing correlated equilibrium}\label{sm:ce}
 
-\noindent The role signal acts as a correlating device \cite{aumann1974,aumann1987}. At each encounter the noisy status $s=(\w_i-\w_j)\cdot\g_m+\sread\xi$ recommends the action $a_i=\sign(s)$ to agent $i$. The obedience constraint is that following this recommendation is a best response when the partner also follows. Writing $q=\Pr(\text{partner plays Go}\mid s_i)$, the anti-coordination payoffs give expected returns
+\noindent The role signal acts as a correlating device \cite{aumann1974,aumann1987}. At each encounter the noisy status difference $s=\Delta_{im}(j)+\sread\xi$ recommends the action $a_i=\sign(s)$ to agent $i$. The obedience constraint is that following this recommendation is a best response when the partner also follows. Writing $q=\Pr(\text{partner plays Go}\mid s_i)$, the anti-coordination payoffs give expected returns
 \begin{equation}
 \text{Go:}\;\; 6(1-q)-q=6-7q,\qquad \text{Defer:}\;\; 2q+3(1-q)=3-q,
 \end{equation}
@@ -385,7 +386,7 @@ Role-following therefore emerges from the mixed equilibrium under payoff learnin
 
 \subsection{Beyond mean field: pairwise error rates}
 
-\noindent The mean-field error rate $P_{e,im}=\Phi(-|\w_i\cdot\g_m|/\sread)$ replaces the partner projection by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|(\w_i-\w_j)\cdot\g_m|/\sread)$. This is exact at the bifurcation (all $\omega$-identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes span the range: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different repertoires. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
+\noindent The mean-field error rate $P_{e,im}=\Phi(-|\tanh(\w_i\cdot\g_m)|/\sread)$ replaces the partner's score by its zero mean. The true pairwise rate is $P_{e,ijm}=\Phi(-|\Delta_{im}(j)|/\sread)$. This is exact at the bifurcation (all $\omega$-identities near the origin) but breaks in the thick phase, where partners are drawn from a bimodal distribution and the status difference depends on whether the pair is same- or cross-mode. Resource accumulation therefore depends on the pairing distribution $\mathcal P_i$: $\dot r_i=\sum_m f_m\,\mathbb{E}_{j\sim\mathcal P_i}[W_{ijm}]-c\,r_i$. Three schemes span the range: uniform random pairing, which supplies a partner uncorrelated with one's own status; rank-ordered pairing, which supplies the status-mirrored (oracle-assisted) partner; and network-based pairing, which interpolates via the network's assortativity. Better pairing lowers the effective $\beta_c$ and acts as a multiplier on $\pibar'(0)$: two societies with identical $\{\w_i\}$ but different pairing have different resource distributions, different $\Cr$, and potentially different repertoires. The pairing factor of each scheme, $(1-\rhopair)$, is derived below directly from this partner correlation, without reference to the thick-phase bimodal picture, so that it is equally well defined below threshold, where it sets $\beta_c$ (\cref{sm:pairing-rho}).
 
 \subsection{Pairing efficiency as a partner correlation}\label{sm:pairing-rho}
 
@@ -467,7 +468,7 @@ This control carries a cost in coordination efficiency. Take the schedule $\{\rh
 
 \noindent The vector feedback Eq.~(2) of the main text is the negative gradient of the energy Eq.~(12) of the main text, so single-agent dynamics are noisy gradient descent on a landscape whose stored patterns are the schemas $\{\g_m\}$ and whose activation is the integrated policy $\Psi$ ($\Psi'=2\pibar-1$). This is the structure of a dense associative memory \cite{krotov2016}. The feature/prototype duality is realized as two regimes: a \emph{feature mode} (soft $\pi$, high $\sread$, graded projections, near the bifurcation) and a \emph{prototype mode} (sharp $\pi$, low $\sread$, categorical $\omega$-identities at role-polytope vertices, deep in the thick phase).
 
-\paragraph{Where the mapping breaks.} A social role is not an individual's alignment but a \emph{bimodal split} of the population along $\g_m$, ordered by the variance $\g_m^{\!\top}\C\g_m$. Roles are relational. Three features absent from Hopfield retrieval follow: an anti-coordination constraint (the population must occupy complementary basins, not all retrieve one pattern); a self-generated signal (the ``input'' difference $(\w_i-\w_j)\cdot\g_m$ is produced by the population, so the landscape depth is state-dependent through the pairing distribution); and pairing dependence (basin depth that matters is the coordination payoff $W_{ijm}$, not the single-agent energy).
+\paragraph{Where the mapping breaks.} A social role is not an individual's alignment but a \emph{bimodal split} of the population along $\g_m$, ordered by the variance $\g_m^{\!\top}\C\g_m$. Roles are relational. Three features absent from Hopfield retrieval follow: an anti-coordination constraint (the population must occupy complementary basins, not all retrieve one pattern); a self-generated signal (the ``input'' difference $\Delta_{im}(j)$ is produced by the population, so the landscape depth is state-dependent through the pairing distribution); and pairing dependence (basin depth that matters is the coordination payoff $W_{ijm}$, not the single-agent energy).
 
 \paragraph{The bound.} Despite this, the Hopfield structure caps the number of well-separated minima. Krotov--Hopfield give $M^{\mathrm{Hopfield}}_{\max}\sim d^{\,n-1}$, with $n$ the activation order (policy sharpness). The effective role capacity is lower, since each split must also satisfy the engine conditions:
 \begin{equation}\label{SM-eq:sm-capacity}
@@ -603,7 +604,7 @@ b_0\sum_{e}a_e\,\g_{m_e}=b_0N_{\mathrm{enc}}\Bigl(\frac1{N_{\mathrm{enc}}}\sum_e
 \end{equation}
 with $\beta=\nu b_0$. The $X_e$ are bounded by $\max_m|\g_m|$, so the fluctuation is the $O(N_{\mathrm{enc}}^{-1/2})$ of the central limit theorem. It is the shot noise of Appendix~A of the main text.
 
-\paragraph{The noise average of a single decision.} Fix the context $m$ and the partner $j$, so the status difference $\Delta=(\w_i-\w_j)\cdot\g_m$ is a number. The agent draws $T$ samples $s_t=\Delta+\sread\xi_t$ with $\xi_t$ independent standard Gaussians, and their mean is Gaussian about the true difference,
+\paragraph{The noise average of a single decision.} Fix the context $m$ and the partner $j$, so the status difference $\Delta=\Delta_{im}(j)$ is a number. The agent draws $T$ samples $s_t=\Delta+\sread\xi_t$ with $\xi_t$ independent standard Gaussians, and their mean is Gaussian about the true difference,
 \begin{equation}\label{SM-eq:sm-sbar}
 \bar s_T=\frac1T\sum_{t=1}^{T}s_t\ \sim\ \mathcal N\Bigl(\Delta,\ \frac{\sread^2}{T}\Bigr).
 \end{equation}
@@ -615,13 +616,13 @@ with $\pibar(\Delta)=\Pr(a{=}{+}1\mid\Delta)$ the Go-probability of the policy a
 
 \paragraph{Evaluating the expectation.} Conditioning outward from the observation noise, the expectation factorizes,
 \begin{equation}\label{SM-eq:sm-tower}
-\mathbb E[X]=\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl((\w_i-\w_j)\cdot\g_m\bigr),\qquad \bar a(\Delta)\equiv2\pibar(\Delta)-1 .
+\mathbb E[X]=\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl(\Delta_{im}(j)\bigr),\qquad \bar a(\Delta)\equiv2\pibar(\Delta)-1 .
 \end{equation}
 The innermost average is \cref{SM-eq:sm-twopoint}, taken at fixed context and partner. The partner and context averages follow. One can instead group the window's encounters by partner, in which case the count $N_{\mathrm{enc}}f_mp^{(m)}_{ij}$ of encounters with $j$ in context $m$ supplies the weight. That route requires every cell to be well populated, $N_{\mathrm{enc}}f_mp^{(m)}_{ij}\gg1$, which under uniform matching means $\nu/\gamma\gg\Nag$. The route through \cref{SM-eq:sm-tower} requires only $N_{\mathrm{enc}}\gg1$ and gives the same weights.
 
 \paragraph{The dynamics at finite $\Nag$.} Substituting \cref{SM-eq:sm-tower} into \cref{SM-eq:sm-window} gives the dense-encounter limit at fixed population size,
 \begin{equation}\label{SM-eq:sm-drift-finiteN}
-\dot\w_i=-\gamma\,\w_i(1+|\w_i|^2)+\beta\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl((\w_i-\w_j)\cdot\g_m\bigr)+\sidn\bm{\eta}_i .
+\dot\w_i=-\gamma\,\w_i+\beta\sum_m f_m\,\g_m\sum_j p^{(m)}_{ij}\,\bar a\bigl(\Delta_{im}(j)\bigr)+\sidn\bm{\eta}_i .
 \end{equation}
 No randomness remains over which partners were drawn. The pairing probabilities already enter as weights, exactly as they do in Eq.~(2) of the main text.
 
@@ -639,7 +640,7 @@ is the participation ratio of the pairing kernel, equal to $\Nag-1$ under unifor
 
 \paragraph{Averaging the difference and averaging the action.} What the limit delivers is $\mathbb E_j[\bar a(\Delta_{im}(j))]$, an average of the \emph{action} over the partner. Eq.~(2) of the main text instead evaluates $\bar a$ at the averaged \emph{status difference}. The two operations are not the same, and only the second carries an error.
 
-Averaging the status difference is exact. $\Delta_{im}(j)=(\w_i-\w_j)\cdot\g_m$ is linear in $\w_j$, so the average is $(\w_i-\mathbb E[\w_j\mid\w_i])\cdot\g_m$ with no approximation. What it needs is that the conditional mean be linear, and near the symmetric fixed point the joint Gaussianity of $(x_i,x_j)$ supplies $\mathbb E[x_j\mid x_i]=\rhopair x_i$, hence the expected difference $(1-\rhopair)x_i$ of \cref{sm:pairing-rho}.
+Averaging the status difference is exact. $\Delta_{im}(j)=\tanh x_i-\tanh x_j$ is linear in the partner's score, so the average is $\tanh x_i-\mathbb E[\tanh x_j\mid x_i]$ with no approximation. Under random matching the conditional mean is the population mean score, which vanishes for a symmetric population. Near the symmetric fixed point the scores are linear, and the joint Gaussianity of $(x_i,x_j)$ supplies $\mathbb E[x_j\mid x_i]=\rhopair x_i$, hence the expected difference $(1-\rhopair)x_i$ of \cref{sm:pairing-rho}.
 
 Averaging the action is not the same, because $\bar a$ is nonlinear. For this policy the exact partner average is available in closed form, through the same $\omega$-identity that produced the erf in the first place: for $z$ Gaussian with variance $s^2$,
 \begin{equation}\label{SM-eq:sm-erfconv}
