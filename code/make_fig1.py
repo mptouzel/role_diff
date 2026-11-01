@@ -211,26 +211,42 @@ axM.text(0.015, 0.02, 'solid: sim\ndotted: linear theory', transform=axM.transAx
 axM.legend(frameon=False, fontsize=7, loc='upper left', ncol=3, handlelength=0.6,
            columnspacing=0.9, handletextpad=0.3, borderaxespad=0.3)
 
-# right-side histogram strip = numeric status axis (RHS), shared scale
+# right-side strips at the last snapshot: projection (shared scale with panel b),
+# then status tanh(omega.g_m), which is confined to (-1, 1)
 divider = make_axes_locatable(axM)
-axH = divider.append_axes("right", size="17%", pad=0.06, sharey=axM)
+axH = divider.append_axes("right", size="15%", pad=0.06, sharey=axM)
+axS = divider.append_axes("right", size="15%", pad=0.12)
 ib = ib_strip
+gk = np.sqrt(gnorm[0])                          # |g_m(k)|, strongest first
 yy = np.linspace(-YLIM, YLIM, 400)
+ys = np.linspace(-1, 1, 400)
 for k in (2, 1, 0):
     zz = z_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
     dens = gaussian_kde(zz)(yy); dens = dens / dens.max() * 0.95
     axH.fill_betweenx(yy, 0, dens, color=cols[k], alpha=0.32, lw=0)
     axH.plot(dens, yy, color=cols[k], lw=1.2)
-axH.set_xlim(0, 1.08); axH.set_xticks([])
-axH.axhline(0.0, color='0.6', lw=0.5, ls=':')
-for _sp in ('top', 'bottom', 'right'):
-    axH.spines[_sp].set_visible(False)
+    st = np.tanh(gk[k] * zz)                    # status = score of the projection
+    dens = gaussian_kde(st, bw_method=0.15)(ys); dens = dens / dens.max() * 0.95
+    axS.fill_betweenx(ys, 0, dens, color=cols[k], alpha=0.32, lw=0)
+    axS.plot(dens, ys, color=cols[k], lw=1.2)
+for ax, ttl in ((axH, 'projection'), (axS, 'status')):
+    ax.set_xlim(0, 1.08); ax.set_xticks([])
+    ax.axhline(0.0, color='0.6', lw=0.5, ls=':')
+    for _sp in ('top', 'bottom', 'right'):
+        ax.spines[_sp].set_visible(False)
+    ax.set_title(ttl + '\n' + rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 axH.tick_params(axis='y', which='both', left=False, right=False,
                 labelleft=False, labelright=False)
-axH.yaxis.set_label_position('right')
-axH.set_ylabel(r'agent status  $\boldsymbol{\omega}_i\cdot\hat{\mathbf{g}}_{m(k)}$'
-               '\n' r'(individual agents shown as dots at left)', fontsize=8)
-axH.set_title(rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
+SLIM = 1.25                                     # gray: statuses no agent can reach
+axS.set_ylim(-SLIM, SLIM)
+axS.axhspan(1, SLIM, color='0.82', lw=0, zorder=0)
+axS.axhspan(-SLIM, -1, color='0.82', lw=0, zorder=0)
+axS.set_yticks([-1, 0, 1])
+axS.tick_params(axis='y', labelsize=7, left=False, right=True, labelleft=False,
+                labelright=True, length=2, pad=1)
+axS.spines['left'].set_visible(False)
+axS.yaxis.set_label_position('right')
+axS.set_ylabel(r'agent status  $\tanh(\boldsymbol{\omega}_i\cdot\mathbf{g}_{m(k)})$', fontsize=8)
 
 # Save under the final name; also refresh fig_loop_ignition, which is the name
 # the manuscript's Figure 1 \includegraphics resolves to (main.tex), so the
