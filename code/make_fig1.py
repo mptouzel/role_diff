@@ -141,17 +141,18 @@ beta_c = d['gamma'] / ((1.0 - rho_pair) * mu_k)
 z_snap = d['z_snap']; snap_betas = d['snap_betas']
 gamma = float(d['gamma']); gamma_eff = gamma
 gain_k = (1.0 - rho_pair) * mu_k
-XMAX = 20.0
+XMAX = 10.0
 famp = np.sqrt(floor)                          # noise-floor amplitude
-YLIM = 1.06 * np.nanmax(np.abs(z_snap[snap_betas <= XMAX]))   # status range of the swarm
+ib_strip = int(np.argmin(np.abs(snap_betas - XMAX)))           # snapshot shown in the right strip
+YLIM = 1.06 * np.nanmax(np.abs(z_snap[:ib_strip + 1]))          # status range up to that snapshot
 
 # individual-agent status swarm (jittered columns at snapshot betas) -- background
 rng_b = np.random.default_rng(0)
-off, jw = 0.34, 0.12
+off, jw = 0.20, 0.07
 ax_off = (np.arange(3) - 1) * off
 _valid = [i for i in range(len(snap_betas))
           if betas[0] + off + jw <= snap_betas[i] <= XMAX - off - jw]
-ib_sel = np.array(_valid[::2])
+ib_sel = np.array(_valid)
 for k in range(3):
     for ib in ib_sel:
         zz = z_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
@@ -172,8 +173,9 @@ for k in range(3):
 # noise band with vertically centred label
 axM.axhspan(-famp, famp, color='0.86', zorder=0)
 axM.axhline(0.0, color='0.6', lw=0.5, ls=':', zorder=1)
-axM.text(13.5, 0.0, r'noise floor $\pm\sqrt{\sigma_{\omega}^2/2\gamma}$',
-         fontsize=6.4, va='center', ha='center', color='k', zorder=5)
+axM.text(6.0, 0.0, r'noise floor $\pm\sqrt{\sigma_{\omega}^2/2\gamma}$',
+         fontsize=6.4, va='center', ha='center', color='k', zorder=5,
+         bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='none', alpha=0.8))
 
 # beta_c guides + labels (same annotations as the original panel)
 _trx = axM.get_xaxis_transform()          # x in data coords, y in axes coords
@@ -198,8 +200,7 @@ axM.text(0.5*(beta_c[0]+beta_c[2]), 1.060, 'cascade', transform=_trx,
          clip_on=False, zorder=7)
 
 axM.set_xlim(betas[0], XMAX); axM.set_ylim(-YLIM, YLIM)
-axM.set_xticks([5, 10, 15, 20])           # keep the tick at 5, drop its label:
-axM.set_xticklabels(['', '10', '15', '20'])   # beta_c^(2)=3.99 sits where '5' would print
+axM.set_xticks([6, 10])                   # clear of the beta_c labels at 2.65, 3.99, 8.25
 axM.set_xlabel(r'feedback strength $\beta$  (equilibrated at each $\beta$; $\Lambda\propto\beta$)')
 axM.set_ylabel(r'differentiation order parameter  $\pm\sqrt{v_k}$')
 axM.text(-0.13, 1.01, 'b', transform=axM.transAxes, fontsize=12, fontweight='bold')
@@ -213,7 +214,7 @@ axM.legend(frameon=False, fontsize=7, loc='upper left', ncol=3, handlelength=0.6
 # right-side histogram strip = numeric status axis (RHS), shared scale
 divider = make_axes_locatable(axM)
 axH = divider.append_axes("right", size="17%", pad=0.06, sharey=axM)
-ib = int(np.argmin(np.abs(snap_betas - XMAX)))
+ib = ib_strip
 yy = np.linspace(-YLIM, YLIM, 400)
 for k in (2, 1, 0):
     zz = z_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
