@@ -43,12 +43,12 @@ def sbox(x, y, text, fc, title, w=3.0, h=1.55):
              fontweight='bold', zorder=4)
     axA.text(x, y-0.25, text, ha='center', va='center', fontsize=6.5, zorder=4)
 
-def fbox(x, y, title, sub, w=2.6, h=1.15):
+def fbox(x, y, title, sub, w=2.6, h=1.15, dy=0.0):
     axA.add_patch(FancyBboxPatch((x-w/2, y-h/2), w, h, boxstyle="round,pad=0.1",
                  fc='#efe6f7', ec='none', lw=1.0, zorder=3))
     axA.text(x, y+h/2-0.32, title, ha='center', va='center', fontsize=8.5,
              fontweight='bold', zorder=4)
-    axA.text(x, y-h/2+0.44, sub, ha='center', va='center', fontsize=6.5, zorder=4)
+    axA.text(x, y-h/2+0.44+dy, sub, ha='center', va='center', fontsize=6.5, zorder=4)
 
 def A(p0, p1, color='0.15', lw=1.9, dashed=False, ms=15, sA=2, sB=6, rad=0.0):
     axA.add_patch(FancyArrowPatch(p0, p1, connectionstyle=f"arc3,rad={rad}",
@@ -87,8 +87,9 @@ sbox(2.45, 1.5, r"agent wealth $r_i$" "\n"
      r"$\dot r_i=\sum_m f_m W_{im}-c\,r_i$", '#fdeede', 'Resources', w=3.2)
 SX = 8.4
 fbox(SX, 8.4, 'Role Signal',
-     r"$\Delta_{im}(j)=(\boldsymbol{\omega}_i{-}\boldsymbol{\omega}_j)\cdot\mathbf{g}_m$" "\n"
-     r"$s_{im}=\Delta_{im}(j)+\sigma_{\rm read}\xi$", w=3.4, h=1.55)
+     r"$\Delta_{im}(j)=\tanh(\boldsymbol{\omega}_i{\cdot}\mathbf{g}_m)$" "\n"
+     r"$\qquad\quad{-}\tanh(\boldsymbol{\omega}_j{\cdot}\mathbf{g}_m)$" "\n"
+     r"$s_{im}=\Delta_{im}(j)+\sigma_{\rm read}\xi$", w=3.4, h=1.95, dy=0.02)
 fbox(SX, 5.0, 'Action', r"$a_{im}=\pi(s_{im})$", w=3.1, h=1.15)
 fbox(SX, 1.5, 'Reward',
      r"$W_{im}=w_0(1{-}2P_{e,im})^2$" "\n"
@@ -142,7 +143,7 @@ gamma = float(d['gamma']); gamma_eff = gamma
 gain_k = (1.0 - rho_pair) * mu_k
 XMAX = 20.0
 famp = np.sqrt(floor)                          # noise-floor amplitude
-YLIM = 2.7
+YLIM = 1.06 * np.nanmax(np.abs(z_snap[snap_betas <= XMAX]))   # status range of the swarm
 
 # individual-agent status swarm (jittered columns at snapshot betas) -- background
 rng_b = np.random.default_rng(0)
@@ -206,7 +207,7 @@ for k, lb in enumerate([r'$k=1$', r'$k=2$', r'$k=3$']):
     axM.plot([], [], 'o', color=cols[k], ms=4, label=lb)
 axM.text(0.015, 0.02, 'solid: sim\ndotted: linear theory', transform=axM.transAxes,
          va='bottom', ha='left', fontsize=6.8, color='0.3', linespacing=1.35, zorder=6)
-axM.legend(frameon=False, fontsize=7, loc='lower right', ncol=3, handlelength=0.6,
+axM.legend(frameon=False, fontsize=7, loc='upper left', ncol=3, handlelength=0.6,
            columnspacing=0.9, handletextpad=0.3, borderaxespad=0.3)
 
 # right-side histogram strip = numeric status axis (RHS), shared scale

@@ -2,23 +2,25 @@
 
 For each FIXED beta we equilibrate the agent dynamics and average the order
 parameter -- a stationary/adiabatic object, so the x-axis is unambiguously beta
-(NOT time). Game directions are held at a hierarchical strength profile
-(Model 4), so the covariance eigenvalues lambda_k(beta) rise from the noise
-floor one at a time at the critical couplings beta_c^(k) = gamma/((1-rho_pair) mu_k),
-giving a clean three-step cascade over beta in [0, 21] with
-beta_c^(k) ~ [2.6, 4.0, 8.2]. The quartic restoring term saturates each mode
-above threshold. Model 6 (dynamic schemas) selects this same ordering
-endogenously via resource feedback (main-text Fig. 3); here we fix the schemas
-to display the cascade cleanly.
+(NOT time). The schema repertoire is held fixed: orthogonal axes with a
+hierarchical strength profile (Model 4), so the covariance eigenvalues
+lambda_k(beta) rise from the noise floor one at a time at the critical couplings
+beta_c^(k) = gamma/((1-rho_pair) mu_k), mu_k = 2 pibar'(0) u_k with u_k the
+eigenvalues of H^T H, beta_c^(k) ~ [2.66, 4.01, 8.26]. Model 6 (dynamic schemas)
+selects this same ordering endogenously via resource feedback (main-text Fig. 3);
+here we fix the schemas to display the cascade cleanly.
 
-The strength profile is chosen so that s_k^2 ~ 1/beta_c^(k); with sigma_obs=0.6
-(the value used throughout the paper) this places the three linear-theory
-divergences beta_c^(k) = gamma sigma_obs sqrt(2 pi) / (2 (1-rho_pair) s_k^2) at the
-values marked in Fig. 1c. The simulated (equilibrated) onsets coincide with
-these thresholds; the cubic term only bounds the saturated amplitude.
+Model of main-text Eq. (1): status difference = difference of saturating scores,
+tanh(w_i.g_m) - tanh(w_j.g_m); harmonic restoring force -gamma w_i. Dense-encounter
+limit: each step every agent meets K random partners in every context and its
+single-sample sign decision is replaced by its average over the read noise,
+erf(Delta / (sqrt 2 sigma_obs)), averaged over the K partners. The write shot
+noise of a finite encounter rate is therefore absent, and the only noise is the
+isotropic omega-identity noise sigma_dyn, giving the flat floor sigma_dyn^2/2gamma.
 """
 import os
 import numpy as np
+from scipy.special import erf
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PKG_ROOT = os.path.dirname(HERE)                  # .../culture_engine_PRX
@@ -32,42 +34,31 @@ gamma = 1.0
 sigma_obs = 0.6
 sigma_dyn = 0.25
 dt = 0.02
+K = 32           # partners per agent per step (dense-encounter average)
 rho_pair = 0.0   # random pairing: partner correlation (factor (1-rho_pair)=1)
 
 betas = np.linspace(0.1, 21.0, 120)
 burn_steps = 1200
 avg_steps = 1500
 
-# Fixed hierarchical context portfolio: near-orthogonal directions with spaced
-# strengths. The RATIOS are pinned by the target critical couplings via
-# s_k^2 ~ 1/beta_c^(k), placing beta_c^(k) = gamma sigma_obs sqrt(2pi)/(2 (1-rho_pair) s_k^2)
-# at ~[5.3, 8.0, 16.5]. The overall AMPLITUDE SCALE is the one free knob left:
-# raising `strength` (with sigma_obs raised in proportion, strength ~ sqrt(sigma_obs),
-# so beta_c stays put) drives the system deeper into the quartic-saturated regime,
-# which compresses the saturated eigenvalue spacing lambda_1:lambda_2:lambda_3 in
-# panel (c). sigma_obs = 0.6 (the value used throughout the paper) gives a clean,
-# well-separated three-step cascade; increase it if you want modes 1 and 2 to
-# plateau closer together.
-base = np.eye(d)
-dirs = np.array([base[m] + 0.12 * rng.standard_normal(d) for m in range(M)])
-dirs /= np.linalg.norm(dirs, axis=1, keepdims=True)
+# Fixed hierarchical context portfolio: orthogonal directions with spaced
+# strengths |g_m|. The strengths are pinned by the target critical couplings via
+# u_k ~ 1/beta_c^(k), beta_c^(k) = gamma sigma_obs sqrt(2pi)/(2 (1-rho_pair) u_k).
+dirs = np.eye(d)
 strength = np.array([0.533, 0.434, 0.302]) * np.sqrt(sigma_obs / 0.6)   # |g_m|
 G = dirs * strength[:, None]                      # fixed throughout
 
 piprime = 1.0 / (sigma_obs * np.sqrt(2 * np.pi))
-mu = 2 * piprime * np.sort(strength**2)[::-1]
+u_k = np.sort(np.linalg.eigvalsh(G.T @ G))[::-1]  # eigenvalues of H^T H, strongest first
+mu = 2 * piprime * u_k
 beta_c = gamma / ((1.0 - rho_pair) * mu)   # gamma/((1-rho_pair) mu_k); random -> gamma/mu_k
 
 def step_dynamics(omega, beta, rng):
-    perm = rng.permutation(N)
-    partner = np.empty(N, dtype=int)
-    partner[perm[::2]] = perm[1::2]
-    partner[perm[1::2]] = perm[::2]
-    gaps = omega - omega[partner]
-    S = gaps @ G.T + sigma_obs * rng.standard_normal((N, M))
-    go = (S > 0)
-    fb = ((2 * go.astype(float) - 1.0) @ G)
-    drift = -gamma * omega * (1.0 + np.sum(omega**2, axis=1, keepdims=True)) + beta * fb
+    score = np.tanh(omega @ G.T)                  # N x M saturating scores
+    partners = rng.integers(0, N, (N, K))         # random matching, rho_pair = 0
+    gaps = score[:, None, :] - score[partners]    # status differences Delta_im(j)
+    a = erf(gaps / (np.sqrt(2) * sigma_obs)).mean(1)   # noise-averaged sign decision
+    drift = -gamma * omega + beta * (a @ G)
     return omega + drift * dt + sigma_dyn * np.sqrt(dt) * rng.standard_normal((N, d))
 
 eigs_C = np.zeros((len(betas), d))
@@ -99,7 +90,7 @@ for ib, beta in enumerate(betas):
         print(f"beta={beta:.2f}  eigs={eigs_C[ib].round(3)}")
 
 # schema strengths are fixed; report them (constant) for the dashed overlay
-g_norms = np.tile(np.sort(strength**2)[::-1], (len(betas), 1))
+g_norms = np.tile(u_k, (len(betas), 1))
 
 np.savez(DATA_PATH,
          betas=betas, eigs=eigs_C, gnorm=g_norms,
