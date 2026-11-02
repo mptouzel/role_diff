@@ -142,9 +142,20 @@ z_snap = d['z_snap']; snap_betas = d['snap_betas']
 gamma = float(d['gamma']); gamma_eff = gamma
 gain_k = (1.0 - rho_pair) * mu_k
 XMAX = 10.0
-famp = np.sqrt(floor)                          # noise-floor amplitude
+gk = np.sqrt(gnorm[0])                         # |g_m(k)|, strongest first
+x_snap = z_snap * gk                           # projections x = omega . g_m(k), the argument of tanh
+famp = gk[0] * np.sqrt(floor)                  # noise-floor amplitude of x on axis 1
 ib_strip = int(np.argmin(np.abs(snap_betas - XMAX)))           # snapshot shown in the right strip
-YLIM = 1.06 * np.nanmax(np.abs(z_snap[:ib_strip + 1]))          # status range up to that snapshot
+YLIM = 1.06 * np.nanmax(np.abs(x_snap[:ib_strip + 1]))          # projection range up to that snapshot
+
+def shade_saturation(ax, x0, x1):
+    # gray where the status no longer follows the projection: opacity tanh^2 x = 1 - dtanh/dx
+    yv = np.linspace(-YLIM, YLIM, 300)[:, None]
+    img = np.zeros((300, 2, 4)); img[..., :3] = 0.55; img[..., 3] = 0.45 * np.tanh(yv)**2
+    ax.imshow(img, extent=[x0, x1, -YLIM, YLIM], origin='lower', aspect='auto',
+              interpolation='bilinear', zorder=0)
+
+shade_saturation(axM, betas[0], XMAX)
 
 # individual-agent status swarm (jittered columns at snapshot betas) -- background
 rng_b = np.random.default_rng(0)
@@ -155,25 +166,25 @@ _valid = [i for i in range(len(snap_betas))
 ib_sel = np.array(_valid)
 for k in range(3):
     for ib in ib_sel:
-        zz = z_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
+        zz = x_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
         bx = snap_betas[ib] + ax_off[k] + rng_b.uniform(-jw, jw, zz.size)
         axM.scatter(bx, zz, s=4, alpha=0.18, color=cols[k], edgecolors='none',
                     rasterized=True, zorder=2)
 
-# order-parameter branches: solid +/- sqrt(v_k) (simulation), dotted linear theory
+# order-parameter branches: solid +/- |g_k| sqrt(v_k) (simulation), dotted linear theory
 for k in range(3):
-    amp = np.sqrt(eigs[:, k])
+    amp = gk[k] * np.sqrt(eigs[:, k])
     axM.plot(betas,  amp, color=cols[k], lw=1.7, zorder=4)
     axM.plot(betas, -amp, color=cols[k], lw=1.7, zorder=4)
     bb = np.linspace(betas[0], beta_c[k] * 0.985, 200)
-    amp_lin = np.sqrt(floor * gamma / (gamma_eff - bb * gain_k[k]))
+    amp_lin = gk[k] * np.sqrt(floor * gamma / (gamma_eff - bb * gain_k[k]))
     axM.plot(bb,  amp_lin, color=cols[k], lw=0.9, ls=(0, (1, 1)), alpha=0.9, zorder=3)
     axM.plot(bb, -amp_lin, color=cols[k], lw=0.9, ls=(0, (1, 1)), alpha=0.9, zorder=3)
 
 # noise band with vertically centred label
-axM.axhspan(-famp, famp, color='0.86', zorder=0)
+axM.axhspan(-famp, famp, color='0.86', zorder=1)
 axM.axhline(0.0, color='0.6', lw=0.5, ls=':', zorder=1)
-axM.text(6.0, 0.0, r'noise floor $\pm\sqrt{\sigma_{\omega}^2/2\gamma}$',
+axM.text(6.0, 0.0, r'noise floor ($k=1$)',
          fontsize=6.4, va='center', ha='center', color='k', zorder=5,
          bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='none', alpha=0.8))
 
@@ -202,11 +213,11 @@ axM.text(0.5*(beta_c[0]+beta_c[2]), 1.060, 'cascade', transform=_trx,
 axM.set_xlim(betas[0], XMAX); axM.set_ylim(-YLIM, YLIM)
 axM.set_xticks([6, 10])                   # clear of the beta_c labels at 2.65, 3.99, 8.25
 axM.set_xlabel(r'feedback strength $\beta$  (equilibrated at each $\beta$; $\Lambda\propto\beta$)')
-axM.set_ylabel(r'differentiation order parameter  $\pm\sqrt{v_k}$')
+axM.set_ylabel(r'projection  $\boldsymbol{\omega}_i\cdot\mathbf{g}_{m(k)}$')
 axM.text(-0.13, 1.01, 'b', transform=axM.transAxes, fontsize=12, fontweight='bold')
 for k, lb in enumerate([r'$k=1$', r'$k=2$', r'$k=3$']):
     axM.plot([], [], 'o', color=cols[k], ms=4, label=lb)
-axM.text(0.015, 0.02, 'solid: sim\ndotted: linear theory', transform=axM.transAxes,
+axM.text(0.015, 0.02, r'solid: $\pm|\mathbf{g}_{m(k)}|\sqrt{v_k}$ (sim)' '\n' 'dotted: linear theory' '\n' 'gray: status saturated', transform=axM.transAxes,
          va='bottom', ha='left', fontsize=6.8, color='0.3', linespacing=1.35, zorder=6)
 axM.legend(frameon=False, fontsize=7, loc='upper left', ncol=3, handlelength=0.6,
            columnspacing=0.9, handletextpad=0.3, borderaxespad=0.3)
@@ -217,15 +228,14 @@ divider = make_axes_locatable(axM)
 axH = divider.append_axes("right", size="15%", pad=0.06, sharey=axM)
 axS = divider.append_axes("right", size="15%", pad=0.12)
 ib = ib_strip
-gk = np.sqrt(gnorm[0])                          # |g_m(k)|, strongest first
 yy = np.linspace(-YLIM, YLIM, 400)
 ys = np.linspace(-1, 1, 400)
 for k in (2, 1, 0):
-    zz = z_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
+    zz = x_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
     dens = gaussian_kde(zz)(yy); dens = dens / dens.max() * 0.95
     axH.fill_betweenx(yy, 0, dens, color=cols[k], alpha=0.32, lw=0)
     axH.plot(dens, yy, color=cols[k], lw=1.2)
-    st = np.tanh(gk[k] * zz)                    # status = score of the projection
+    st = np.tanh(zz)                            # status = score of the projection
     dens = gaussian_kde(st, bw_method=0.15)(ys); dens = dens / dens.max() * 0.95
     axS.fill_betweenx(ys, 0, dens, color=cols[k], alpha=0.32, lw=0)
     axS.plot(dens, ys, color=cols[k], lw=1.2)
@@ -235,6 +245,7 @@ for ax, ttl in ((axH, 'projection'), (axS, 'status')):
     for _sp in ('top', 'bottom', 'right'):
         ax.spines[_sp].set_visible(False)
     ax.set_title(ttl + '\n' + rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
+shade_saturation(axH, 0, 1.08)
 axH.tick_params(axis='y', which='both', left=False, right=False,
                 labelleft=False, labelright=False)
 SLIM = 1.25                                     # gray: statuses no agent can reach
