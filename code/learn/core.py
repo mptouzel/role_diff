@@ -5,8 +5,11 @@ k = 0 -> 50/50 play (the game's mixed Nash); k -> inf -> sign rule; k < 0 -> ant
 
 Conventions copied from code/sim_fig1.py (not imported, so that file is untouched):
 N=2500, d=M=3, gamma=1, sigma_obs (=sigma_read)=0.6, sigma_dyn (=sigma_omega)=0.25,
-dt=0.02, all M contexts played every step against one random partner,
-feedback beta * sum_m a_m g_m, quartic restoring force.
+dt=0.02, orthogonal repertoire, status difference tanh(w_i.g_m) - tanh(w_j.g_m),
+feedback beta * sum_m a_m g_m, harmonic restoring force.
+Unlike sim_fig1.py (dense-encounter limit) this is the encounter process at finite rate:
+all M contexts played every step against one random partner, with sampled actions and
+payoffs, which the policy-gradient updates need.
 """
 import numpy as np
 from numpy.polynomial.hermite_e import hermegauss
@@ -27,11 +30,8 @@ GH_W = GH_W / GH_W.sum()
 
 
 def schema_matrix(seed=5):
-    """Same fixed hierarchical repertoire as sim_fig1.py (same rng draw order)."""
-    rng = np.random.default_rng(seed)
-    base = np.eye(d)
-    dirs = np.array([base[m] + 0.12 * rng.standard_normal(d) for m in range(M)])
-    dirs /= np.linalg.norm(dirs, axis=1, keepdims=True)
+    """Same fixed hierarchical repertoire as sim_fig1.py: orthogonal axes (seed unused)."""
+    dirs = np.eye(d)
     strength = np.array([0.533, 0.434, 0.302])
     return dirs * strength[:, None], dirs, strength**2
 
@@ -101,7 +101,8 @@ def step(omega, k, beta, rng, theta=None, mode="tanh", n=None, c=0.0):
     partner = np.empty(n, dtype=int)
     partner[perm[::2]] = perm[1::2]
     partner[perm[1::2]] = perm[::2]
-    Delta = (omega - omega[partner]) @ G.T            # n x M
+    score = np.tanh(omega @ G.T)                      # n x M statuses
+    Delta = score - score[partner]                    # status differences
     s = Delta + SIGMA_READ * rng.standard_normal((n, M))
     if mode == "sign":
         go = s > 0
@@ -114,7 +115,7 @@ def step(omega, k, beta, rng, theta=None, mode="tanh", n=None, c=0.0):
     r = PAY[gi, gi[partner]]
     if c:
         r = r + c * tilt(Delta) * (go & go[partner])
-    drift = -GAMMA * omega * (1.0 + np.sum(omega**2, axis=1, keepdims=True)) + beta * (a @ G)
+    drift = -GAMMA * omega + beta * (a @ G)
     omega = omega + drift * DT + SIGMA_OM * np.sqrt(DT) * rng.standard_normal(omega.shape)
     return omega, dict(s=s, a=a, t=t, r=r, Delta=Delta, partner=partner)
 

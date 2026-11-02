@@ -43,11 +43,11 @@ sel = (np.abs(ks) > 0) & (np.abs(ks) <= 0.12)
 mk = {2.0: 'o', 6.0: 's', 12.0: '^'}
 for j, b in enumerate(betas):
     for m in range(3):
-        x = 3 * c.U[m] * f["v"][j, sel, m]; y = f["gr"][j, sel, m] / ks[sel]
+        x = 1.5 * f["d2"][j, sel, m]; y = f["gr"][j, sel, m] / ks[sel]
         a.plot(x, y, mk[b], ms=3.5, color=cols[m], alpha=0.85, mec='none')
 lim = [0.005, 0.3]; a.plot(lim, lim, '-', lw=0.9, color=MUTED)
 a.set_xscale('log'); a.set_yscale('log'); a.set_xlim(lim); a.set_ylim(lim)
-a.set_xlabel(r'$3\,u_m v_m$')
+a.set_xlabel(r'$\frac{3}{2}\,\mathbb{E}[\Delta^2]$')
 a.set_ylabel(r'$\ell^{-1}\,\partial_\ell \bar U_i$')
 for b in betas:
     a.plot([], [], mk[b], ms=3.5, color=MUTED, mec='none', label=rf'$\beta={b:g}$')
@@ -55,18 +55,19 @@ for m in range(3):
     a.plot([], [], '-', lw=1.5, color=cols[m], label=f'context {m+1}')
 a.legend(loc='upper left')
 
-# ---------- (b) learned ell_m(t), beta = 6 (solid) and 12 (dashed); inset v_m vs ell ----------
+# ---------- (b) loop gain Lambda_m(ell_m(t)) along learning, beta = 6 (solid) and 12 (dashed) ----------
 a = ax[0, 1]
 t = np.arange(1, sw["b6_e1_s0"].shape[0] + 1) * int(sw["rec"]) * float(sw["dt"])
 for m in range(3):
-    a.plot(t, sw["b6_e1_s0"][:, 0, m], lw=1.5, color=cols[m])
-    a.plot(t, sw["b12_e1_s0"][:, 0, m], '--', lw=1.1, color=cols[m])
-for m, lc in enumerate(c.k_c(6.0)):
-    if np.isfinite(lc):
-        a.axhline(lc, color=cols[m], lw=0.7, alpha=0.6, ls=':')
-a.set_xscale('log'); a.set_yscale('log'); a.set_ylim(0.03, 12)
-a.set_xlabel(r'time ($1/\gamma$)'); a.set_ylabel(r'learned slope $\ell_m$')
-ins = inset_axes(a, width='36%', height='34%', loc='upper left', borderpad=1.6)
+    for b, ls, lw in ((6.0, '-', 1.5), (12.0, '--', 1.1)):
+        X = sw[f"b{b:g}_e1_s0"]
+        a.plot(t, c.Lambda_m(X[:, 0, m], b)[:, m], ls, lw=lw, color=cols[m])
+        a.axhline(b * c.U[m] * c.G_SIGN / c.GAMMA,                 # sign-rule ceiling
+                  color=cols[m], lw=0.7, alpha=0.6, ls=':')
+a.axhline(1.0, color=MUTED, lw=0.9)
+a.set_xscale('log'); a.set_yscale('log'); a.set_ylim(0.02, 6)
+a.set_xlabel(r'time ($1/\gamma$)'); a.set_ylabel(r'loop gain $\Lambda_m(\ell_m)$')
+ins = inset_axes(a, width='36%', height='34%', loc='lower right', borderpad=1.6)
 X = sw["b6_e1_s0"]; pos = ks > 0
 for m in range(3):
     ins.plot(ks[pos], f["v"][bi, pos, m], '-', lw=3, alpha=0.3, color=cols[m])

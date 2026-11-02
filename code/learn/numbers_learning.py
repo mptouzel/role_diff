@@ -31,9 +31,12 @@ print("\n== mixed Nash and small-ell growth rate (fixed_k)")
 i0 = np.argmin(abs(ks))
 print(f"payoff at ell=0, beta=2/6/12: {np.round(f['r'][:, i0], 4)}")
 sel = (np.abs(ks) > 0) & (np.abs(ks) <= 0.12)
-ratio = f["gr"][:, sel, :] / ks[None, sel, None] / (3 * c.U[None, None, :] * f["v"][:, sel, :])
-print(f"|ell|<=0.12: gradient/ell over 3 u_m v_m in [{ratio.min():.3f}, {ratio.max():.3f}], "
+ratio = f["gr"][:, sel, :] / ks[None, sel, None] / (1.5 * f["d2"][:, sel, :])
+print(f"|ell|<=0.12: gradient/ell over (3/2) E[Delta^2] in [{ratio.min():.3f}, {ratio.max():.3f}], "
       f"max |dev| {np.abs(ratio - 1).max() * 100:.1f}%")
+lin = f["gr"][:, sel, :] / ks[None, sel, None] / (3 * c.U[None, None, :] * f["v"][:, sel, :])
+print(f"linear-score value 3 u_m v_m: gradient/ell over it in [{lin.min():.3f}, {lin.max():.3f}], "
+      f"overestimate up to {(1 / lin.min() - 1) * 100:.0f}% (beta=12 rows: min {lin[-1].min():.3f})")
 print(f"floor sigma_w^2/2gamma = {c.FLOOR:.4f}; v_1 at ell=0, beta=2/6/12: {np.round(f['v'][:, i0, 0], 3)}")
 
 print("\n== learning through the cascade (learn_sweep, eps=1, ell0=0.05)")
