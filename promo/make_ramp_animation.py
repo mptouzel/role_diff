@@ -16,6 +16,12 @@ beta_c: critical slowing down makes a finite ramp lag its own thresholds.
 Rendered twice, since the two vertical scales in (b) say different things:
   cascade.mp4         log v_k    -- every liftoff is a visible event
   cascade_linear.mp4  linear v_k -- the leading axes dominate; the tail is flat
+and recut for feeds, on the same frame clock:
+  cascade_roles_and_staircase.mp4   panels (a) and (c)
+  cascade_panelC.mp4                panel (c) alone
+
+Panel (a) is drawn in status coordinates tanh(omega.g_k), which stay in (-1, 1):
+omega itself grows linearly with beta once the roles have formed.
 """
 import os
 import shutil
@@ -29,7 +35,7 @@ from matplotlib import animation
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 d = np.load(os.path.join(HERE, "ramp_data.npz"))
-betas, eigs, z = d["betas"], d["eigs"], d["z_cloud"]
+betas, eigs, z = d["betas"], d["eigs"], d["s_cloud"]   # statuses tanh(omega.g_k)
 floor, M, n_show = float(d["floor"]), eigs.shape[1], d["z_cloud"].shape[2]
 # M counts identity dimensions, so panel (b) shows every mode including the
 # ones pinned at the floor. The cascade can only ever reach the number of
@@ -60,10 +66,9 @@ OPEN = 55                                  # frames over which a dimension opens
 rng = np.random.default_rng(3)
 jit = rng.uniform(-1, 1, z.shape[1])       # fixed per-agent jitter for the 1-D phase
 
-# each axis gets its own fixed range: axis 2 is the weaker mode, and on a
-# shared scale its split is squeezed to nothing. Units stay absolute, so the
-# tick labels still show the hierarchy that panel (b) quantifies.
-zlim = [float(np.abs(z[:, :, c]).max()) * 1.08 for c in range(n_show)]
+# Panel (a) shows statuses, which are confined to (-1, 1) on every axis, so the
+# frame is fixed: the noise-floor cloud and the saturated role corners share it.
+zlim = [1.05] * n_show
 
 from scipy.ndimage import gaussian_filter
 
@@ -120,9 +125,9 @@ def _dip(Marg):
     return centre / np.maximum(Marg.max(axis=1), 1e-12)
 
 # Marginal dips alone cannot support a four-role claim. A ring gives a bimodal
-# marginal on BOTH axes with no four-group structure at all, which is what two
-# axes of similar strength produce here (sim_ramp.py). So the second level also
-# requires the joint to concentrate at four angles, not merely to be wide.
+# marginal on BOTH axes with no four-group structure at all (an isotropic
+# confinement of omega produces one). So the second level also requires the
+# joint to concentrate at four angles, not merely to be wide.
 def _four_angular_groups(zc, nb=24, thresh=1.3):
     th = np.arctan2(zc[:, :, 1], zc[:, :, 0])
     out = np.zeros(th.shape[0], dtype=bool)
@@ -144,115 +149,137 @@ for _i, _v in enumerate(_pk):
     VMAX[_i] = _e
 
 
-def render(scale, outname):
-    fig = plt.figure(figsize=(15.6, 4.6))
-    outer = fig.add_gridspec(1, 3, width_ratios=[1.15, 1, 1], wspace=0.30,
-                             left=0.045, right=0.99, bottom=0.13, top=0.90)
-    inner = outer[0].subgridspec(2, 2, width_ratios=[4, 1], height_ratios=[1, 3.4],
-                                 wspace=0.05, hspace=0.05)
-    axP = fig.add_subplot(inner[1, 0])
-    axT = fig.add_subplot(inner[0, 0], sharex=axP)   # marginal on axis 1
-    axR = fig.add_subplot(inner[1, 1], sharey=axP)   # marginal on axis 2
-    axS = fig.add_subplot(outer[1])
-    axC = fig.add_subplot(outer[2])
-    xc = 0.5 * (_XE[1:] + _XE[:-1])
-    yc = 0.5 * (_YE[1:] + _YE[:-1])
-    mtop, = axT.plot(xc, MX[0], color="tab:blue", lw=1.8)
-    mrig, = axR.plot(MY[0], yc, color="tab:blue", lw=1.8)
-    for ax_, lim in ((axT, MXMAX), (axR, MYMAX)):
-        for sp in ("top", "right", "left" if ax_ is axT else "bottom"):
-            ax_.spines[sp].set_visible(False)
-    axT.set_ylim(0, MXMAX[0]); axT.set_yticks([]); axT.tick_params(labelbottom=False)
-    axR.set_xlim(0, MYMAX[0]); axR.set_xticks([]); axR.tick_params(labelleft=False)
-    axT.set_title("(a)  who takes which role", loc="left", fontsize=12)
+LAYOUTS = {   # panels, figure size (in), dpi, margins (left, right, wspace); one frame clock
+    # The recuts keep their pixel size at half the figure size and twice the dpi,
+    # so every label is twice as large: they are watched on phones.
+    "abc": ("abc", (15.6, 4.6), 100, (0.045, 0.99, 0.30)),
+    "ac":  ("ac", (7.8, 3.44), 200, (0.10, 0.965, 0.26)),   # roles + staircase, for feeds
+    "c":   ("c", (5.2, 4.58), 200, (0.13, 0.955, 0.30)),     # staircase alone
+}
 
-    # ---- (a) the population ----------------------------------------------
-    im = axP.imshow(DENS[0].T, origin="lower", cmap="Blues", aspect="auto",
-                    extent=[-zlim[0], zlim[0], -zlim[1], zlim[1]],
-                    interpolation="bicubic", vmin=0, vmax=VMAX[0], zorder=2)
-    axP.axhline(0, color="0.85", lw=0.8, zorder=0)
-    axP.axvline(0, color="0.85", lw=0.8, zorder=0)
-    axP.set_xlim(-zlim[0], zlim[0])
-    axP.set_ylim(-zlim[1], zlim[1])
-    axP.set_xlabel(r"status on axis 1   $\omega_i \cdot \hat{g}_1$")
-    axP.set_ylabel(r"status on axis 2   $\omega_i \cdot \hat{g}_2$")
-    note = axP.text(0.03, 0.045, "", transform=axP.transAxes, fontsize=9.5,
-                    va="bottom", ha="left", color="0.3")
-    for s in ("top", "right"):
-        axP.spines[s].set_visible(False)
 
-    # ---- (b) the spectrum -------------------------------------------------
-    lo = eigs.min() * 0.6 if scale == "log" else 0.0
-    axS.axhspan(lo, ACTIVE, color="0.92", zorder=0)
-    axS.axhline(ACTIVE, color="0.45", lw=1.0, ls="--", zorder=1)
-    axS.text(0.98, 0.96, "dashed: noise floor  " r"$\sigma_\omega^2/2\gamma$",
-             transform=axS.transAxes, va="top", ha="right", fontsize=9, color="0.4")
-    pts = axS.scatter(k, eigs[0], s=70, c=colors, edgecolor="0.25", linewidth=0.6, zorder=3)
-    axS.set_yscale(scale)
-    axS.set_xlim(0.3, M + 0.7)
-    axS.set_xticks(np.arange(2, M + 1, 2))
-    axS.set_ylim(lo, eigs.max() * (1.8 if scale == "log" else 1.05))
-    axS.set_xlabel(r"role axis  $k$")
-    axS.set_ylabel(r"covariance eigenvalue  $v_k$")
-    axS.set_title("(b)  the population's role structure", loc="left", fontsize=12)
-    for s in ("top", "right"):
-        axS.spines[s].set_visible(False)
+def render(scale, outname, layout="abc"):
+    panels, size, dpi, (left, right, wsp) = LAYOUTS[layout]
+    fig = plt.figure(figsize=size, dpi=dpi)
+    ratios = {"a": 1.15, "b": 1.0, "c": 1.0}
+    outer = fig.add_gridspec(1, len(panels), width_ratios=[ratios[q] for q in panels],
+                             wspace=wsp, left=left, right=right,
+                             bottom={"abc": 0.13, "ac": 0.19, "c": 0.12}[layout], top=0.90 if layout == "abc" else 0.92)
+    slot = {q: outer[n] for n, q in enumerate(panels)}
+    im = mtop = mrig = note = pts = trail = btrail = ptrail = dot = readout = None
+    if "a" in panels:
+        inner = slot["a"].subgridspec(2, 2, width_ratios=[4, 1], height_ratios=[1, 3.4],
+                                      wspace=0.05, hspace=0.05)
+        axP = fig.add_subplot(inner[1, 0])
+        axT = fig.add_subplot(inner[0, 0], sharex=axP)   # marginal on axis 1
+        axR = fig.add_subplot(inner[1, 1], sharey=axP)   # marginal on axis 2
+    if "b" in panels:
+        axS = fig.add_subplot(slot["b"])
+    if "c" in panels:
+        axC = fig.add_subplot(slot["c"])
+    if "a" in panels:
+        xc = 0.5 * (_XE[1:] + _XE[:-1])
+        yc = 0.5 * (_YE[1:] + _YE[:-1])
+        mtop, = axT.plot(xc, MX[0], color="tab:blue", lw=1.8)
+        mrig, = axR.plot(MY[0], yc, color="tab:blue", lw=1.8)
+        for ax_, lim in ((axT, MXMAX), (axR, MYMAX)):
+            for sp in ("top", "right", "left" if ax_ is axT else "bottom"):
+                ax_.spines[sp].set_visible(False)
+        axT.set_ylim(0, MXMAX[0]); axT.set_yticks([]); axT.tick_params(labelbottom=False)
+        axR.set_xlim(0, MYMAX[0]); axR.set_xticks([]); axR.tick_params(labelleft=False)
+        axT.set_title("(a)  who takes which role", loc="left", fontsize=12)
 
-    # ---- (c) the cascade ---------------------------------------------------
-    axC.step(betas, N_of_t, where="post", color="0.88", lw=1.6, zorder=1)
-    if bits is not None:
-        axC.plot(betas, bits, color="0.90", lw=1.4, zorder=1)
-    trail, = axC.step([], [], where="post", color="tab:blue", lw=2.4, zorder=4,
-                      label=r"role axes above the floor  $N$")
-    btrail, = axC.plot([], [], color="tab:orange", lw=2.2, zorder=3,
-                       label="role information (bits)")
-    ptrail, = axC.plot([], [], color="tab:green", lw=1.8, ls="--", zorder=2,
-                       label=r"coordination payoff / $w_0$")
-    dot, = axC.plot([], [], "o", ms=9, color="tab:blue", mec="white", mew=1.4, zorder=5)
-    axC.set_xscale("log")
-    axC.set_xlim(betas[0], betas[-1])
-    # Scale to what the run actually reaches, not to the repertoire size: only a
-    # fraction of the schemas clear the floor over this ramp, and the bits curve
-    # tops out well below that again, so a 0..M axis flattens it onto the frame.
-    _top = max(float(N_of_t.max()),
-               float(bits.max()) if bits is not None else 0.0,
-               float(payoff.max()) if payoff is not None else 0.0)
-    axC.set_ylim(-0.4, _top + 0.6)
-    axC.set_xlabel(r"feedback strength  $\beta(t)$")
-    axC.set_ylabel("axes,  bits,  payoff")
-    # Under the readout, where the staircase is still low: the lower right is
-    # where the bits and payoff curves run.
-    axC.legend(loc="upper left", bbox_to_anchor=(0.0, 0.90), fontsize=8,
-               frameon=False, borderpad=0.1, labelspacing=0.25, handlelength=1.6)
-    axC.set_title("(c)  the cascade, and what it yields", loc="left", fontsize=12)
-    for s in ("top", "right"):
-        axC.spines[s].set_visible(False)
-    readout = axC.text(0.03, 0.94, "", transform=axC.transAxes, fontsize=10,
-                       va="top", ha="left", color="0.25")
+        # ---- (a) the population ----------------------------------------------
+        im = axP.imshow(DENS[0].T, origin="lower", cmap="Blues", aspect="auto",
+                        extent=[-zlim[0], zlim[0], -zlim[1], zlim[1]],
+                        interpolation="bicubic", vmin=0, vmax=VMAX[0], zorder=2)
+        axP.axhline(0, color="0.85", lw=0.8, zorder=0)
+        axP.axvline(0, color="0.85", lw=0.8, zorder=0)
+        axP.set_xlim(-zlim[0], zlim[0])
+        axP.set_ylim(-zlim[1], zlim[1])
+        axP.set_xlabel(r"status on axis 1   $\tanh(\omega_i \cdot g_1)$")
+        axP.set_ylabel(r"status on axis 2   $\tanh(\omega_i \cdot g_2)$")
+        note = axP.text(0.03, 0.045, "", transform=axP.transAxes, fontsize=9.5,
+                        va="bottom", ha="left", color="0.3")
+        for s in ("top", "right"):
+            axP.spines[s].set_visible(False)
+
+    if "b" in panels:
+        # ---- (b) the spectrum -------------------------------------------------
+        lo = eigs.min() * 0.6 if scale == "log" else 0.0
+        axS.axhspan(lo, ACTIVE, color="0.92", zorder=0)
+        axS.axhline(ACTIVE, color="0.45", lw=1.0, ls="--", zorder=1)
+        axS.text(0.98, 0.96, "dashed: noise floor  " r"$\sigma_\omega^2/2\gamma$",
+                 transform=axS.transAxes, va="top", ha="right", fontsize=9, color="0.4")
+        pts = axS.scatter(k, eigs[0], s=70, c=colors, edgecolor="0.25", linewidth=0.6, zorder=3)
+        axS.set_yscale(scale)
+        axS.set_xlim(0.3, M + 0.7)
+        axS.set_xticks(np.arange(2, M + 1, 2))
+        axS.set_ylim(lo, eigs.max() * (1.8 if scale == "log" else 1.05))
+        axS.set_xlabel(r"role axis  $k$")
+        axS.set_ylabel(r"covariance eigenvalue  $v_k$")
+        axS.set_title("(b)  the population's role structure", loc="left", fontsize=12)
+        for s in ("top", "right"):
+            axS.spines[s].set_visible(False)
+
+    if "c" in panels:
+        # ---- (c) the cascade ---------------------------------------------------
+        axC.step(betas, N_of_t, where="post", color="0.88", lw=1.6, zorder=1)
+        if bits is not None:
+            axC.plot(betas, bits, color="0.90", lw=1.4, zorder=1)
+        trail, = axC.step([], [], where="post", color="tab:blue", lw=2.4, zorder=4,
+                          label=r"role axes above the floor  $N$")
+        btrail, = axC.plot([], [], color="tab:orange", lw=2.2, zorder=3,
+                           label="role information (bits)")
+        ptrail, = axC.plot([], [], color="tab:green", lw=1.8, ls="--", zorder=2,
+                           label=r"coordination payoff / $w_0$")
+        dot, = axC.plot([], [], "o", ms=9, color="tab:blue", mec="white", mew=1.4, zorder=5)
+        axC.set_xscale("log")
+        axC.set_xlim(betas[0], betas[-1])
+        # Scale to what the run actually reaches, not to the repertoire size: only a
+        # fraction of the schemas clear the floor over this ramp, and the bits curve
+        # tops out well below that again, so a 0..M axis flattens it onto the frame.
+        _top = max(float(N_of_t.max()),
+                   float(bits.max()) if bits is not None else 0.0,
+                   float(payoff.max()) if payoff is not None else 0.0)
+        axC.set_ylim(-0.4, 1.22 * _top)            # headroom for the readout and legend
+        axC.set_xlabel(r"feedback strength  $\beta(t)$")
+        axC.set_ylabel("axes,  bits,  payoff")
+        # Under the readout, where the staircase is still low: the lower right is
+        # where the bits and payoff curves run.
+        axC.legend(loc="upper left", bbox_to_anchor=(0.0, 0.90), fontsize=8,
+                   frameon=False, borderpad=0.1, labelspacing=0.25, handlelength=1.6)
+        axC.set_title("(c)  the cascade, and what it yields", loc="left", fontsize=12)
+        for s in ("top", "right"):
+            axC.spines[s].set_visible(False)
+        readout = axC.text(0.03, 0.94, "", transform=axC.transAxes, fontsize=10,
+                           va="top", ha="left", color="0.25")
 
     def update(i):
-        # (a) how far the second dimension has opened, and whether axis 3 colours
-        w = np.clip((i - lift[1]) / OPEN, 0.0, 1.0) if n_show > 1 else 0.0
-        im.set_data(DENS[i].T)
-        im.set_clim(0, VMAX[i])
-        mtop.set_ydata(MX[i]); axT.set_ylim(0, MXMAX[i])
-        mrig.set_xdata(MY[i]); axR.set_xlim(0, MYMAX[i])
-        note.set_text({0: "no roles yet:  one cloud",
-                       1: "axis 1 has split:  two roles\n(axis 2 is broadening, not yet split)",
-                       2: "both axes split:  four role combinations"}[SPLIT[i]])
-        # (b), (c)
-        pts.set_offsets(np.c_[k, eigs[i]])
-        on = eigs[i] > ACTIVE
-        pts.set_sizes(np.where(on, 105, 42))
-        pts.set_color([c if o else "0.72" for c, o in zip(colors, on)])
-        trail.set_data(betas[: i + 1], N_of_t[: i + 1])
-        dot.set_data([betas[i]], [N_of_t[i]])
-        if bits is not None:
-            btrail.set_data(betas[: i + 1], bits[: i + 1])
-            ptrail.set_data(betas[: i + 1], payoff[: i + 1])
-        extra = rf",   $I={bits[i]:.1f}$ bits" if bits is not None else ""
-        readout.set_text(rf"$\beta={betas[i]:.3g}$,   $N={N_of_t[i]}$ of {n_sch}" + extra)
-        return im, mtop, mrig, pts, trail, btrail, ptrail, dot, readout, note
+        if "a" in panels:
+            # (a) how far the second dimension has opened, and whether axis 3 colours
+            w = np.clip((i - lift[1]) / OPEN, 0.0, 1.0) if n_show > 1 else 0.0
+            im.set_data(DENS[i].T)
+            im.set_clim(0, VMAX[i])
+            mtop.set_ydata(MX[i]); axT.set_ylim(0, MXMAX[i])
+            mrig.set_xdata(MY[i]); axR.set_xlim(0, MYMAX[i])
+            note.set_text({0: "one cloud:  no roles yet",
+                           1: "axis 1 split:  two roles",
+                           2: "both split:  four roles"}[SPLIT[i]])
+        if "b" in panels:
+            pts.set_offsets(np.c_[k, eigs[i]])
+            on = eigs[i] > ACTIVE
+            pts.set_sizes(np.where(on, 105, 42))
+            pts.set_color([c if o else "0.72" for c, o in zip(colors, on)])
+        if "c" in panels:
+            trail.set_data(betas[: i + 1], N_of_t[: i + 1])
+            dot.set_data([betas[i]], [N_of_t[i]])
+            if bits is not None:
+                btrail.set_data(betas[: i + 1], bits[: i + 1])
+                ptrail.set_data(betas[: i + 1], payoff[: i + 1])
+            extra = rf",   $I={bits[i]:.1f}$ bits" if bits is not None else ""
+            readout.set_text(rf"$\beta={betas[i]:.3g}$,   $N={N_of_t[i]}$ of {n_sch}" + extra)
+        return [x for x in (im, mtop, mrig, pts, trail, btrail, ptrail, dot, readout, note) if x is not None]
 
     ani = animation.FuncAnimation(fig, update, frames=len(betas), interval=33, blit=False)
     # Render to scratch, then remux into place with the moov atom moved to the
@@ -264,7 +291,7 @@ def render(scale, outname):
     tmp = tempfile.mkdtemp(prefix="ramp_render_")
     try:
         scratch = os.path.join(tmp, outname)
-        ani.save(scratch, writer=animation.FFMpegWriter(fps=30, bitrate=3000))
+        ani.save(scratch, writer=animation.FFMpegWriter(fps=30, bitrate=3000), dpi=dpi)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", scratch, "-c", "copy",
                         "-movflags", "+faststart", os.path.join(HERE, outname)],
                        check=True)
@@ -282,3 +309,6 @@ if __name__ == "__main__":
         render("log", "cascade.mp4")
     if which in ("both", "linear"):
         render("linear", "cascade_linear.mp4")
+    if which in ("both", "recuts"):
+        render("log", "cascade_roles_and_staircase.mp4", layout="ac")
+        render("log", "cascade_panelC.mp4", layout="c")

@@ -13,16 +13,14 @@ Four acts, 78 s at 30 fps, from promo/geometry_data.npz:
      P_e = Phi(-|Delta|/sigma_read) of Eq. (3) means;
   3. the beta ramp -- the cloud stretches along ghat_1 and divides into two role
      lobes as beta crosses beta_c^(1) = 2.6;
-  4. beta_c^(2) = 4.0 -- the second schema is above threshold and broadens the
-     cloud along ghat_2 without dividing it. Measured on this repertoire at
-     N = 3000: axis-2 marginal dip 0.97 at beta = 12 and 0.55 at beta = 20,
-     against 0.04 for axis 1, with the angular contrast of the (z_1, z_2)
-     density at 34-43 throughout. Two lobes, not four groups, and not the ring
-     of sim_ring.py.
+  4. beta_c^(2) = 4.0 and beta_c^(3) = 8.2 -- each further schema divides the
+     population again, along its own axis: four role combinations, then eight,
+     the corners of a box aligned with the schemas (sim_geometry.py). The
+     marginal panels show statuses tanh(omega.g_m), which stay in (-1, 1).
 
 Projection is orthographic and hand-rolled rather than mplot3d: the camera
 orbits at fixed elevation, points are painter-sorted and sized by depth, and the
-view zooms out through act 3 so the growing cloud stays in frame.
+view zooms out through act 3, following the cloud's measured extent.
 
 Renders need /home/mptouzel/miniconda3/bin/python3 (the venv has no matplotlib)
 and FFMpegWriter with codec libopenh264 (no libx264 in this environment).
@@ -59,8 +57,9 @@ def _ema(v, a=0.06):
 DIPS = np.vstack([_ema(dips[:, m]) for m in range(3)]).T     # density at 0 / peak
 # Per-frame ceiling for the marginals, smoothed in time: a fixed one is set by
 # the tight subcritical peak and flattens every later frame to nothing.
-HMAX = 1.25 * _ema(np.array([max(np.histogram(cloud[i][:, m], bins=23,
-                                              range=(-2.7, 2.7))[0].max()
+STAT = np.tanh(cloud * strength)                   # statuses tanh(omega.g_m), in (-1, 1)
+HMAX = 1.25 * _ema(np.array([max(np.histogram(STAT[i][:, m], bins=23,
+                                              range=(-1.0, 1.0))[0].max()
                                  for m in (0, 1)) for i in range(len(betas))]), 0.05)
 
 STRIDE = int(os.environ.get("STRIDE", "1"))        # >1 renders a fast preview
@@ -102,7 +101,7 @@ def pick_pair(rng, want_misread):
     cand_lo = np.where((z < np.percentile(z, 18)) & (off < np.percentile(off, 45)))[0]
     for _ in range(4000):
         i, j = rng.choice(cand_hi), rng.choice(cand_lo)
-        delta = (omega_sub[i] - omega_sub[j]) @ (np.eye(3)[0] * strength[0])
+        delta = np.tanh(omega_sub[i, 0] * strength[0]) - np.tanh(omega_sub[j, 0] * strength[0])
         s_i = delta + sigma_obs * rng.standard_normal()
         s_j = -delta + sigma_obs * rng.standard_normal()
         # i should go and j should defer; a misread is j reading Go as well.
@@ -133,12 +132,17 @@ def project(P, az, el):
     return P @ r, P @ u, P @ f
 
 
+# The cloud grows linearly in beta once roles form (harmonic restoring force),
+# so the zoom follows its measured extent, smoothed so the camera does not jitter.
+EXT = np.maximum(0.55, 1.15 * _ema(np.array([np.percentile(np.abs(c), 99.5)
+                                             for c in cloud]), 0.03))
+
+
 def half_extent(k):
     """World half-size in view. Zoom out through act 3 as the cloud grows."""
     if k < A1 + A2:
         return 0.55
-    t = (k - A1 - A2) / max(A3 - 1, 1)
-    return 0.55 + (2.4 - 0.55) * min(1.0, t / 0.55) ** 0.8
+    return float(EXT[min(k - A1 - A2, A3 - 1)])
 
 
 # The camera rocks about az = -66 deg rather than orbiting. At az = -90 the
@@ -317,10 +321,10 @@ def act2(k, az, el, L):
         sub.set_text("Two agents meet. Neither has been told what to do.")
     elif name == "score":
         cap.set_text(r"The schema scores them both")
-        sub.set_text(r"Each identity projects onto $\hat g_1$.")
+        sub.set_text(r"Each identity projects onto $\hat g_1$. Its status is $\tanh(\omega_i\cdot g_1)$.")
     elif name == "delta":
         cap.set_text(r"Only the difference matters")
-        sub.set_text(r"$\Delta=(\omega_i-\omega_j)\cdot g_1$ is what the encounter turns on.")
+        sub.set_text(r"The status difference $\Delta$ is what the encounter turns on.")
     elif name == "read":
         cap.set_text(r"Each agent reads $\Delta$ through a noisy channel")
         sub.set_text(r"The wider the gap, the rarer the misread.")
@@ -354,7 +358,7 @@ def role_colors(P, w):
 
 def marginal_panel(axh, x, k, m, title):
     axh.clear()
-    axh.hist(x, bins=23, range=(-2.7, 2.7), color=DIM, alpha=0.9)
+    axh.hist(x, bins=23, range=(-1.0, 1.0), color=DIM, alpha=0.9)
     axh.set_ylim(0, HMAX[k])
     axh.set_yticks([])
     axh.set_title(title, fontsize=11.5, pad=4)
@@ -373,8 +377,8 @@ def act3(k, az, el, L):
     draw_axes(az, el, L, show=(True, True, True))
     axI.set_visible(False)
     axH1.set_visible(True); axH2.set_visible(True)
-    marginal_panel(axH1, cloud[k][:, 0], k, 0, r"on axis 1   $\omega_i\cdot\hat g_1$")
-    marginal_panel(axH2, cloud[k][:, 1], k, 1, r"on axis 2   $\omega_i\cdot\hat g_2$")
+    marginal_panel(axH1, STAT[k][:, 0], k, 0, r"status on axis 1   $\tanh(\omega_i\cdot g_1)$")
+    marginal_panel(axH2, STAT[k][:, 1], k, 1, r"status on axis 2   $\tanh(\omega_i\cdot g_2)$")
     crossed = int((b > beta_c).sum())
     hud.set_text(rf"$\beta={b:.1f}$" + "\n" +
                  rf"$\beta_c^{{(1,2,3)}}={beta_c[0]:.1f},\,{beta_c[1]:.1f},\,{beta_c[2]:.1f}$"
@@ -388,13 +392,16 @@ def act3(k, az, el, L):
     elif b < beta_c[1] * 1.7:
         cap.set_text(r"The cloud divides along $\hat g_1$")
         sub.set_text("Two complementary roles, self-sustaining. Nobody assigned them.")
-    elif DIPS[k, 1] > 0.62:
+    elif DIPS[k, 1] > 0.45:
         cap.set_text(r"$\beta_c^{(2)}=4.0$: the second schema is over threshold too")
-        sub.set_text(r"It widens the cloud along $\hat g_2$ without dividing it.")
+        sub.set_text(r"Each role now divides again, along $\hat g_2$.")
+    elif DIPS[k, 2] > 0.45:
+        cap.set_text("Four role combinations")
+        sub.set_text(r"Each schema divides the population on its own. "
+                     r"Axis 3 crosses at $\beta_c^{(3)}=8.2$.")
     else:
-        cap.set_text("A second role axis is not yet a second role")
-        sub.set_text(rf"Axis 1 divided at $\beta=2.6$ (dip {DIPS[k, 0]:.2f}); axis 2 "
-                     rf"crossed at 4.0 and is at dip {DIPS[k, 1]:.2f} by $\beta={b:.0f}$.")
+        cap.set_text("Eight role combinations, one per corner")
+        sub.set_text("Three schemas, three independent divisions. Nobody assigned them.")
 
 
 def draw(k):

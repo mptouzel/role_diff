@@ -15,11 +15,15 @@ Manuscript package (REVTeX 4.2).
                       by `code/make_fig1.py`.
 - `code/scratch/`   — working notes and exploratory scripts. Not part of the
                       submission and not used to build any figure.
-- `promo/`          — two-panel animations of the cascade for talks and
-                      outreach, log and linear in $v_k$. Not part of the
-                      submission. `make promo` regenerates them; the
-                      intermediate `ramp_data.npz` is git-ignored and
-                      rebuilt from a fixed seed in ~2 min.
+- `promo/`          — animations for talks and outreach, on the model of
+                      Fig. 1 (tanh statuses, harmonic restoring force):
+                      the cascade (`cascade*.mp4`, from `sim_ramp.py`), a
+                      degenerate pair igniting into four role groups
+                      (`ring.mp4`), and the 3D geometry of three schemas
+                      (`geometry.mp4`). Not part of the submission.
+                      `make promo` regenerates them; the intermediate
+                      `*_data.npz` files are git-ignored and rebuilt from
+                      fixed seeds in ~10 min.
 - `requirements.txt`, `Makefile` — pinned figure environment and build targets.
 
 ## Compiling

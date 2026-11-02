@@ -5,8 +5,10 @@ linearly in time, beta(t), as in Sec. V of the main text, and the INSTANTANEOUS
 covariance is recorded every frame. That is what makes the eigenvalues visibly
 fluctuate and then lift off the noise floor one at a time.
 
-The dynamics is the one of code/sim_fig1.py, unchanged. Only the schedule
-(a ramp rather than per-beta equilibration) and the repertoire size differ:
+The dynamics is the one of code/sim_fig1.py: tanh statuses, harmonic restoring
+force, read noise averaged over K random partners per context (the
+dense-encounter limit). Only the schedule (a ramp rather than per-beta
+equilibration) and the repertoire size differ:
 M = d = 16 modes on a geometric strength profile, so the thresholds
 beta_c^(k) = gamma / ((1-rho_pair) g mu_k) are spaced logarithmically and the
 cascade is the geometric class (ii) of Sec. III B. Under an exponential ramp
@@ -14,17 +16,16 @@ that puts the liftoffs at even intervals in frame number. The directions are
 exactly orthogonal coordinate axes, so each ignition is a division along a new,
 independent role axis.
 
-The number of schemas does not control how sharply a lobe splits. Holding axes
-1-6 fixed and varying only how many further schemas are active (6, 10, 16 at
-N = 1200) leaves <|omega|^2> unchanged to within a percent and the axis-1 dip
-flat or slightly deeper with more of them. What matters for the cloud panel is
-beta, and only the leading axis ever splits cleanly.
+Measured on this run (bimodality coefficient of the status on axes 1-3): axis 1
+is split by beta = 5 (0.96), axes 2 and 3 by beta = 20 (0.99, 0.98), and all
+sixteen are above the floor by beta = 40. Each axis divides the population
+independently, so the joint of axes 1 and 2 ends in four groups.
 
 Writes promo/ramp_data.npz.
 """
 import os
 import numpy as np
-from scipy.special import ndtr          # standard normal CDF
+from scipy.special import ndtr, erf          # standard normal CDF
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(HERE, "ramp_data.npz")
@@ -38,9 +39,8 @@ sigma_dyn = 0.25                # as Fig. 1. Lowering it tightens the role lobes
                                 # also lowers the floor, and v_k/floor = 1/(1-Lambda_k),
                                 # so "supra-floor" then fires far below threshold and
                                 # the cascade collapses into one jump.
-dt = 0.002                      # beta*|g|*dt must stay small against |omega|: at
-                                # beta=100 this holds the per-step kick near 0.07,
-                                # where the lobe separation is converged in dt.
+dt = 0.01                       # dense-encounter limit: no shot noise to resolve
+K = 32                          # partners averaged per context per step
 rho_pair = 0.0                      # random pairing, factor (1-rho_pair) = 1
 
 # --- repertoire: near-orthogonal directions, geometric strengths ------------
@@ -59,17 +59,8 @@ gain = 2 * piprime                                      # read gain g = 2 pibar'
 # Sec. III B. The top of the ramp (beta = 100) leaves the last mode only just
 # above its own threshold, so an axis is still igniting on screen at the end.
 #
-# The wide first gap (u_2/u_1 = 0.25) is what makes panel (a) legible, and the
-# reason is the isotropic quartic. Two axes of similar strength leave an
-# approximate continuous symmetry in their plane, and the population settles
-# onto a RING rather than into four role groups: at u_2/u_1 = 0.79 the angular
-# histogram of (z_1, z_2) is flat to 1.9:1 and all four quadrants hold 0.25 of
-# the agents, while both marginals are bimodal, because a ring projects to a
-# bimodal marginal on either axis. Widening the gap breaks that symmetry:
-# u_2/u_1 = 0.79 / 0.40 / 0.25 / 0.15 gives axis-1 dips 0.56 / 0.35 / 0.22 /
-# 0.13 and axis-2 dips 0.59 / 0.74 / 0.80 / 0.88. There is no setting with four
-# groups: breaking the degeneracy enough to avoid the ring is exactly what
-# stops axis 2 splitting. Panel (a) therefore shows one clean binary division.
+# The wide first gap (u_2/u_1 = 0.25) gives panel (a) a stretch with one clean
+# binary division before axis 2 divides each lobe again.
 beta_c_target = np.concatenate([[1.8], np.geomspace(7.2, 60.0, M - 1)])
 u = gamma / ((1.0 - rho_pair) * gain * beta_c_target)   # u_k = |g_k|^2
 strength = np.sqrt(u)
@@ -78,17 +69,11 @@ mu = np.sort(np.linalg.eigvalsh(G @ G.T))[::-1]         # eigenvalues of H^T H
 beta_c = gamma / ((1.0 - rho_pair) * gain * mu)         # Lambda_k = Lambda mu_k = 1
 
 # --- ramp schedule ---------------------------------------------------------
-# beta stops at 100. Pushing it further does not deepen the lobes: past the last
-# threshold every further unit of beta is spent on |omega|^2, which the isotropic
-# quartic shares across all six axes. A dt sweep at fixed elapsed time confirms
-# it -- at beta = 400 the apparent splitting is a Euler--Maruyama artifact that
-# disappears as dt falls, while at beta <= 100 the lobes are converged in dt.
-# The ramp is exponential so that a constant-speed marker on a log-beta axis
+# beta stops at 100, past the last threshold (60). The ramp is exponential so that a constant-speed marker on a log-beta axis
 # still reads as a clock, and because strengths compound exponentially anyway.
 beta_lo, beta_hi = 1.0, 100.0
 n_frames = 900
-steps_per_frame = 240                                   # 0.48 time units per frame,
-                                                        # as before, at the smaller dt
+steps_per_frame = 48                                    # 0.48 time units per frame
 floor = sigma_dyn**2 / (2 * gamma)                      # noise floor sigma_w^2/2gamma
 
 def step_dynamics(omega, beta, rng):
@@ -102,12 +87,11 @@ def step_dynamics(omega, beta, rng):
     different contexts. Redrawing the partner per context restores that
     independence at the same feedback scale.
     """
-    proj = omega @ G.T                                   # (N, M) status on each axis
-    partner = rng.integers(0, N, size=(N, M))            # independent partner per context
-    gaps = proj - proj[partner, np.arange(M)]
-    S = gaps + sigma_obs * rng.standard_normal((N, M))
-    fb = ((2 * (S > 0).astype(float) - 1.0) @ G)
-    drift = -gamma * omega * (1.0 + np.sum(omega**2, axis=1, keepdims=True)) + beta * fb
+    score = np.tanh(omega @ G.T)                         # (N, M) statuses
+    partner = rng.integers(0, N, size=(N, K, M))         # K partners per context
+    gaps = score[:, None, :] - score[partner, np.arange(M)]   # status differences
+    a = erf(gaps / (np.sqrt(2) * sigma_obs)).mean(1)     # noise-averaged sign decision
+    drift = -gamma * omega + beta * (a @ G)
     return omega + drift * dt + sigma_dyn * np.sqrt(dt) * rng.standard_normal((N, d))
 
 betas = np.geomspace(beta_lo, beta_hi, n_frames)
@@ -117,6 +101,7 @@ n_cloud = N                                             # every agent, so densit
 cloud_idx = np.arange(N)
 n_show = 3                                              # axes kept for the unfolding panel
 z_cloud = np.zeros((n_frames, n_cloud, n_show), dtype=np.float32)
+s_cloud = np.zeros((n_frames, n_cloud, n_show), dtype=np.float32)   # statuses tanh(omega.g)
 
 # What the cascade is worth, measured on the encounters themselves. For a pair
 # meeting in context m the role-inference error is P_e = Phi(-|Delta|/sread),
@@ -133,9 +118,9 @@ def _hbin(p):
     return -(p * np.log2(p) + (1 - p) * np.log2(1 - p))
 
 def extracted(omega, rng):
-    proj = omega @ G.T
+    score = np.tanh(omega @ G.T)
     partner = rng.integers(0, N, size=(N, M))
-    gaps = proj - proj[partner, np.arange(M)]
+    gaps = score - score[partner, np.arange(M)]
     pe = ndtr(-np.abs(gaps) / sigma_obs)
     return (1.0 - _hbin(pe)).mean(axis=0).sum(), ((1.0 - 2.0 * pe) ** 2).mean(axis=0).sum()
 
@@ -147,11 +132,12 @@ for i, beta in enumerate(betas):
     eigs[i] = np.sort(np.linalg.eigvalsh(C))[::-1]
     z = omega[cloud_idx] @ Ghat.T
     z_cloud[i] = z[:, :n_show]
+    s_cloud[i] = np.tanh(omega[cloud_idx] @ G.T)[:, :n_show]
     bits[i], payoff[i] = extracted(omega, rng)
     if i % 100 == 0:
         print(f"frame {i:4d}  beta={beta:6.2f}  N_active={(eigs[i] > 2*floor).sum():2d}")
 
 np.savez(DATA_PATH, betas=betas, eigs=eigs, beta_c=np.sort(beta_c),
          u=np.sort(u)[::-1], mu=mu, gamma=gamma, sigma_dyn=sigma_dyn, sigma_obs=sigma_obs,
-         rho_pair=rho_pair, floor=floor, z_cloud=z_cloud, bits=bits, payoff=payoff)
+         rho_pair=rho_pair, floor=floor, z_cloud=z_cloud, s_cloud=s_cloud, bits=bits, payoff=payoff)
 print("done ->", DATA_PATH)

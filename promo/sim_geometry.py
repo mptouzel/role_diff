@@ -6,18 +6,15 @@ and the split of the cloud into two role lobes along the axis that schema reads.
 
 Repertoire. d = M = 3, exactly orthogonal, with the strength profile of Fig. 1
 (code/sim_fig1.py, |g_m| = 0.533, 0.434, 0.302), so the clip traces the same
-cascade the figure does: beta_c = 2.6, 4.0, 8.2. Directions are exactly
-orthogonal rather than the 0.12-jittered ones of sim_fig1.py, so each axis is a
-coordinate of the box and an ignition reads as a division along a drawn arrow.
+cascade the figure does: beta_c = 2.65, 3.99, 8.25. The dynamics is that of
+code/sim_fig1.py: tanh statuses, harmonic restoring force, read noise averaged
+over K random partners per context.
 
-What the run is for. Measured at N = 3000 on this repertoire, the axis-1
-marginal dip (density at the origin over peak density) falls 0.96 -> 0.30 ->
-0.04 at beta = 3, 6, 12, while the axis-2 dip is still 0.97 at beta = 12 and
-0.55 at beta = 20, and the angular contrast of the (z_1, z_2) density stays at
-34-43 throughout. The population therefore holds TWO lobes, not four groups and
-not the ring of sim_ring.py: axis 2 crosses its threshold at beta_c = 4.0 and
-broadens the cloud long before it divides it. The animation is written to say
-that rather than to imply a second role.
+What the run shows. Measured here (N = 600), the marginal dip (density at the
+origin over peak density) on axis 1 is 0.40 at beta = 3 and 0 from beta = 6; on
+axis 2 it is 0.24 at beta = 6 and 0 from beta = 10; on axis 3 it is 0.46 at
+beta = 10 and 0 by beta = 20. Each schema divides the population in turn, so the
+cloud ends in eight groups, the corners of a box aligned with the three schemas.
 
 Saves a subcritical snapshot for the staged encounter of the clip's second act,
 then the ramp frames.
@@ -26,6 +23,7 @@ Writes promo/geometry_data.npz.
 """
 import os
 import numpy as np
+from scipy.special import erf
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(HERE, "geometry_data.npz")
@@ -36,7 +34,9 @@ N, d, M = 600, 3, 3          # N small: individual points must stay readable in 
 gamma = 1.0
 sigma_obs = 0.6
 sigma_dyn = 0.25
-dt = 0.002
+dt = 0.01                       # dense-encounter limit: no shot noise to resolve
+K = 32                          # partners averaged per context per step
+#
 rho_pair = 0.0
 
 dirs = np.eye(d)
@@ -51,22 +51,18 @@ floor = sigma_dyn**2 / (2.0 * gamma)
 beta_sub = 1.6                                       # below beta_c^(1) = 2.6
 beta_lo, beta_hi = 1.6, 20.0
 n_frames = 900
-steps_per_frame = 200
-sub_steps = 20000
+steps_per_frame = 40
+sub_steps = 4000
 
 
 def step(omega, beta, rng):
-    """One encounter per context per agent, partner redrawn per context.
-
-    Identical in form to promo/sim_ramp.py: the independent partner draw is what
-    keeps role assignments from correlating across axes.
-    """
-    proj = omega @ G.T
-    partner = rng.integers(0, N, size=(N, M))
-    gaps = proj - proj[partner, np.arange(M)]
-    S = gaps + sigma_obs * rng.standard_normal((N, M))
-    fb = (2.0 * (S > 0).astype(float) - 1.0) @ G
-    drift = -gamma * omega * (1.0 + np.sum(omega**2, axis=1, keepdims=True)) + beta * fb
+    """Identical in form to promo/sim_ramp.py: K partners per context, redrawn
+    per context, so role assignments do not correlate across axes."""
+    score = np.tanh(omega @ G.T)                         # (N, M) statuses
+    partner = rng.integers(0, N, size=(N, K, M))         # K partners per context
+    gaps = score[:, None, :] - score[partner, np.arange(M)]   # status differences
+    a = erf(gaps / (np.sqrt(2) * sigma_obs)).mean(1)     # noise-averaged sign decision
+    drift = -gamma * omega + beta * (a @ G)
     return omega + drift * dt + sigma_dyn * np.sqrt(dt) * rng.standard_normal((N, d))
 
 
