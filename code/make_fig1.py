@@ -148,14 +148,6 @@ famp = gk[0] * np.sqrt(floor)                  # noise-floor amplitude of x on a
 ib_strip = int(np.argmin(np.abs(snap_betas - XMAX)))           # snapshot shown in the right strip
 YLIM = 1.06 * np.nanmax(np.abs(x_snap[:ib_strip + 1]))          # projection range up to that snapshot
 
-def shade_saturation(ax, x0, x1):
-    # gray where the status no longer follows the projection: opacity tanh^2 x = 1 - dtanh/dx
-    yv = np.linspace(-YLIM, YLIM, 300)[:, None]
-    img = np.zeros((300, 2, 4)); img[..., :3] = 0.55; img[..., 3] = 0.45 * np.tanh(yv)**2
-    ax.imshow(img, extent=[x0, x1, -YLIM, YLIM], origin='lower', aspect='auto',
-              interpolation='bilinear', zorder=0)
-
-shade_saturation(axM, betas[0], XMAX)
 
 # individual-agent status swarm (jittered columns at snapshot betas) -- background
 rng_b = np.random.default_rng(0)
@@ -217,45 +209,33 @@ axM.set_ylabel(r'projection  $\boldsymbol{\omega}_i\cdot\mathbf{g}_{m(k)}$')
 axM.text(-0.13, 1.01, 'b', transform=axM.transAxes, fontsize=12, fontweight='bold')
 for k, lb in enumerate([r'$k=1$', r'$k=2$', r'$k=3$']):
     axM.plot([], [], 'o', color=cols[k], ms=4, label=lb)
-axM.text(0.015, 0.02, r'solid: $\pm|\mathbf{g}_{m(k)}|\sqrt{v_k}$ (sim)' '\n' 'dotted: linear theory' '\n' 'gray: status saturated', transform=axM.transAxes,
+axM.text(0.015, 0.02, r'solid: $\pm|\mathbf{g}_{m(k)}|\sqrt{v_k}$ (sim)' '\n' 'dotted: linear theory', transform=axM.transAxes,
          va='bottom', ha='left', fontsize=6.8, color='0.3', linespacing=1.35, zorder=6)
 axM.legend(frameon=False, fontsize=7, loc='upper left', ncol=3, handlelength=0.6,
            columnspacing=0.9, handletextpad=0.3, borderaxespad=0.3)
 
-# right-side strips at the last snapshot: projection (shared scale with panel b),
-# then status tanh(omega.g_m), which is confined to (-1, 1)
+# right-side strip at the last snapshot: status tanh(omega.g_m), on the same numeric
+# scale as panel b, so it matches the projection near zero and is confined to (-1, 1)
 divider = make_axes_locatable(axM)
-axH = divider.append_axes("right", size="15%", pad=0.06, sharey=axM)
-axS = divider.append_axes("right", size="15%", pad=0.12)
+axS = divider.append_axes("right", size="17%", pad=0.06, sharey=axM)
 ib = ib_strip
-yy = np.linspace(-YLIM, YLIM, 400)
 ys = np.linspace(-1, 1, 400)
 for k in (2, 1, 0):
     zz = x_snap[ib, :, k]; zz = zz[~np.isnan(zz)]
-    dens = gaussian_kde(zz)(yy); dens = dens / dens.max() * 0.95
-    axH.fill_betweenx(yy, 0, dens, color=cols[k], alpha=0.32, lw=0)
-    axH.plot(dens, yy, color=cols[k], lw=1.2)
     st = np.tanh(zz)                            # status = score of the projection
     dens = gaussian_kde(st, bw_method=0.15)(ys); dens = dens / dens.max() * 0.95
     axS.fill_betweenx(ys, 0, dens, color=cols[k], alpha=0.32, lw=0)
     axS.plot(dens, ys, color=cols[k], lw=1.2)
-for ax, ttl in ((axH, 'projection'), (axS, 'status')):
-    ax.set_xlim(0, 1.08); ax.set_xticks([])
-    ax.axhline(0.0, color='0.6', lw=0.5, ls=':')
-    for _sp in ('top', 'bottom', 'right'):
-        ax.spines[_sp].set_visible(False)
-    ax.set_title(ttl + '\n' + rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
-shade_saturation(axH, 0, 1.08)
-axH.tick_params(axis='y', which='both', left=False, right=False,
-                labelleft=False, labelright=False)
-SLIM = 1.25                                     # gray: statuses no agent can reach
-axS.set_ylim(-SLIM, SLIM)
-axS.axhspan(1, SLIM, color='0.82', lw=0, zorder=0)
-axS.axhspan(-SLIM, -1, color='0.82', lw=0, zorder=0)
-axS.set_yticks([-1, 0, 1])
+axS.set_xlim(0, 1.08); axS.set_xticks([])
+axS.axhline(0.0, color='0.6', lw=0.5, ls=':')
+axS.axhspan(1, YLIM, color='0.86', lw=0, zorder=0)      # statuses no agent can reach
+axS.axhspan(-YLIM, -1, color='0.86', lw=0, zorder=0)
+for _sp in ('top', 'bottom', 'left'):
+    axS.spines[_sp].set_visible(False)
+axS.set_title('status\n' + rf'$\beta={snap_betas[ib]:.0f}$', fontsize=7)
 axS.tick_params(axis='y', labelsize=7, left=False, right=True, labelleft=False,
                 labelright=True, length=2, pad=1)
-axS.spines['left'].set_visible(False)
+axS.set_yticks([-1, 0, 1])
 axS.yaxis.set_label_position('right')
 axS.set_ylabel(r'agent status  $\tanh(\boldsymbol{\omega}_i\cdot\mathbf{g}_{m(k)})$', fontsize=8)
 
