@@ -1,4 +1,4 @@
-# LinkedIn post — Role Differentiation as Ignition of a Collective Information Engine
+# LinkedIn post — Measurement-Induced Role Differentiation in Agent Populations
 
 Single post. Link goes in the FIRST COMMENT, not the body (see notes).
 The first ~210 characters are what shows before "…see more" — the fold is
@@ -30,7 +30,7 @@ Some points worth mentioning for AI safety practice:
 
 The inversion is numerically sensitive, so the number of agents you can sample is the binding constraint. And if the system is pushed across the threshold quickly, you cross before the warning signal is measurable at all. Fast deployment destroys early warning.
 
-Underneath all of this is a 40-year-old problem in sociology, Sewell's duality of schemas and resources, for which our paper gives the first-ever model. It turns out to be a fixed-point equation, and an information engine, one that produces differentiation rather than consensus.
+Underneath all of this is a 40-year-old problem in sociology, Sewell's duality of schemas and resources, for which our paper gives the first-ever model. It turns out to be a fixed-point equation with the structure of an information engine, one that produces differentiation rather than consensus.
 
 Lots more in linked paper.
 

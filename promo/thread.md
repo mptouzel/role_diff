@@ -1,4 +1,4 @@
-# Social media thread — Role Differentiation as Ignition of a Collective Information Engine
+# Social media thread — Measurement-Induced Role Differentiation in Agent Populations
 
 Draft for Bluesky/X. 10 posts, all within the 300-grapheme limit.
 
@@ -12,7 +12,7 @@ Coordination is enhancing AI capability. When it's decentralized, how does it em
 **2/**
 Sociology says a pile of individuals becomes a collective when roles differentiate — planner/executor, coder/reviewer.
 
-Our new preprint makes that quantitative: role differentiation as the ignition of a collective information engine.
+Our new preprint makes that quantitative: role differentiation as a measurement-induced transition, set by how well agents read each other.
 
 **3/**
 The setup is deliberately minimal.
@@ -60,9 +60,9 @@ Below threshold the identity covariance is the static response to the loop gain.
 You read the cascade before the first role appears.
 
 **10/**
-Underneath is a 40-year-old sociology problem: Sewell's duality of schemas and resources, a societal dynamics never before formalized.
+Underneath is a 40-year-old sociology problem: Sewell's duality of schemas and resources, never before formalized.
 
-It turns out to be a fixed-point equation, and an information engine — one that orders by differentiation rather than consensus.
+It turns out to be a fixed-point equation with the structure of an information engine, one that orders by differentiation rather than consensus.
 
 Paper: arxiv.org/abs/2609.05442
 
