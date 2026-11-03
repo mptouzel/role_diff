@@ -9,8 +9,9 @@
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{bm}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{xfrac}
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
@@ -78,7 +79,7 @@
 \date{\today}
 
 \begin{abstract}
-In informational active matter, particles that measure their neighbors and act on the result produce large-scale order, such as a gas whose pressure differs by direction. So far that order has been agreement: the particles align. We ask whether the same mechanism can produce the opposite kind of order, in which agents differ by taking complementary roles. In a two-player game where the pair does best by acting differently, a shared signal that assigns the roles raises the payoff. How much the signal reveals about the roles limits the gain. What is necessary for this signal and differentiation to emerge in agent populations? We consider persistent identities built from its past actions. Partners read each other's identities to decide who takes which role, and each action reinforces the identity it was read from. Roles emerge once the gain of this loop exceeds one. The resulting order is a social pressure that spreads identities apart along directions set by the game contexts. With many contexts, roles appear one direction at a time, in sequences that range from gradual and predictable to sudden. Agents reinforce the contexts that pay them such that the loop gives quantitative form to Structuration, the sociological idea that social structure and individual action produce each other. For populations of AI agents, it gives a mechanism and an early warning for gains in capability driven by coordination.
+In informational active matter, particles that measure their neighbors and act on the result produce large-scale order, such as a gas whose pressure differs by direction. So far in the literature that order has been agreement: the particles align. We ask whether the same mechanism can produce the opposite kind of order, in which agents differ by taking complementary roles. In a two-player game where the pair does best by acting differently, a shared signal that assigns the roles raises the payoff. How much the signal reveals about the roles limits the gain. What is necessary for this signal and differentiation to emerge in agent populations? We consider persistent identities built from its past actions. Partners read each other's identities to decide who takes which role, and each action reinforces the identity it was read from. Roles emerge once the gain of this loop exceeds one. The resulting order is a social pressure that spreads identities apart along directions set by the game contexts. With many contexts, roles appear one direction at a time, in sequences that range from gradual and predictable to sudden. Agents reinforce the contexts that pay them such that the loop gives quantitative form to Structuration, the sociological idea that social structure and individual action produce each other. For populations of AI agents, it gives a mechanism and an early warning for gains in capability driven by coordination.
 \end{abstract}
 
 \maketitle
@@ -109,7 +110,32 @@ with $\gamma$ the decay rate, $\sidn$ the identity noise, and $\bm{\Pi}$ the soc
 
 We formulate the multi-agent system from two considerations. First, agents encounter each other in multiple contexts across which they can take distinct roles. Second, similar contexts should lead to similar roles. Identities are then formulated as vectors that live in a context embedding such that each context $m$ is represented as a vector $\g_m$, and together with the identity determine the latter's \textit{score} in that context. We call $\g_m$ schema vectors since they organize roles in a context. The score is the projection $\w_i\cdot\g_m$ passed through a saturating function, $\tanh(\w_i\cdot\g_m)$, which keeps the roles discrete (\cref{sec:model}). This score is the status that partners read.
 
-An action taken in context $m$ is written into the identity along $\g_m$. Reading and writing along the same direction closes the loop of each context on itself. Schemas at right angles then support independent roles, overlapping schemas couple the roles of their contexts, and the dimension of the space limits how many independent roles exist. The loop gain therefore differs from one direction to another. Below threshold the social force is linear in the identity, and along a direction with loop gain $\Lambda_k$ the social pressure is $\Pi_k=\tfrac12\sidn^2\Lambda_k/(1-\Lambda_k)$ (\cref{eq:C-linear}). The pressure is largest along the directions with the largest loop gain, so the shape of the cloud of identities reveals the loop gains, and with them the order in which roles will form (\cref{sec:monitoring}). It diverges as $\Lambda_k\to1$, where the symmetric state loses stability. Each time the loop gain crosses one along a schema direction, $\bm{\Pi}$ grows along that schema's direction, and the population divides there into complementary roles. As the feedback strength rises, the directions cross in the order set by the spectrum of the repertoire, so roles appear one direction at a time in a \emph{cascade} of bifurcations (\cref{fig:loop}b). Each active schema adds one direction to the anisotropy of the social pressure.
+An action taken in context $m$ is written into the identity along $\g_m$. Reading and writing along the same direction closes the loop of each context on itself. Schemas at right angles then support independent roles, overlapping schemas couple the roles of their contexts, and the dimension of the space limits how many independent roles exist. The loop gain therefore differs from one direction to another. Below threshold the social force is linear in the identity, and along a direction with loop gain $\Lambda_k$ the social pressure is $\Pi_k=\tfrac12\sidn^2\Lambda_k/(1-\Lambda_k)$ (\cref{eq:C-linear}). The pressure is largest along the directions with the largest loop gain, so the shape of the cloud of identities reveals the loop gains, and with them the order in which roles will form (\cref{sec:monitoring}). It diverges as $\Lambda_k\to1$, where the symmetric state loses stability. Each time the loop gain crosses one along a schema direction, $\bm{\Pi}$ grows along that schema's direction, and the population divides there into complementary roles. As the feedback strength rises, the directions cross in the order set by the spectrum of the repertoire, so roles appear one direction at a time in a \emph{cascade} of bifurcations (\cref{fig:loop}b). Each active schema adds one direction to the anisotropy of the social pressure. \Cref{tab:map} collects the correspondence with particle-based informational active matter.
+
+\begin{table}[t]
+\caption{Correspondence between particle-based informational active matter \cite{vansaders2023,ziepke2022} and the agent population.}
+\label{tab:map}
+\centering
+\rowcolors{2}{gray!12}{white}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.42\columnwidth}>{\raggedright\arraybackslash}p{0.46\columnwidth}}
+\hline\hline
+Informational active matter & Agent population\\
+\hline
+particle & agent\\
+particle state (e.g., velocity) & $\omega$-identity $\w_i$\\
+interaction (e.g., collision) & encounter in a game context\\
+measurement of neighbors' states & noisy read of the partner's status\\
+feedback on the interaction rule & taking a role (Go or Defer)\\
+onset at a threshold in measurement quality & onset at loop gain $\Lambda=1$\\
+consensus (alignment) & differentiation (complementary roles)\\
+kinetic pressure & identity noise, $\tfrac12\sidn^2\Id$\\
+interaction pressure & social pressure, $\bm{\Pi}$\\
+confining walls & decay of identities (harmonic confinement), $\gamma$\\
+container stretched along the alignment & identity cloud stretched along the active schemas, $\C$\\
+order limited by measured information & gain limited by role information, $W\le2w_0I$\\
+\hline\hline
+\end{tabular}
+\end{table}
 
 The repertoire of schemas sets that anisotropy, and the dynamics set the repertoire. Resources are an essential part of that dynamics. Agents accumulate the coordination payoff as resources, and a schema is reinforced by the resource-weighted identity variance it produces. This loop is a quantitative form of Sewell's duality of schemas and resources \cite{sewell1992}, a proposed resolution of the structure--agency debate in social science \cite{giddens1984} that has had no quantitative formalization. Existing agent models accumulate resources under fixed rules, or represent schemas as scalar state or payoff terms \cite{tesfatsion2006,bouchaud2000,santos2006}. Populations of language-model agents now make such loops directly measurable \cite{touzel2026position}.
 
@@ -129,7 +155,7 @@ Our results follow the loop. \Cref{sec:model} builds the model from the game, th
 \noindent \Cref{fig:loop}a schematizes the model described in this section to illustrate the closed loop: three slower varying state variables coupled through a fast per-encounter chain of status, action and reward. We build it in four steps: the game that makes roles worthwhile, the $\omega$-identities that realize them, the resources that accumulate, and the schemas that survive.
 
 \subsection{The game}
-\noindent The game is the anti-coordination game of the Introduction, with $(V_{\mathrm{GG}},V_{\mathrm{GD}},V_{\mathrm{DG}},V_{\mathrm{DD}})=(-1,6,2,3)$, and the status channel defined below is its correlating device. Role-following is not a dominant strategy, since it is the best reply only when the partner also follows. Its incentive constraint is nonetheless strict once roles differentiate (\smref{S1\,C}). Payoff learning moves agents off the mixed equilibrium toward a sharp policy on the role signal, and a weak dependence of the collision cost on status selects following the signal over reversing it (\smref{S1\,D}). The payoffs enter the theory only through the coordination gain $w_0=1.5$ per encounter, which sets the scale of wealth. This holds for any anti-coordination game whose two best-reply gains are equal, and $w_0$ is then half that gain.
+\noindent The game is the anti-coordination game of the Introduction, with payoffs $(V_{\mathrm{GG}},V_{\mathrm{GD}},V_{\mathrm{DG}},V_{\mathrm{DD}})$ equal to $(-1,6,2,3)$, and the status channel defined below is its correlating device. Role-following is not a dominant strategy, since it is the best reply only when the partner also follows. Its incentive constraint is nonetheless strict once roles differentiate (\smref{S1\,C}). Payoff learning moves agents off the mixed equilibrium toward a sharp policy on the role signal, and a weak dependence of the collision cost on status selects following the signal over reversing it (\smref{S1\,D}). The payoffs enter the theory only through the coordination gain $w_0=1.5$ per encounter, which sets the scale of wealth. This holds for any anti-coordination game whose two best-reply gains are equal, and $w_0$ is then half that gain.
 
 \subsection{Agents, game contexts, and $\omega$-identities}
 \noindent $\Nag$ agents play the game against each other, selecting actions $a\in\{-1 (\mathrm{Defer}),+1 (\mathrm{Go})\}$ in pairwise encounters across a repertoire of $M$ distinct game contexts. We emphasize the importance of variable context in capturing both the \emph{transposability} of schemas and the context-dependent nature of roles. We represent $\omega$-identities as points $\w_i\in\mathbb{R}^d$, with embedding dimension $d$, and schemas as linear forms on that space. The schema $\g_m$ scores agent $i$ through the projection $\w_i\cdot\g_m$, and the score $\tanh(\w_i\cdot\g_m)$ is the agent's \emph{status} in context $m$. Each context carries one schema: the context is the situation an encounter draws, and the schema is the rule it invokes (\cref{sec:schemas}). A schema reads $\omega$-identities and is not one of them. The Euclidean inner product identifies each form with a direction in the same space, and that direction is the one along which actions are written back. Read axis and write axis are thus the same axis. Sewell's duality enters the model at this identification.
