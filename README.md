@@ -1,4 +1,4 @@
-# Role differentiation as ignition of a collective information engine
+# Measurement-induced role differentiation in agent populations
 
 Manuscript package (REVTeX 4.2).
 
