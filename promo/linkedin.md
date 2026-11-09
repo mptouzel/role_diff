@@ -16,7 +16,7 @@ That raises a question our evaluation practice cannot currently answer: when doe
 
 Our new pre-print puts that question on a phase diagram.
 
-The model is deliberately toyish. Agents meet in pairs and play an anti-coordination game, where complementary role-play pays more than acting alone. Nobody assigns the roles. Each agent carries a persistent identity that summarizes its own past actions; in an encounter it reads a noisy social signal relative to its partner, picks a role, and writes that choice back into its identity. Read, act, write.
+The model is deliberately toyish. Agents meet in pairs and play an anti-coordination game, where complementary roles pay more than independent, self-interested play. No coordinator assigns the roles. Each agent carries a persistent identity that summarizes its own past actions; in an encounter it reads a noisy social signal relative to its partner, picks a role, and writes that choice back into its identity. Read, act, write.
 
 That loop either dies out or ignites, and the condition is a single number that factorizes into four terms: identity persistence, agent cognitive capacity, communication channel fidelity, and the strength of the task repertoire. Above 1, roles crystallize on their own.
 
@@ -30,7 +30,9 @@ Some points worth mentioning for AI safety practice:
 
 The inversion is numerically sensitive, so the number of agents you can sample is the binding constraint. And if the system is pushed across the threshold quickly, you cross before the warning signal is measurable at all. Fast deployment destroys early warning.
 
-Underneath all of this is a 40-year-old problem in sociology, Sewell's duality of schemas and resources, for which our paper gives the first-ever model. It turns out to be a fixed-point equation with the structure of an information engine, one that produces differentiation rather than consensus.
+Underneath all of this is a problem in sociology: how social structure and individual action produce each other. Sewell (1992) framed it as a duality of schemas and resources, but only qualitatively. In our model the payoff that roles earn reinforces the contexts that produced them, and the whole loop becomes a fixed-point equation with the structure of an information engine, one that produces differentiation rather than consensus.
+
+The model is the minimal case, two roles per context. The coordinators and many-agent workstreams of the real incident are the next step.
 
 Lots more in linked paper.
 

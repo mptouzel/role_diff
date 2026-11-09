@@ -60,9 +60,9 @@ Below threshold the identity covariance is the static response to the loop gain.
 You read the cascade before the first role appears.
 
 **10/**
-Underneath is a 40-year-old sociology problem: Sewell's duality of schemas and resources, never before formalized.
+Underneath is a sociology problem from 1992: Sewell's duality of schemas and resources, until now only qualitative.
 
-It turns out to be a fixed-point equation with the structure of an information engine, one that orders by differentiation rather than consensus.
+Here the payoff roles earn reinforces the contexts that produced them: a fixed-point equation with the structure of an information engine.
 
 Paper: arxiv.org/abs/2609.05442
 
@@ -100,5 +100,12 @@ Paper: arxiv.org/abs/2609.05442
   "Two limits: the inversion turns a ~7% eigenvalue difference into a
   factor of 8 in predicted onset, so sample size binds. And sweep fast
   enough and you cross before slowing-down is measurable."
+- Scope watch: the model has two roles per context (one Go/Defer split per
+  context, up to 2^k role profiles over k contexts). If a reply points to the
+  incident's coordinators and lanes: "Minimal case. Coordinators with many
+  assignees need group encounters, and agents becoming the signal source for
+  others is a second-order differentiation -- both flagged as extensions."
+  The coordinator/lane detail comes from METR's investigation
+  (metr2026incident), not OpenAI's post.
 - Post 6 is the one most likely to travel on its own. Consider it as an
   alternative opener if the swarm hook underperforms.
